@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
 
 const Home: NextPage = () => {
   return (
@@ -12,6 +13,9 @@ const Home: NextPage = () => {
 
       <main>
         <h1>Requiz</h1>
+        <Link href="/quiz">
+          <a>Join a quiz</a>
+        </Link>
       </main>
     </>
   );
