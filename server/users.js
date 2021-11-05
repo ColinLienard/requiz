@@ -1,6 +1,11 @@
 let users = [];
 
-export const addUser = (userName, userId, socketId, room) => {
+export const addUser = (
+  userName,
+  userId,
+  socketId,
+  room,
+) => {
   const user = {
     userName,
     userId,

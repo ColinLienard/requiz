@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import { addUser, getUsers, removeUser } from './users.js';
+// import { User } from './lib/types.js';
 
 const io = new Server(8000, {
   cors: {

@@ -55,7 +55,7 @@ const Chat: FC<Props> = ({ socket }) => {
           tabIndex={0}
           onKeyPress={closeSocket}
         >
-          Left
+          Leave
         </a>
       </Link>
     </section>
