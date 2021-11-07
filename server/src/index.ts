@@ -1,6 +1,6 @@
-import { Server } from 'socket.io';
-import { addUser, getUsers, removeUser } from './users.js';
-// import { User } from './lib/types.js';
+import { Server, Socket } from 'socket.io';
+import { addUser, getUsers, removeUser } from './lib/users';
+import { User } from './lib/types';
 
 const io = new Server(8000, {
   cors: {
@@ -8,12 +8,18 @@ const io = new Server(8000, {
   },
 });
 
-io.on('connection', (socket) => {
-  socket.on('message', ({ room, author, content }) => {
+io.on('connection', (socket: Socket) => {
+  socket.on('message', (
+    { room, author, content }:
+    { room: string, author: string, content: string },
+  ) => {
     socket.to(room).emit('message', author, content);
   });
 
-  socket.on('join', ({ userName, userId, room }) => {
+  socket.on('join', (
+    { userName, userId, room }:
+    { userName: string, userId: number, room: string },
+  ) => {
     socket.join(room);
     socket.to(room).emit('user-joined', userName, userId);
     addUser(userName, userId, socket.id, room);
@@ -27,7 +33,7 @@ io.on('connection', (socket) => {
   // });
 
   socket.on('disconnect', () => {
-    const user = removeUser(socket.id);
+    const user: User | null = removeUser(socket.id);
     if (user) {
       io.to(user.room).emit('user-left', user.userName);
       io.to(user.room).emit('get-users', getUsers(user.room));
