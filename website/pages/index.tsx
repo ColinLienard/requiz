@@ -13,7 +13,7 @@ const Home: NextPage = () => {
 
       <main>
         <h1>Requiz</h1>
-        <Link href="/quiz">
+        <Link href="/quiz/room">
           <a>Join a quiz</a>
         </Link>
       </main>

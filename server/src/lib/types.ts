@@ -4,3 +4,5 @@ export type User = {
   socketId: string,
   room: string,
 }
+
+export type GameState = 'waiting' | 'playing'

@@ -9,14 +9,19 @@ import User from '../../Common/User/User';
 import { ChatUser } from '../../../lib/types';
 
 type Props = {
-  socket: Socket
+  socket: Socket,
+  userName: string,
+  userId: number
 }
 
-const Chat: FC<Props> = ({ socket }) => {
-  const [userList, setUserList] = useState<ChatUser[]>([]);
+const Sidebar: FC<Props> = ({ socket, userName, userId }) => {
+  const [userList, setUserList] = useState<ChatUser[]>([{
+    name: userName,
+    id: userId,
+  }]);
 
   useEffect(() => {
-    socket?.on('get-users', (users: {
+    socket.on('get-users', (users: {
       userName: string,
       userId: number,
       socketId: string,
@@ -30,12 +35,12 @@ const Chat: FC<Props> = ({ socket }) => {
       }));
     });
 
-    socket?.on('user-joined', (anUserName: string, userId: number) => {
-      setUserList((state) => [{ name: anUserName, id: userId }, ...state]);
+    socket.on('user-joined', (anUserName: string, anUserId: number) => {
+      setUserList((state) => [{ name: anUserName, id: anUserId }, ...state]);
     });
   }, [socket]);
 
-  const closeSocket = () => socket?.close();
+  const closeSocket = () => socket.close();
 
   return (
     <section>
@@ -62,4 +67,4 @@ const Chat: FC<Props> = ({ socket }) => {
   );
 };
 
-export default Chat;
+export default Sidebar;

@@ -8,3 +8,5 @@ export type ChatUser = {
   name: string,
   id: number
 }
+
+export type GameState = 'waiting' | 'playing'
