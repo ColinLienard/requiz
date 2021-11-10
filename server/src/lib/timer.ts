@@ -8,6 +8,7 @@ export const stopTimer = () => {
 
 export const startTimer = (io: Server, room: string, start: number, callback: () => void) => {
   let time = start;
+  io.to(room).emit('timer', time);
   timer = setInterval(() => {
     if (time > 0) {
       time -= 1;

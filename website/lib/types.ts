@@ -9,4 +9,10 @@ export type ChatUser = {
   id: number
 }
 
-export type GameState = 'waiting' | 'playing'
+export type GameState = 'waiting' | 'playing' | 'end'
+
+export type QuizQuestion = {
+  question: string,
+  responses: string[],
+  correct: number
+}

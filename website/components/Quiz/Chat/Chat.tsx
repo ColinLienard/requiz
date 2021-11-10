@@ -48,7 +48,13 @@ const Chat: FC<Props> = ({
     socket.on('user-left', (anUserName) => {
       setChatMessages((state) => [...state, { content: `🤖 ${anUserName} left`, id: randomId() }]);
     });
-  }, [socket]);
+
+    return () => {
+      socket.removeAllListeners('message');
+      socket.removeAllListeners('user-joined');
+      socket.removeAllListeners('user-left');
+    };
+  }, []);
 
   const handleMessageChange = (event: ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);

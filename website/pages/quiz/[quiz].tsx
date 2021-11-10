@@ -7,6 +7,7 @@ import Chat from '../../components/Quiz/Chat/Chat';
 import Sidebar from '../../components/Quiz/Sidebar/Sidebar';
 import WaitingRoom from '../../components/Quiz/WaitingRoom/WaitingRoom';
 import { GameState } from '../../lib/types';
+import Question from '../../components/Quiz/Question/Question';
 
 const Quiz: NextPage = () => {
   const userId = Math.round(Math.random() * 1000);
@@ -15,6 +16,7 @@ const Quiz: NextPage = () => {
   const { quiz } = router.query;
   const [socket, setSocket] = useState<Socket>();
   const [gameState, setGameState] = useState<GameState>('waiting');
+  const [connected, setConnected] = useState(false);
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_SERVER_URL) {
@@ -25,22 +27,45 @@ const Quiz: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    socket?.on('game-started', () => {
-      router.push('/?error=game-started', '/');
-    });
+    socket?.on('connect', () => {
+      setConnected(true);
 
-    socket?.on('game-full', () => {
-      router.push('/?error=game-full', '/');
-    });
+      socket?.on('game-started', () => {
+        router.push('/?error=game-started', '/');
+      });
 
-    socket?.on('game-state', (newGameState: GameState) => {
-      setGameState(newGameState);
+      socket?.on('game-full', () => {
+        router.push('/?error=game-full', '/');
+      });
+
+      socket?.on('game-state', (newGameState: GameState) => {
+        setGameState(newGameState);
+      });
     });
 
     return () => {
       socket?.close();
     };
   }, [socket]);
+
+  const renderGameState = (socketConnected: Socket) => {
+    switch (gameState) {
+      case 'waiting':
+        return (
+          <WaitingRoom socket={socketConnected} />
+        );
+      case 'playing':
+        return (
+          <Question socket={socketConnected} />
+        );
+      case 'end':
+        return (
+          <h2>The end</h2>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -52,12 +77,10 @@ const Quiz: NextPage = () => {
 
       <main>
         <h1>A random quiz</h1>
-        {socket && quiz
+        {socket && connected
           ? (
             <>
-              {gameState === 'waiting'
-                ? <WaitingRoom socket={socket} />
-                : null}
+              {renderGameState(socket)}
               <Chat
                 socket={socket}
                 userName={userName}

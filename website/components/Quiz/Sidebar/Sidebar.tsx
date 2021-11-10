@@ -38,7 +38,12 @@ const Sidebar: FC<Props> = ({ socket, userName, userId }) => {
     socket.on('user-joined', (anUserName: string, anUserId: number) => {
       setUserList((state) => [{ name: anUserName, id: anUserId }, ...state]);
     });
-  }, [socket]);
+
+    return () => {
+      socket.removeAllListeners('get-users');
+      socket.removeAllListeners('user-joined');
+    };
+  }, []);
 
   const closeSocket = () => socket.close();
 

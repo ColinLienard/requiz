@@ -7,7 +7,7 @@ type Props = {
 }
 
 const WaitingRoom: FC<Props> = ({ socket }) => {
-  const timer = useTimer(socket);
+  const timer = useTimer(socket, 'minutes-secondes');
 
   return (
     <section>
