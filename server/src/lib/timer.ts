@@ -1,20 +1,21 @@
 import { Server } from 'socket.io';
+import { getRoom } from './rooms';
 
-let timer: NodeJS.Timer;
-
-export const stopTimer = () => {
-  clearInterval(timer);
+export const stopTimer = (room: string) => {
+  if (getRoom(room).timer) {
+    clearInterval(getRoom(room).timer as NodeJS.Timer);
+  }
 };
 
 export const startTimer = (io: Server, room: string, start: number, callback: () => void) => {
   let time = start;
   io.to(room).emit('timer', time);
-  timer = setInterval(() => {
+  getRoom(room).timer = setInterval(() => {
     if (time > 0) {
       time -= 1;
       io.to(room).emit('timer', time);
     } else {
-      stopTimer();
+      stopTimer(room);
       callback();
     }
   }, 1000);

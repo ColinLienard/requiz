@@ -6,4 +6,10 @@ export type User = {
   lives: number
 }
 
-export type GameState = 'waiting' | 'playing'
+export type RoomState = 'waiting' | 'playing'
+
+export type Room = {
+  name: string,
+  state: RoomState,
+  timer: NodeJS.Timer | null
+}

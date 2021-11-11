@@ -2,7 +2,13 @@ import { Server, Socket } from 'socket.io';
 import { addUser, getUsers, removeUser } from './lib/users';
 import { startTimer, stopTimer } from './lib/timer';
 import { listenToResponses, startQuiz } from './lib/quiz';
-import { GameState, User } from './lib/types';
+import {
+  createRoom,
+  deleteRoom,
+  getRoom,
+  updateRoomState,
+} from './lib/rooms';
+import { User } from './lib/types';
 
 const io = new Server(8000, {
   cors: {
@@ -10,44 +16,47 @@ const io = new Server(8000, {
   },
 });
 
-let gameState: GameState = 'waiting';
 const maxUsers = 10;
 
 io.on('connection', (socket: Socket) => {
+  socket.on('join', (
+    { userName, userId, room }:
+    { userName: string, userId: number, room: string },
+  ) => {
+    if (!getRoom(room)) {
+      createRoom(room);
+
+      socket.join(room);
+      addUser(userName, userId, socket.id, room);
+      listenToResponses(io, socket);
+
+      startTimer(io, room, 3, () => {
+        // After the waiting room
+        updateRoomState(room, 'playing');
+        io.to(room).emit('game-state', 'playing');
+        startQuiz(io, socket, room);
+      });
+    } else if (getRoom(room).state !== 'waiting') {
+      // If the game is started, redirect user to home
+      io.to(socket.id).emit('game-started');
+    } else if (getUsers(room).length === maxUsers) {
+      // If the game is full, redirect user to home
+      io.to(socket.id).emit('game-full');
+    } else {
+      socket.join(room);
+      addUser(userName, userId, socket.id, room);
+      listenToResponses(io, socket);
+
+      socket.to(room).emit('user-joined', userName, userId);
+      io.to(socket.id).emit('get-users', getUsers(room));
+    }
+  });
+
   socket.on('message', (
     { room, author, content }:
     { room: string, author: string, content: string },
   ) => {
     socket.to(room).emit('message', author, content);
-  });
-
-  socket.on('join', (
-    { userName, userId, room }:
-    { userName: string, userId: number, room: string },
-  ) => {
-    if (gameState !== 'waiting') {
-      // If the game is started, redirect user to home
-      io.to(socket.id).emit('game-started', gameState);
-    } else if (getUsers(room).length === maxUsers) {
-      // If the game is full, redirect user to home
-      io.to(socket.id).emit('game-full', gameState);
-    } else {
-      socket.join(room);
-      addUser(userName, userId, socket.id, room);
-      if (getUsers(room).length === 1) {
-        // If the user is the first in the room, launches the timer (waiting room)
-        startTimer(io, room, 3, () => {
-          // After the waiting room
-          gameState = 'playing';
-          io.to(room).emit('game-state', gameState);
-          startQuiz(io, socket, room);
-        });
-      } else {
-        socket.to(room).emit('user-joined', userName, userId);
-        io.to(socket.id).emit('get-users', getUsers(room));
-      }
-      listenToResponses(io, socket);
-    }
   });
 
   socket.on('disconnect', () => {
@@ -57,8 +66,8 @@ io.on('connection', (socket: Socket) => {
       io.to(user.room).emit('get-users', getUsers(user.room));
 
       if (getUsers(user.room).length === 0) {
-        stopTimer();
-        gameState = 'waiting';
+        stopTimer(user.room);
+        deleteRoom(user.room);
       }
     }
   });
