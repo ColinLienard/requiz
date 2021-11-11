@@ -1,4 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Socket } from 'socket.io-client';
 import useTimer from '../../../lib/hooks/useTimer';
 import { QuizQuestion } from '../../../lib/types';
@@ -11,21 +16,38 @@ type Props = {
 const Question: FC<Props> = ({ socket }) => {
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion>();
   const [selected, setSelected] = useState<number>(0);
+  const [reveal, setReveal] = useState(false);
   const timer = useTimer(socket, 'secondes');
+  const isCorrect = useRef(false);
 
   useEffect(() => {
     socket.on('question', (newQuizQuestion: QuizQuestion) => {
       setQuizQuestion(newQuizQuestion);
       setSelected(0);
+      setReveal(false);
+    });
+
+    socket.on('request-response', () => {
+      setReveal(true);
+      if (!isCorrect.current) {
+        socket.emit('response', false);
+      }
     });
 
     return () => {
       socket.removeAllListeners('question');
+      socket.removeAllListeners('request-response');
     };
   }, []);
 
+  useEffect(() => {
+    isCorrect.current = selected === quizQuestion?.correct;
+  }, [selected, quizQuestion]);
+
   const handleSelect = (toSelect: number) => {
-    setSelected(toSelect);
+    if (!reveal) {
+      setSelected(toSelect);
+    }
   };
 
   return (
@@ -41,6 +63,7 @@ const Question: FC<Props> = ({ socket }) => {
                 number={index + 1}
                 selected={selected}
                 select={handleSelect}
+                good={reveal ? quizQuestion.correct === index + 1 : undefined}
               />
             </li>
           );

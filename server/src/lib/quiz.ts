@@ -1,5 +1,6 @@
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { startTimer } from './timer';
+import { updateUser } from './users';
 
 const testQuiz = [
   {
@@ -34,15 +35,30 @@ const testQuiz = [
   },
 ];
 
-const startQuiz = (io: Server, room: string, index = 0) => {
+export const startQuiz = (io: Server, socket: Socket, room: string, index = 0) => {
   if (index < testQuiz.length) {
     io.to(room).emit('question', testQuiz[index]);
-    startTimer(io, room, 10, () => {
-      startQuiz(io, room, index + 1);
+    startTimer(io, room, 5, () => {
+      // At the end of the timer
+      io.to(room).emit('request-response');
+      setTimeout(() => {
+        startQuiz(io, socket, room, index + 1);
+      }, 5000);
     });
   } else {
     io.to(room).emit('game-state', 'end');
   }
 };
 
-export default startQuiz;
+export const listenToResponses = (io: Server, socket: Socket) => {
+  socket.on('response', (correctResponse: boolean) => {
+    if (!correctResponse) {
+      const user = updateUser(socket.id, correctResponse);
+      io.to(user.room).emit('update-user', {
+        name: user.userName,
+        id: user.userId,
+        lives: user.lives,
+      });
+    }
+  });
+};

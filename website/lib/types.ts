@@ -6,7 +6,8 @@ export type ChatMessageType = {
 
 export type ChatUser = {
   name: string,
-  id: number
+  id: number,
+  lives: number
 }
 
 export type GameState = 'waiting' | 'playing' | 'end'

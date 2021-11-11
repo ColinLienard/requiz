@@ -18,6 +18,7 @@ const Sidebar: FC<Props> = ({ socket, userName, userId }) => {
   const [userList, setUserList] = useState<ChatUser[]>([{
     name: userName,
     id: userId,
+    lives: 3,
   }]);
 
   useEffect(() => {
@@ -25,23 +26,35 @@ const Sidebar: FC<Props> = ({ socket, userName, userId }) => {
       userName: string,
       userId: number,
       socketId: string,
-      room: string
+      room: string,
+      lives: number
     }[]) => {
-      setUserList(() => users.map((user) => {
+      setUserList(users.map((user) => {
         return {
           name: user.userName,
           id: user.userId,
+          lives: user.lives,
         };
       }));
     });
 
     socket.on('user-joined', (anUserName: string, anUserId: number) => {
-      setUserList((state) => [{ name: anUserName, id: anUserId }, ...state]);
+      setUserList((state) => [{ name: anUserName, id: anUserId, lives: 3 }, ...state]);
+    });
+
+    socket.on('update-user', (userToUpdate: ChatUser) => {
+      setUserList((newUserList) => newUserList.map((user) => {
+        if (userToUpdate.id === user.id) {
+          return userToUpdate;
+        }
+        return user;
+      }));
     });
 
     return () => {
       socket.removeAllListeners('get-users');
       socket.removeAllListeners('user-joined');
+      socket.removeAllListeners('update-user');
     };
   }, []);
 
@@ -53,7 +66,7 @@ const Sidebar: FC<Props> = ({ socket, userName, userId }) => {
         {userList.map((user) => {
           return (
             <li key={user.id}>
-              <User name={user.name} />
+              <User name={user.name} lives={user.lives} />
             </li>
           );
         })}
