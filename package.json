@@ -8,6 +8,10 @@
     "email": "colin.lienard87@orange.fr",
     "url": "https://colin-lienard.fr/"
   },
+  "scripts": {
+    "dev:web": "yarn --cwd website dev",
+    "dev:serv": "yarn --cwd server dev"
+  },
   "workspaces": [
     "website",
     "server"
