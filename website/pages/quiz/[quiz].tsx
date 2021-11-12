@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { io, Socket } from 'socket.io-client';
@@ -9,9 +9,12 @@ import WaitingRoom from '../../components/Quiz/WaitingRoom/WaitingRoom';
 import { GameState } from '../../lib/types';
 import Question from '../../components/Quiz/Question/Question';
 
-const Quiz: NextPage = () => {
-  const userId = Math.round(Math.random() * 1000);
-  const userName = `User${userId}`;
+type Props = {
+  userId: number,
+  userName: string
+}
+
+const Quiz: NextPage<Props> = ({ userId, userName }: Props) => {
   const router = useRouter();
   const { quiz } = router.query;
   const [socket, setSocket] = useState<Socket>();
@@ -24,6 +27,10 @@ const Quiz: NextPage = () => {
     } else {
       router.push('/?error=socket-connection', '/');
     }
+
+    return () => {
+      socket?.close();
+    };
   }, []);
 
   useEffect(() => {
@@ -42,10 +49,6 @@ const Quiz: NextPage = () => {
         setGameState(newGameState);
       });
     });
-
-    return () => {
-      socket?.close();
-    };
   }, [socket]);
 
   const renderGameState = (socketConnected: Socket) => {
@@ -98,6 +101,18 @@ const Quiz: NextPage = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const userId = Math.round(Math.random() * 1000);
+  const userName = `User${userId}`;
+
+  return {
+    props: {
+      userId,
+      userName,
+    },
+  };
 };
 
 export default Quiz;
