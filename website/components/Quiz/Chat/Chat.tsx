@@ -4,20 +4,22 @@ import {
   useState,
   ChangeEvent,
   FormEvent,
+  useContext,
 } from 'react';
-import { Socket } from 'socket.io-client';
+// import { Socket } from 'socket.io-client';
 import ChatMessage from '../ChatMessage/ChatMessage';
 import { ChatMessageType } from '../../../lib/types';
+import SocketContext from '../../../lib/contexts/SocketContext';
 
 type Props = {
-  socket: Socket,
+  // socket: Socket,
   userName: string,
   userId: number,
   room: string
 }
 
 const Chat: FC<Props> = ({
-  socket,
+  // socket,
   userName,
   userId,
   room,
@@ -27,6 +29,7 @@ const Chat: FC<Props> = ({
     content: `🙋‍♂️ Welcome to ${room} !`,
     id: `${userName}-0`,
   }]);
+  const socket = useContext(SocketContext);
 
   const randomId = () => Math.random().toString(36).substr(2, 9);
 

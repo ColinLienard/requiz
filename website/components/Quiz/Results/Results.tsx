@@ -1,13 +1,15 @@
-import { FC, useEffect, useState } from 'react';
-import { Socket } from 'socket.io-client';
+import {
+  FC,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import SocketContext from '../../../lib/contexts/SocketContext';
 import { User } from '../../../lib/types';
 
-type Props = {
-  socket: Socket
-}
-
-const Results: FC<Props> = ({ socket }) => {
+const Results: FC = () => {
   const [winner, setWinner] = useState('');
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
     socket.on('get-users', (users: User[]) => {

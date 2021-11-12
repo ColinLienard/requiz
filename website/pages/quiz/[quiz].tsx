@@ -6,9 +6,10 @@ import { io, Socket } from 'socket.io-client';
 import Chat from '../../components/Quiz/Chat/Chat';
 import Sidebar from '../../components/Quiz/Sidebar/Sidebar';
 import WaitingRoom from '../../components/Quiz/WaitingRoom/WaitingRoom';
-import { GameState } from '../../lib/types';
 import Question from '../../components/Quiz/Question/Question';
 import Results from '../../components/Quiz/Results/Results';
+import SocketContext from '../../lib/contexts/SocketContext';
+import { GameState } from '../../lib/types';
 
 type Props = {
   userId: number,
@@ -52,19 +53,19 @@ const Quiz: NextPage<Props> = ({ userId, userName }: Props) => {
     });
   }, [socket]);
 
-  const renderGameState = (socketConnected: Socket) => {
+  const renderGameState = () => {
     switch (gameState) {
       case 'waiting':
         return (
-          <WaitingRoom socket={socketConnected} />
+          <WaitingRoom />
         );
       case 'playing':
         return (
-          <Question socket={socketConnected} />
+          <Question />
         );
       case 'end':
         return (
-          <Results socket={socketConnected} />
+          <Results />
         );
       default:
         return null;
@@ -83,20 +84,18 @@ const Quiz: NextPage<Props> = ({ userId, userName }: Props) => {
         <h1>A random quiz</h1>
         {socket && connected
           ? (
-            <>
-              {renderGameState(socket)}
+            <SocketContext.Provider value={socket}>
+              {renderGameState()}
               <Chat
-                socket={socket}
                 userName={userName}
                 userId={userId}
                 room={quiz as string}
               />
               <Sidebar
-                socket={socket}
                 userName={userName}
                 userId={userId}
               />
-            </>
+            </SocketContext.Provider>
           )
           : null}
       </main>

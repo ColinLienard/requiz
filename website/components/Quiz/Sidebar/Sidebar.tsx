@@ -1,25 +1,26 @@
 import {
   FC,
+  useContext,
   useEffect,
   useState,
 } from 'react';
 import Link from 'next/link';
-import { Socket } from 'socket.io-client';
 import UserItem from '../../Common/UserItem/UserItem';
+import SocketContext from '../../../lib/contexts/SocketContext';
 import { User } from '../../../lib/types';
 
 type Props = {
-  socket: Socket,
   userName: string,
   userId: number
 }
 
-const Sidebar: FC<Props> = ({ socket, userName, userId }) => {
+const Sidebar: FC<Props> = ({ userName, userId }) => {
   const [userList, setUserList] = useState<User[]>([{
     name: userName,
     id: userId,
     lives: 3,
   }]);
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
     socket.on('get-users', (users: User[]) => {

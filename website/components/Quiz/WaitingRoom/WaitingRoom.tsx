@@ -1,12 +1,9 @@
-import { FC } from 'react';
-import { Socket } from 'socket.io-client';
+import { FC, useContext } from 'react';
+import SocketContext from '../../../lib/contexts/SocketContext';
 import useTimer from '../../../lib/hooks/useTimer';
 
-type Props = {
-  socket: Socket
-}
-
-const WaitingRoom: FC<Props> = ({ socket }) => {
+const WaitingRoom: FC = () => {
+  const socket = useContext(SocketContext);
   const timer = useTimer(socket, 'minutes-secondes');
 
   return (

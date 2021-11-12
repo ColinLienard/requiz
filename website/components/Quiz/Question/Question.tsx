@@ -1,23 +1,21 @@
 import {
   FC,
+  useContext,
   useEffect,
   useRef,
   useState,
 } from 'react';
-import { Socket } from 'socket.io-client';
+import SocketContext from '../../../lib/contexts/SocketContext';
 import useTimer from '../../../lib/hooks/useTimer';
 import { QuizQuestion } from '../../../lib/types';
 import Response from '../Response/Response';
 
-type Props = {
-  socket: Socket
-}
-
-const Question: FC<Props> = ({ socket }) => {
+const Question: FC = () => {
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion>();
   const [selected, setSelected] = useState<number>(0);
   const [reveal, setReveal] = useState(false);
   const [lives, setLives] = useState(3);
+  const socket = useContext(SocketContext);
   const timer = useTimer(socket, 'secondes');
   const isCorrect = useRef(false);
 
