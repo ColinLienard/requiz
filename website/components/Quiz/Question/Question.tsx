@@ -17,6 +17,7 @@ const Question: FC<Props> = ({ socket }) => {
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion>();
   const [selected, setSelected] = useState<number>(0);
   const [reveal, setReveal] = useState(false);
+  const [lives, setLives] = useState(3);
   const timer = useTimer(socket, 'secondes');
   const isCorrect = useRef(false);
 
@@ -29,8 +30,9 @@ const Question: FC<Props> = ({ socket }) => {
 
     socket.on('request-response', () => {
       setReveal(true);
-      if (!isCorrect.current) {
+      if (!isCorrect.current && lives > 0) {
         socket.emit('response', false);
+        setLives((newLives) => newLives - 1);
       }
     });
 
@@ -50,9 +52,26 @@ const Question: FC<Props> = ({ socket }) => {
     }
   };
 
+  const renderLives = () => {
+    let hearts = '';
+    for (let i = 0; i < lives; i += 1) {
+      hearts += '💖';
+    }
+    return hearts;
+  };
+
   return (
     <section>
-      <h2>{timer}</h2>
+      <p>
+        {lives > 0
+          ? renderLives()
+          : 'Eliminé'}
+      </p>
+      <h2>
+        {reveal
+          ? `${isCorrect.current}`
+          : timer}
+      </h2>
       <h3>{quizQuestion?.question}</h3>
       <ul>
         {quizQuestion?.responses.map((response, index) => {

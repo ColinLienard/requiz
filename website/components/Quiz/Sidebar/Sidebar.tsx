@@ -5,8 +5,8 @@ import {
 } from 'react';
 import Link from 'next/link';
 import { Socket } from 'socket.io-client';
-import User from '../../Common/User/User';
-import { ChatUser } from '../../../lib/types';
+import UserItem from '../../Common/UserItem/UserItem';
+import { User } from '../../../lib/types';
 
 type Props = {
   socket: Socket,
@@ -15,34 +15,22 @@ type Props = {
 }
 
 const Sidebar: FC<Props> = ({ socket, userName, userId }) => {
-  const [userList, setUserList] = useState<ChatUser[]>([{
+  const [userList, setUserList] = useState<User[]>([{
     name: userName,
     id: userId,
     lives: 3,
   }]);
 
   useEffect(() => {
-    socket.on('get-users', (users: {
-      userName: string,
-      userId: number,
-      socketId: string,
-      room: string,
-      lives: number
-    }[]) => {
-      setUserList(users.map((user) => {
-        return {
-          name: user.userName,
-          id: user.userId,
-          lives: user.lives,
-        };
-      }));
+    socket.on('get-users', (users: User[]) => {
+      setUserList(users);
     });
 
     socket.on('user-joined', (anUserName: string, anUserId: number) => {
       setUserList((state) => [{ name: anUserName, id: anUserId, lives: 3 }, ...state]);
     });
 
-    socket.on('update-user', (userToUpdate: ChatUser) => {
+    socket.on('update-user', (userToUpdate: User) => {
       setUserList((newUserList) => newUserList.map((user) => {
         if (userToUpdate.id === user.id) {
           return userToUpdate;
@@ -66,7 +54,7 @@ const Sidebar: FC<Props> = ({ socket, userName, userId }) => {
         {userList.map((user) => {
           return (
             <li key={user.id}>
-              <User name={user.name} lives={user.lives} />
+              <UserItem name={user.name} lives={user.lives} />
             </li>
           );
         })}

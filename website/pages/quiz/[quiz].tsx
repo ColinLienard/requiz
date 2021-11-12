@@ -8,6 +8,7 @@ import Sidebar from '../../components/Quiz/Sidebar/Sidebar';
 import WaitingRoom from '../../components/Quiz/WaitingRoom/WaitingRoom';
 import { GameState } from '../../lib/types';
 import Question from '../../components/Quiz/Question/Question';
+import Results from '../../components/Quiz/Results/Results';
 
 type Props = {
   userId: number,
@@ -63,7 +64,7 @@ const Quiz: NextPage<Props> = ({ userId, userName }: Props) => {
         );
       case 'end':
         return (
-          <h2>The end</h2>
+          <Results socket={socketConnected} />
         );
       default:
         return null;

@@ -62,7 +62,7 @@ io.on('connection', (socket: Socket) => {
   socket.on('disconnect', () => {
     const user: User | null = removeUser(socket.id);
     if (user) {
-      io.to(user.room).emit('user-left', user.userName);
+      io.to(user.room).emit('user-left', user.name);
       io.to(user.room).emit('get-users', getUsers(user.room));
 
       if (getUsers(user.room).length === 0) {

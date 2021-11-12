@@ -4,7 +4,7 @@ export type ChatMessageType = {
   id: string
 }
 
-export type ChatUser = {
+export type User = {
   name: string,
   id: number,
   lives: number

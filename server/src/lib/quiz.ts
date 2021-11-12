@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { startTimer } from './timer';
-import { updateUser } from './users';
+import { getUsers, updateUser } from './users';
 
 const testQuiz = [
   {
@@ -47,6 +47,7 @@ export const startQuiz = (io: Server, socket: Socket, room: string, index = 0) =
     });
   } else {
     io.to(room).emit('game-state', 'end');
+    io.to(room).emit('get-users', getUsers(room));
   }
 };
 
@@ -54,11 +55,7 @@ export const listenToResponses = (io: Server, socket: Socket) => {
   socket.on('response', (correctResponse: boolean) => {
     if (!correctResponse) {
       const user = updateUser(socket.id, correctResponse);
-      io.to(user.room).emit('update-user', {
-        name: user.userName,
-        id: user.userId,
-        lives: user.lives,
-      });
+      io.to(user.room).emit('update-user', user);
     }
   });
 };

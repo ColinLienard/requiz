@@ -9,8 +9,8 @@ export const addUser = (
   room: string,
 ) => {
   const user = {
-    userName,
-    userId,
+    name: userName,
+    id: userId,
     socketId,
     room,
     lives: 3,

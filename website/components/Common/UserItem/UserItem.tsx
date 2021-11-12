@@ -5,10 +5,10 @@ type Props = {
   lives: number
 }
 
-const User: FC<Props> = ({ name, lives }) => {
+const UserItem: FC<Props> = ({ name, lives }) => {
   return (
     <p>{`${name} - ${lives}💕`}</p>
   );
 };
 
-export default User;
+export default UserItem;
