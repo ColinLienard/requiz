@@ -10,6 +10,7 @@ import Question from '../../components/Quiz/Question/Question';
 import Results from '../../components/Quiz/Results/Results';
 import SocketContext from '../../lib/contexts/SocketContext';
 import { GameState } from '../../lib/types';
+import styles from '../../styles/pages/Quiz.module.scss';
 
 type Props = {
   userId: number,
@@ -80,20 +81,21 @@ const Quiz: NextPage<Props> = ({ userId, userName }: Props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1>A random quiz</h1>
+      <main className={styles.main}>
         {socket && connected
           ? (
             <SocketContext.Provider value={socket}>
-              {renderGameState()}
+              <Sidebar
+                userName={userName}
+                userId={userId}
+              />
+              <section className={styles.game}>
+                {renderGameState()}
+              </section>
               <Chat
                 userName={userName}
                 userId={userId}
                 room={quiz as string}
-              />
-              <Sidebar
-                userName={userName}
-                userId={userId}
               />
             </SocketContext.Provider>
           )

@@ -51,6 +51,7 @@ const Sidebar: FC<Props> = ({ userName, userId }) => {
 
   return (
     <section>
+      <h1>A random quiz</h1>
       <ul>
         {userList.map((user) => {
           return (
