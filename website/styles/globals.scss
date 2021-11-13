@@ -18,22 +18,17 @@ a {
   text-decoration: none;
 }
 
-button {
+button, input {
   border: none;
   outline: none;
   background-color: transparent;
   font-family: inherit;
   font-size: inherit;
   color: inherit;
-  cursor: pointer;
 }
 
-input {
-  border: none;
-  outline: none;
-  color: inherit;
-  font-family: inherit;
-  font-size: inherit;
+button, input[type=button], input[type=submit] {
+  cursor: pointer;
 }
 
 li {
