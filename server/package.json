@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "concurrently \"tsc -w\" \"nodemon -w build build/index.js\"",
     "start": "node build/index.js",
-    "build": "tsc",
-    "postinstall": "yarn build"
+    "build": "tsc"
   },
   "dependencies": {
     "socket.io": "^4.3.1"
