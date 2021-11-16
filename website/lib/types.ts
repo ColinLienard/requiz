@@ -17,3 +17,11 @@ export type QuizQuestion = {
   responses: string[],
   correct: number
 }
+
+export type UserFromDB = {
+  _id: string,
+  name: string,
+  email: string,
+  image?: string
+  password?: string
+}
