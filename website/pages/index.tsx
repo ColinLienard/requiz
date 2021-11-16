@@ -16,25 +16,24 @@ const Home: NextPage = () => {
 
       <main>
         <h1>Requiz</h1>
-        {session
-          ? (
-            <>
-              <p>Signed in as</p>
-              <h3>{session.user?.email}</h3>
-              <button type="button" onClick={() => signOut()}>Sign out</button>
-              <br />
-              <br />
-              <Link href="/quiz/room">
-                <a>Join a quiz</a>
-              </Link>
-            </>
-          )
-          : (
-            <>
-              <p>Not signed in.</p>
-              <button type="button" onClick={() => signIn()}>Sign in</button>
-            </>
-          )}
+        {session && (
+          <>
+            <p>Signed in as</p>
+            <h3>{session.user?.email}</h3>
+            <button type="button" onClick={() => signOut()}>Sign out</button>
+            <br />
+            <br />
+            <Link href="/quiz/room">
+              <a>Join a quiz</a>
+            </Link>
+          </>
+        )}
+        {!session && (
+          <>
+            <p>Not signed in.</p>
+            <button type="button" onClick={() => signIn()}>Sign in</button>
+          </>
+        )}
       </main>
     </>
   );
