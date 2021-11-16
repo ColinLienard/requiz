@@ -6,20 +6,17 @@ import {
   FormEvent,
   useContext,
 } from 'react';
-// import { Socket } from 'socket.io-client';
 import ChatMessage from '../ChatMessage/ChatMessage';
 import { ChatMessageType } from '../../../lib/types';
 import SocketContext from '../../../lib/contexts/SocketContext';
 
 type Props = {
-  // socket: Socket,
   userName: string,
   userId: number,
   room: string
 }
 
 const Chat: FC<Props> = ({
-  // socket,
   userName,
   userId,
   room,
@@ -79,13 +76,11 @@ const Chat: FC<Props> = ({
   return (
     <section>
       <ul>
-        {chatMessages.map((chatMessage) => {
-          return (
-            <li key={chatMessage.id}>
-              <ChatMessage author={chatMessage.author} content={chatMessage.content} />
-            </li>
-          );
-        })}
+        {chatMessages.map((chatMessage) => (
+          <li key={chatMessage.id}>
+            <ChatMessage author={chatMessage.author} content={chatMessage.content} />
+          </li>
+        ))}
       </ul>
       <form onSubmit={sendMessage}>
         <input type="text" placeholder="Message..." value={message} onChange={handleMessageChange} />

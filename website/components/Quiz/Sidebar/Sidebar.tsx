@@ -53,13 +53,11 @@ const Sidebar: FC<Props> = ({ userName, userId }) => {
     <section>
       <h1>A random quiz</h1>
       <ul>
-        {userList.map((user) => {
-          return (
-            <li key={user.id}>
-              <UserItem name={user.name} lives={user.lives} />
-            </li>
-          );
-        })}
+        {userList.map((user) => (
+          <li key={user.id}>
+            <UserItem name={user.name} lives={user.lives} />
+          </li>
+        ))}
       </ul>
       <Link href="/">
         <a

@@ -82,24 +82,22 @@ const Quiz: NextPage<Props> = ({ userId, userName }: Props) => {
       </Head>
 
       <main className={styles.main}>
-        {socket && connected
-          ? (
-            <SocketContext.Provider value={socket}>
-              <Sidebar
-                userName={userName}
-                userId={userId}
-              />
-              <section className={styles.game}>
-                {renderGameState()}
-              </section>
-              <Chat
-                userName={userName}
-                userId={userId}
-                room={quiz as string}
-              />
-            </SocketContext.Provider>
-          )
-          : null}
+        {socket && connected && (
+          <SocketContext.Provider value={socket}>
+            <Sidebar
+              userName={userName}
+              userId={userId}
+            />
+            <section className={styles.game}>
+              {renderGameState()}
+            </section>
+            <Chat
+              userName={userName}
+              userId={userId}
+              room={quiz as string}
+            />
+          </SocketContext.Provider>
+        )}
       </main>
     </>
   );

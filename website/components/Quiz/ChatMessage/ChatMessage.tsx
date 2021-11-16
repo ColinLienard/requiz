@@ -8,14 +8,12 @@ type Props = {
 const ChatMessage: FC<Props> = ({ author, content }) => {
   return (
     <p>
-      {author
-        ? (
-          <span>
-            {author}
-            {': '}
-          </span>
-        )
-        : null}
+      {author && (
+        <span>
+          {author}
+          {': '}
+        </span>
+      )}
       {content}
     </p>
   );
