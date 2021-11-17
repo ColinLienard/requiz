@@ -1,12 +1,67 @@
+import { FormEvent, useRef, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { getSession, signIn, getCsrfToken } from 'next-auth/react';
+import authErrorIndex from '../../lib/utils/authErrorIndex';
 
 type Props = {
   csrfToken: string
 }
 
 const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
+  const signInEmail = useRef<HTMLInputElement>(null);
+  const signInPassword = useRef<HTMLInputElement>(null);
+  const signUpName = useRef<HTMLInputElement>(null);
+  const signUpEmail = useRef<HTMLInputElement>(null);
+  const signUpPassword = useRef<HTMLInputElement>(null);
+  const signUpConfirmPassword = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  const handleSignInSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    signIn('signin', {
+      csrfToken,
+      email: signInEmail.current?.value,
+      password: signInPassword.current?.value,
+      redirect: false,
+    }).then((response: { error: string } | undefined) => {
+      if (response?.error) {
+        setError(response?.error);
+      } else {
+        router.push('/');
+      }
+    });
+  };
+
+  const handleSignUpSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (
+      signUpPassword.current?.value.length
+      && signUpPassword.current?.value.length < 8
+    ) {
+      setError('password-not-long-enough');
+    } else if (signUpPassword.current?.value !== signUpConfirmPassword.current?.value) {
+      setError('passwords-do-not-match');
+    } else {
+      signIn('signup', {
+        csrfToken,
+        name: signUpName.current?.value,
+        email: signUpEmail.current?.value,
+        password: signUpPassword.current?.value,
+        redirect: false,
+      }).then((response: { error: string } | undefined) => {
+        if (response?.error) {
+          setError(response?.error);
+        } else {
+          router.push('/');
+        }
+      });
+    }
+  };
+
   return (
     <>
       <Head>
@@ -16,40 +71,46 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
       </Head>
 
       <main>
+        <p><strong>{authErrorIndex[error]}</strong></p>
+        <Link href="/">
+          <a>Home</a>
+        </Link>
+        <br />
+        <br />
         <button type="button" onClick={() => signIn('discord')}>
           Sign in with Discord
         </button>
         <h1>Sign In with credentials</h1>
-        <form method="post" action="/api/auth/callback/signin">
+        <form method="post" action="/api/auth/callback/signin" onSubmit={handleSignInSubmit}>
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <label htmlFor="email">
             Email
-            <input name="email" type="email" />
+            <input name="email" type="email" ref={signInEmail} required />
           </label>
           <label htmlFor="password">
             Password
-            <input name="password" type="password" />
+            <input name="password" type="password" ref={signInPassword} required />
           </label>
           <button type="submit">Sign in</button>
         </form>
         <h2>Sign up with credentials</h2>
-        <form method="post" action="/api/auth/callback/signup">
+        <form method="post" action="/api/auth/callback/signup" onSubmit={handleSignUpSubmit}>
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <label htmlFor="name">
             Name
-            <input name="name" type="text" />
+            <input name="name" type="text" ref={signUpName} required />
           </label>
           <label htmlFor="email">
             Email
-            <input name="email" type="email" />
+            <input name="email" type="email" ref={signUpEmail} required />
           </label>
           <label htmlFor="password">
             Password
-            <input name="password" type="password" />
+            <input name="password" type="password" ref={signUpPassword} required />
           </label>
           <label htmlFor="confirmPassword">
             Confirm password
-            <input name="confirmPassword" type="password" />
+            <input name="confirmPassword" type="password" ref={signUpConfirmPassword} required />
           </label>
           <button type="submit">Sign up</button>
         </form>

@@ -26,16 +26,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => NextAuth(req
           password: string
         };
         const client = await clientPromise;
-        const db = client.db();
-        const user = await db.collection('users').findOne({ email });
+        const user = await client.db().collection('users').findOne({ email });
         if (!user) {
-          /* TODO: handle user doesn't exist */
-          return null;
+          throw new Error('user-does-not-exist');
+        }
+        if (!user.password) {
+          throw new Error('wrong-provider');
         }
         const checkPassword = await compare(password, user.password);
         if (!checkPassword) {
-          /* TODO: handle wrong password */
-          return null;
+          throw new Error('wrong-password');
         }
         client.close();
         return user;
@@ -51,26 +51,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => NextAuth(req
           name,
           email,
           password,
-          confirmPassword,
         } = credentials as {
           name: string,
           email: string,
           password: string,
-          confirmPassword: string
         };
-        if (password !== confirmPassword) {
-          /* TODO: handle passwords must be the same */
-          return null;
-        }
         const client = await clientPromise;
-        const db = client.db();
-        const exist = await db.collection('users').findOne({ email });
+        const exist = await client.db().collection('users').findOne({ email });
         if (exist) {
-          /* TODO: handle email already used */
-          client.close();
-          return null;
+          throw new Error('email-already-used');
         }
-        await db.collection('users').insertOne({
+        await client.db().collection('users').insertOne({
           name,
           email,
           password: await hash(password, 12),
