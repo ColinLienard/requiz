@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import NextAuth from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
+import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter';
 import { hash, compare } from 'bcryptjs';
@@ -11,6 +12,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => NextAuth(req
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
     CredentialsProvider({
       id: 'signin',

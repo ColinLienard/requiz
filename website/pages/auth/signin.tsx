@@ -80,6 +80,10 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
         <button type="button" onClick={() => signIn('discord')}>
           Sign in with Discord
         </button>
+        <br />
+        <button type="button" onClick={() => signIn('google')}>
+          Sign in with Google
+        </button>
         <h1>Sign In with credentials</h1>
         <form method="post" action="/api/auth/callback/signin" onSubmit={handleSignInSubmit}>
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
