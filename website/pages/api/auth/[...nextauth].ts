@@ -62,9 +62,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => NextAuth(req
           password: string,
         };
         const client = await clientPromise;
-        const exist = await client.db().collection('users').findOne({ email });
-        if (exist) {
+        const emailExist = await client.db().collection('users').findOne({ email });
+        if (emailExist) {
           throw new Error('email-already-used');
+        }
+        const nameExist = await client.db().collection('users').findOne({ name });
+        if (nameExist) {
+          throw new Error('name-already-used');
         }
         await client.db().collection('users').insertOne({
           name,

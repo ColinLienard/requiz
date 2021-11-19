@@ -5,6 +5,7 @@ const authErrorIndex: { [key: string]: string } = {
   'wrong-provider': 'This user account is linked to Discord or Google.',
   'wrong-password': 'Wrong password.',
   'email-already-used': 'Email is already used.',
+  'name-already-used': 'Name is already used.',
 };
 
 export default authErrorIndex;
