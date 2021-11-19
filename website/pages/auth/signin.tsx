@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getSession, signIn, getCsrfToken } from 'next-auth/react';
 import authErrorIndex from '../../lib/utils/authErrorIndex';
+import PasswordInput from '../../components/Common/PasswordInput/PasswordInput';
 
 type Props = {
   csrfToken: string
@@ -91,10 +92,7 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
             Email
             <input name="email" type="email" ref={signInEmail} required />
           </label>
-          <label htmlFor="password">
-            Password
-            <input name="password" type="password" ref={signInPassword} required />
-          </label>
+          <PasswordInput label="Password" name="password" ref={signInPassword} />
           <button type="submit">Sign in</button>
         </form>
         <h2>Sign up with credentials</h2>
@@ -108,14 +106,8 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
             Email
             <input name="email" type="email" ref={signUpEmail} required />
           </label>
-          <label htmlFor="password">
-            Password
-            <input name="password" type="password" ref={signUpPassword} required />
-          </label>
-          <label htmlFor="confirmPassword">
-            Confirm password
-            <input name="confirmPassword" type="password" ref={signUpConfirmPassword} required />
-          </label>
+          <PasswordInput label="Password" name="password" ref={signUpPassword} />
+          <PasswordInput label="Confirm password" name="confirmPassword" ref={signUpConfirmPassword} />
           <button type="submit">Sign up</button>
         </form>
       </main>
