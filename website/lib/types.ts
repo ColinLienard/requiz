@@ -6,7 +6,7 @@ export type ChatMessageType = {
 
 export type User = {
   name: string,
-  id: number,
+  id: string,
   lives: number
 }
 
@@ -19,7 +19,7 @@ export type QuizQuestion = {
 }
 
 export type UserFromDB = {
-  _id: string,
+  id: string,
   name: string,
   email: string,
   image?: string

@@ -4,7 +4,7 @@ const users: User[] = [];
 
 export const addUser = (
   userName: string,
-  userId: number,
+  userId: string,
   socketId: string,
   room: string,
 ) => {

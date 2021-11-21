@@ -1,6 +1,6 @@
 export type User = {
   name: string,
-  id: number,
+  id: string,
   socketId: string,
   room: string,
   lives: number

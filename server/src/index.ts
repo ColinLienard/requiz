@@ -21,7 +21,7 @@ const maxUsers = 10;
 io.on('connection', (socket: Socket) => {
   socket.on('join', (
     { userName, userId, room }:
-    { userName: string, userId: number, room: string },
+    { userName: string, userId: string, room: string },
   ) => {
     if (!getRoom(room)) {
       createRoom(room);

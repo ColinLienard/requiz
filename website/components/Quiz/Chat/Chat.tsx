@@ -12,7 +12,7 @@ import SocketContext from '../../../lib/contexts/SocketContext';
 
 type Props = {
   userName: string,
-  userId: number,
+  userId: string,
   room: string
 }
 
