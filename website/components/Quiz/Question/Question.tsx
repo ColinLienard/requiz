@@ -72,19 +72,17 @@ const Question: FC = () => {
       </h2>
       <h3>{quizQuestion?.question}</h3>
       <ul>
-        {quizQuestion?.responses.map((response, index) => {
-          return (
-            <li key={response}>
-              <Response
-                text={response}
-                number={index + 1}
-                selected={selected}
-                select={handleSelect}
-                good={reveal ? quizQuestion.correct === index + 1 : undefined}
-              />
-            </li>
-          );
-        })}
+        {quizQuestion?.responses.map((response, index) => (
+          <li key={response}>
+            <Response
+              text={response}
+              number={index + 1}
+              selected={selected}
+              select={handleSelect}
+              good={reveal ? quizQuestion.correct === index + 1 : undefined}
+            />
+          </li>
+        ))}
       </ul>
     </section>
   );

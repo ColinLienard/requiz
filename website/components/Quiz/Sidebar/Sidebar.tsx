@@ -11,7 +11,7 @@ import { User } from '../../../lib/types';
 
 type Props = {
   userName: string,
-  userId: number
+  userId: string
 }
 
 const Sidebar: FC<Props> = ({ userName, userId }) => {
@@ -27,7 +27,7 @@ const Sidebar: FC<Props> = ({ userName, userId }) => {
       setUserList(users);
     });
 
-    socket.on('user-joined', (anUserName: string, anUserId: number) => {
+    socket.on('user-joined', (anUserName: string, anUserId: string) => {
       setUserList((state) => [{ name: anUserName, id: anUserId, lives: 3 }, ...state]);
     });
 
@@ -53,13 +53,11 @@ const Sidebar: FC<Props> = ({ userName, userId }) => {
     <section>
       <h1>A random quiz</h1>
       <ul>
-        {userList.map((user) => {
-          return (
-            <li key={user.id}>
-              <UserItem name={user.name} lives={user.lives} />
-            </li>
-          );
-        })}
+        {userList.map((user) => (
+          <li key={user.id}>
+            <UserItem name={user.name} lives={user.lives} />
+          </li>
+        ))}
       </ul>
       <Link href="/">
         <a

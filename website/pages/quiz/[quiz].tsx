@@ -1,23 +1,21 @@
 import { useEffect, useState } from 'react';
-import type { GetServerSideProps, NextPage } from 'next';
+import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { io, Socket } from 'socket.io-client';
+import { useSession } from 'next-auth/react';
 import Chat from '../../components/Quiz/Chat/Chat';
 import Sidebar from '../../components/Quiz/Sidebar/Sidebar';
 import WaitingRoom from '../../components/Quiz/WaitingRoom/WaitingRoom';
 import Question from '../../components/Quiz/Question/Question';
 import Results from '../../components/Quiz/Results/Results';
 import SocketContext from '../../lib/contexts/SocketContext';
-import { GameState } from '../../lib/types';
+import { GameState, UserFromDB } from '../../lib/types';
 import styles from '../../styles/pages/Quiz.module.scss';
 
-type Props = {
-  userId: number,
-  userName: string
-}
-
-const Quiz: NextPage<Props> = ({ userId, userName }: Props) => {
+const Quiz: NextPage = () => {
+  const { data: session } = useSession();
+  const { id: userId, name: userName } = session?.user as UserFromDB;
   const router = useRouter();
   const { quiz } = router.query;
   const [socket, setSocket] = useState<Socket>();
@@ -82,39 +80,25 @@ const Quiz: NextPage<Props> = ({ userId, userName }: Props) => {
       </Head>
 
       <main className={styles.main}>
-        {socket && connected
-          ? (
-            <SocketContext.Provider value={socket}>
-              <Sidebar
-                userName={userName}
-                userId={userId}
-              />
-              <section className={styles.game}>
-                {renderGameState()}
-              </section>
-              <Chat
-                userName={userName}
-                userId={userId}
-                room={quiz as string}
-              />
-            </SocketContext.Provider>
-          )
-          : null}
+        {socket && connected && (
+          <SocketContext.Provider value={socket}>
+            <Sidebar
+              userName={userName}
+              userId={userId}
+            />
+            <section className={styles.game}>
+              {renderGameState()}
+            </section>
+            <Chat
+              userName={userName}
+              userId={userId}
+              room={quiz as string}
+            />
+          </SocketContext.Provider>
+        )}
       </main>
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const userId = Math.round(Math.random() * 1000);
-  const userName = `User${userId}`;
-
-  return {
-    props: {
-      userId,
-      userName,
-    },
-  };
 };
 
 export default Quiz;
