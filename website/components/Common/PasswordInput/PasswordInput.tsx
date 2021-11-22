@@ -1,11 +1,11 @@
-import { forwardRef, useState } from 'react';
+import { FC, useState } from 'react';
 
 type Props = {
   label: string,
   name: string
 }
 
-const PasswordInput = forwardRef<HTMLInputElement, Props>(({ label, name }, ref) => {
+const PasswordInput: FC<Props> = ({ label, name }) => {
   const [visible, setVisible] = useState(false);
 
   return (
@@ -14,7 +14,6 @@ const PasswordInput = forwardRef<HTMLInputElement, Props>(({ label, name }, ref)
       <input
         type={visible ? 'text' : 'password'}
         name={name}
-        ref={ref}
         required
       />
       <button type="button" onClick={() => setVisible((v) => !v)}>
@@ -22,7 +21,7 @@ const PasswordInput = forwardRef<HTMLInputElement, Props>(({ label, name }, ref)
       </button>
     </label>
   );
-});
+};
 
 PasswordInput.displayName = 'PasswordInput';
 
