@@ -1,36 +1,31 @@
+import { useReducer, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { FormEvent } from 'react';
+import { ObjectId } from 'mongodb';
+import SettingBar from '../../components/Creator/SettingBar/SettingBar';
+import QuizEditor from '../../components/Creator/QuizEditor/QuizEditor';
+import { EditorContext, questionsReducer } from '../../lib/contexts/EditorContext';
 import clientPromise from '../../lib/utils/mongodb';
-import { UserFromDB } from '../../lib/types';
+import { QuizData, UserFromDB } from '../../lib/types';
 
 type Props = {
-  quizId: string
+  quizId: string,
+  quizData?: QuizData
 }
 
-type Value = {
-  value: string
-}
+const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
+  const [settings, setSettings] = useState<QuizData>();
+  const [questions, dispatchQuestions] = useReducer(questionsReducer, quizData?.questions);
 
-interface SettingsFormData extends EventTarget {
-  title: Value,
-  description: Value
-}
-
-const Creator: NextPage<Props> = ({ quizId }: Props) => {
-  const handleSettings = async (event: FormEvent) => {
-    event.preventDefault();
-    const { title, description } = event.target as SettingsFormData;
-    // const action = (event.nativeEvent as SubmitEvent).submitter?.id;
-    // console.log(action);
+  const saveData = async () => {
     const response = await fetch('/api/save-quiz', {
       method: 'POST',
       body: JSON.stringify({
         quizId,
-        title: title.value,
-        description: description.value,
+        ...settings,
+        questions,
       }),
     });
     if (response.ok) {
@@ -50,22 +45,24 @@ const Creator: NextPage<Props> = ({ quizId }: Props) => {
         <Link href="/">
           <a>Home</a>
         </Link>
-        <h1>Settings</h1>
-        <form onSubmit={handleSettings}>
-          <label htmlFor="title">
-            Title
-            <input type="text" name="title" required />
-          </label>
-          <label htmlFor="description">
-            Description
-            <input type="text" name="description" required />
-          </label>
-          <input type="submit" value="Save" id="save" />
-          <input type="submit" value="Publish" id="publish" />
-        </form>
+        <h1>Quiz creator</h1>
+        <br />
+        <SettingBar setSettings={setSettings} defaultData={quizData} />
+        <br />
+        <EditorContext.Provider value={{ questions, dispatchQuestions }}>
+          <QuizEditor />
+        </EditorContext.Provider>
+        <br />
+        <button type="button" onClick={saveData}>Save</button>
+        <br />
+        <button type="button" onClick={saveData}>Publish</button>
       </main>
     </>
   );
+};
+
+Creator.defaultProps = {
+  quizData: {},
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -80,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const quiz = context.params?.quiz;
+  const quiz = context.params?.quiz as string | undefined;
   if (!quiz) {
     return {
       redirect: {
@@ -95,6 +92,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const client = await clientPromise;
     const response = await client.db().collection('quizzes').insertOne({ userId });
     const quizId = response.insertedId.toHexString();
+    client.close();
 
     return {
       props: {
@@ -102,10 +100,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
+  const client = await clientPromise;
+  const response = await client.db().collection('quizzes').findOne({ _id: new ObjectId(quiz) });
+  if (response) {
+    response._id = response?._id.toHexString();
+  }
 
   return {
     props: {
       quizId: quiz,
+      quizData: response,
     },
   };
 };

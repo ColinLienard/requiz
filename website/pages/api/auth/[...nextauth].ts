@@ -87,7 +87,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => NextAuth(req
     jwt: async ({ token, user }) => {
       const newToken = token;
       if (user) {
-        // eslint-disable-next-line no-underscore-dangle
         newToken.userId = user._id;
       }
       return newToken;

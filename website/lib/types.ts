@@ -13,6 +13,7 @@ export type User = {
 export type GameState = 'waiting' | 'playing' | 'end'
 
 export type QuizQuestion = {
+  id: number,
   question: string,
   responses: string[],
   correct: number
@@ -24,4 +25,24 @@ export type UserFromDB = {
   email: string,
   image?: string
   password?: string
+}
+
+export type QuizData = {
+  title?: string,
+  description?: string,
+  status?: 'draft' | 'published',
+  questions?: QuizQuestion[]
+}
+
+export type QuestionsAction = {
+  type: 'add'
+} | {
+  type: 'modify',
+  value: QuizQuestion
+}
+
+export type QuizSettings = {
+  title?: string,
+  description?: string,
+  status: 'draft' | 'published'
 }
