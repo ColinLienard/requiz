@@ -21,10 +21,18 @@ const QuestionBlock: FC<Props> = ({ question }) => {
     });
   };
 
+  const handleDelete = () => {
+    dispatchQuestions({
+      type: 'delete',
+      id: question.id,
+    });
+  };
+
   return (
     <div>
+      <button type="button" onClick={handleDelete}>X</button>
       <p>{question.id}</p>
-      <input type="text" value={question.question} onChange={handleChange} />
+      <input type="text" placeholder="Your question here" value={question.question} onChange={handleChange} />
     </div>
   );
 };

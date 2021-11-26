@@ -14,7 +14,7 @@ const QuizEditor: FC = () => {
       <h2>Quiz</h2>
       <ul>
         {questions?.map((question) => (
-          <li key={question.question}>
+          <li key={question.id}>
             <QuestionBlock question={question} />
           </li>
         ))}

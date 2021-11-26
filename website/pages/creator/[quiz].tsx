@@ -16,7 +16,7 @@ type Props = {
 }
 
 const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
-  const [settings, setSettings] = useState<QuizData>();
+  const [settings, setSettings] = useState<QuizData | undefined>(quizData);
   const [questions, dispatchQuestions] = useReducer(questionsReducer, quizData?.questions);
 
   const saveData = async () => {

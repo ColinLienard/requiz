@@ -26,11 +26,23 @@ const SettingBar: FC<Props> = ({ setSettings, defaultData }) => {
       <h2>Settings</h2>
       <label htmlFor="title">
         Title
-        <input type="text" name="title" required defaultValue={defaultData?.title} onChange={handleChange} />
+        <input
+          type="text"
+          name="title"
+          required
+          defaultValue={defaultData?.title}
+          onChange={handleChange}
+        />
       </label>
       <label htmlFor="description">
         Description
-        <input type="text" name="description" required defaultValue={defaultData?.description} onChange={handleChange} />
+        <input
+          type="text"
+          name="description"
+          required
+          defaultValue={defaultData?.description}
+          onChange={handleChange}
+        />
       </label>
     </section>
   );

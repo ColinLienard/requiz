@@ -1,29 +1,47 @@
 import { createContext, Dispatch } from 'react';
-import { QuestionsAction, QuizQuestion } from '../types';
+import { QuizQuestion } from '../types';
+
+type QuestionsAction = {
+  type: 'add'
+} | {
+  type: 'modify',
+  value: QuizQuestion
+} | {
+  type: 'delete',
+  id: number
+}
+
+const newId = (state: QuizQuestion[]) => {
+  return state.reduce((previous, current) => {
+    return current.id >= previous ? current.id + 1 : previous;
+  }, 0);
+};
 
 export const questionsReducer = (state: QuizQuestion[] | undefined, action: QuestionsAction) => {
   switch (action.type) {
     case 'add': {
-      if (state) {
-        return [...state, {
-          id: state ? state.length + 1 : 1,
-          question: 'Your question here',
-          responses: [''],
-          correct: 0,
-        }];
-      }
-      return [{
-        id: 1,
-        question: 'Your question here',
+      const question = {
+        id: newId(state as QuizQuestion[]),
+        question: '',
         responses: [''],
         correct: 0,
-      }];
+      };
+      if (state) {
+        return [...state, question];
+      }
+      return [question];
     }
-    case 'modify': {
-      return state?.splice(action.value.id - 1, 1, action.value);
-    }
+    case 'modify':
+      return state?.map((question) => {
+        if (question.id === action.value.id) {
+          return action.value;
+        }
+        return question;
+      });
+    case 'delete':
+      return state?.filter((question) => question.id !== action.id);
     default:
-      return state;
+      throw new Error();
   }
 };
 

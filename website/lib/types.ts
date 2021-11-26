@@ -33,16 +33,3 @@ export type QuizData = {
   status?: 'draft' | 'published',
   questions?: QuizQuestion[]
 }
-
-export type QuestionsAction = {
-  type: 'add'
-} | {
-  type: 'modify',
-  value: QuizQuestion
-}
-
-export type QuizSettings = {
-  title?: string,
-  description?: string,
-  status: 'draft' | 'published'
-}

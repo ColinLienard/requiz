@@ -20,7 +20,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         questions,
       },
     });
-  client.close();
   if (response.modifiedCount) {
     res.status(200).end();
   } else {
