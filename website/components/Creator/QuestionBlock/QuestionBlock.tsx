@@ -36,11 +36,21 @@ const QuestionBlock: FC<Props> = ({ question }) => {
     <div style={{ backgroundColor: '#EFEFEF' }}>
       <button type="button" onClick={handleDelete}>X</button>
       <p>{question.id}</p>
-      <input type="text" placeholder="Your question here" value={question.question} onChange={handleChange} />
+      <input
+        type="text"
+        placeholder="Your question here"
+        value={question.question}
+        onChange={handleChange}
+      />
       <ul>
         {question.responses.map((response, index) => (
-          <li key={`${Math.floor(Math.random() * 1000)}`}>
-            <ResponseBlock id={question.id} index={index} response={response} />
+          <li key={response.id}>
+            <ResponseBlock
+              id={question.id}
+              index={index}
+              response={response.value}
+              canBeDeleted={question.responses.length > 2}
+            />
           </li>
         ))}
       </ul>

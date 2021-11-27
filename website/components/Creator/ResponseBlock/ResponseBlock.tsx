@@ -4,10 +4,16 @@ import { EditorContext } from '../../../lib/contexts/EditorContext';
 type Props = {
   id: number,
   index: number,
-  response: string
+  response: string,
+  canBeDeleted: boolean
 }
 
-const ResponseBlock: FC<Props> = ({ id, index, response }) => {
+const ResponseBlock: FC<Props> = ({
+  id,
+  index,
+  response,
+  canBeDeleted,
+}) => {
   const { dispatchQuestions } = useContext(EditorContext);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -29,10 +35,15 @@ const ResponseBlock: FC<Props> = ({ id, index, response }) => {
 
   return (
     <div style={{ backgroundColor: '#D7D7D7' }}>
-      {index > 1 && (
+      {canBeDeleted && (
         <button type="button" onClick={handleDelete}>X</button>
       )}
-      <input type="text" placeholder="A response here" value={response} onChange={handleChange} />
+      <input
+        type="text"
+        placeholder="A response here"
+        value={response}
+        onChange={handleChange}
+      />
     </div>
   );
 };

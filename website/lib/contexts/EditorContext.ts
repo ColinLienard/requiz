@@ -24,8 +24,8 @@ type QuestionsAction = {
   index: number
 }
 
-const newId = (state: QuizQuestion[]) => {
-  return state.reduce((previous, current) => {
+const newId = (state: { id: number }[]) => {
+  return state.reduce((previous: number, current: { id: number }) => {
     return current.id >= previous ? current.id + 1 : previous;
   }, 0);
 };
@@ -36,7 +36,10 @@ export const questionsReducer = (state: QuizQuestion[] | undefined, action: Ques
       const question = {
         id: newId(state as QuizQuestion[]),
         question: '',
-        responses: ['', ''],
+        responses: [
+          { id: 1, value: '' },
+          { id: 2, value: '' },
+        ],
         correct: 0,
       };
       if (state) {
@@ -44,7 +47,7 @@ export const questionsReducer = (state: QuizQuestion[] | undefined, action: Ques
       }
       return [question];
     }
-    case 'modifyQuestion':
+    case 'modifyQuestion': {
       return state?.map((question) => {
         if (question.id === action.id) {
           const newQuestion = question;
@@ -53,27 +56,34 @@ export const questionsReducer = (state: QuizQuestion[] | undefined, action: Ques
         }
         return question;
       });
-    case 'delete':
+    }
+    case 'delete': {
       return state?.filter((question) => question.id !== action.id);
-    case 'addResponse':
+    }
+    case 'addResponse': {
       return state?.map((question) => {
         if (question.id === action.id) {
           const newQuestion = question;
-          newQuestion.responses = [...newQuestion.responses, ''];
+          newQuestion.responses = [...newQuestion.responses, {
+            id: newId(question.responses),
+            value: '',
+          }];
           return newQuestion;
         }
         return question;
       });
-    case 'modifyResponse':
+    }
+    case 'modifyResponse': {
       return state?.map((question) => {
         if (question.id === action.id) {
           const newQuestion = question;
-          newQuestion.responses[action.index] = action.value;
+          newQuestion.responses[action.index].value = action.value;
           return newQuestion;
         }
         return question;
       });
-    case 'deleteResponse':
+    }
+    case 'deleteResponse': {
       return state?.map((question) => {
         if (question.id === action.id) {
           const newQuestion = question;
@@ -82,8 +92,10 @@ export const questionsReducer = (state: QuizQuestion[] | undefined, action: Ques
         }
         return question;
       });
-    default:
+    }
+    default: {
       throw new Error();
+    }
   }
 };
 
