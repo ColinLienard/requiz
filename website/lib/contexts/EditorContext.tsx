@@ -4,11 +4,24 @@ import { QuizQuestion } from '../types';
 type QuestionsAction = {
   type: 'add'
 } | {
-  type: 'modify',
-  value: QuizQuestion
+  type: 'modifyQuestion',
+  id: number,
+  value: string
 } | {
   type: 'delete',
   id: number
+} | {
+  type: 'addResponse',
+  id: number
+} | {
+  type: 'modifyResponse',
+  id: number,
+  index: number,
+  value: string
+} | {
+  type: 'deleteResponse',
+  id: number,
+  index: number
 }
 
 const newId = (state: QuizQuestion[]) => {
@@ -23,7 +36,7 @@ export const questionsReducer = (state: QuizQuestion[] | undefined, action: Ques
       const question = {
         id: newId(state as QuizQuestion[]),
         question: '',
-        responses: [''],
+        responses: ['', ''],
         correct: 0,
       };
       if (state) {
@@ -31,15 +44,44 @@ export const questionsReducer = (state: QuizQuestion[] | undefined, action: Ques
       }
       return [question];
     }
-    case 'modify':
+    case 'modifyQuestion':
       return state?.map((question) => {
-        if (question.id === action.value.id) {
-          return action.value;
+        if (question.id === action.id) {
+          const newQuestion = question;
+          newQuestion.question = action.value;
+          return newQuestion;
         }
         return question;
       });
     case 'delete':
       return state?.filter((question) => question.id !== action.id);
+    case 'addResponse':
+      return state?.map((question) => {
+        if (question.id === action.id) {
+          const newQuestion = question;
+          newQuestion.responses = [...newQuestion.responses, ''];
+          return newQuestion;
+        }
+        return question;
+      });
+    case 'modifyResponse':
+      return state?.map((question) => {
+        if (question.id === action.id) {
+          const newQuestion = question;
+          newQuestion.responses[action.index] = action.value;
+          return newQuestion;
+        }
+        return question;
+      });
+    case 'deleteResponse':
+      return state?.map((question) => {
+        if (question.id === action.id) {
+          const newQuestion = question;
+          newQuestion.responses.splice(action.index, 1);
+          return newQuestion;
+        }
+        return question;
+      });
     default:
       throw new Error();
   }

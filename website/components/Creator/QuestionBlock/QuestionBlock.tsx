@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, useContext } from 'react';
 import { EditorContext } from '../../../lib/contexts/EditorContext';
 import { QuizQuestion } from '../../../lib/types';
+import ResponseBlock from '../ResponseBlock/ResponseBlock';
 
 type Props = {
   question: QuizQuestion
@@ -11,13 +12,9 @@ const QuestionBlock: FC<Props> = ({ question }) => {
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     dispatchQuestions({
-      type: 'modify',
-      value: {
-        id: question.id,
-        question: event.target?.value,
-        responses: [''],
-        correct: 0,
-      },
+      type: 'modifyQuestion',
+      id: question.id,
+      value: event.target?.value,
     });
   };
 
@@ -28,11 +25,28 @@ const QuestionBlock: FC<Props> = ({ question }) => {
     });
   };
 
+  const handleAddResponse = () => {
+    dispatchQuestions({
+      type: 'addResponse',
+      id: question.id,
+    });
+  };
+
   return (
-    <div>
+    <div style={{ backgroundColor: '#EFEFEF' }}>
       <button type="button" onClick={handleDelete}>X</button>
       <p>{question.id}</p>
       <input type="text" placeholder="Your question here" value={question.question} onChange={handleChange} />
+      <ul>
+        {question.responses.map((response, index) => (
+          <li key={`${Math.floor(Math.random() * 1000)}`}>
+            <ResponseBlock id={question.id} index={index} response={response} />
+          </li>
+        ))}
+      </ul>
+      {question.responses.length < 4 && (
+        <button type="button" onClick={handleAddResponse}>Add response</button>
+      )}
     </div>
   );
 };
