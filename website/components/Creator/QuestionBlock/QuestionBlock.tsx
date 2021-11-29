@@ -50,6 +50,7 @@ const QuestionBlock: FC<Props> = ({ question }) => {
               index={index}
               response={response.value}
               canBeDeleted={question.responses.length > 2}
+              isCorrect={question.correct === index}
             />
           </li>
         ))}

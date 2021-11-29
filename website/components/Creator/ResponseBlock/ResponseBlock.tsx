@@ -5,7 +5,8 @@ type Props = {
   id: number,
   index: number,
   response: string,
-  canBeDeleted: boolean
+  canBeDeleted: boolean,
+  isCorrect: boolean
 }
 
 const ResponseBlock: FC<Props> = ({
@@ -13,6 +14,7 @@ const ResponseBlock: FC<Props> = ({
   index,
   response,
   canBeDeleted,
+  isCorrect,
 }) => {
   const { dispatchQuestions } = useContext(EditorContext);
 
@@ -33,11 +35,20 @@ const ResponseBlock: FC<Props> = ({
     });
   };
 
+  const handleCorrect = () => {
+    dispatchQuestions({
+      type: 'setCorrect',
+      id,
+      value: index,
+    });
+  };
+
   return (
-    <div style={{ backgroundColor: '#D7D7D7' }}>
+    <div style={{ backgroundColor: '#D7D7D7', border: isCorrect ? '2px solid green' : '' }}>
       {canBeDeleted && (
         <button type="button" onClick={handleDelete}>X</button>
       )}
+      <button type="button" onClick={handleCorrect}>O</button>
       <input
         type="text"
         placeholder="A response here"

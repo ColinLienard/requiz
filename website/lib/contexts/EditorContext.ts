@@ -22,6 +22,10 @@ type QuestionsAction = {
   type: 'deleteResponse',
   id: number,
   index: number
+} | {
+  type: 'setCorrect',
+  id: number,
+  value: number
 }
 
 const newId = (state: { id: number }[]) => {
@@ -88,6 +92,17 @@ export const questionsReducer = (state: QuizQuestion[] | undefined, action: Ques
         if (question.id === action.id) {
           const newQuestion = question;
           newQuestion.responses.splice(action.index, 1);
+          newQuestion.correct -= 1;
+          return newQuestion;
+        }
+        return question;
+      });
+    }
+    case 'setCorrect': {
+      return state?.map((question) => {
+        if (question.id === action.id) {
+          const newQuestion = question;
+          newQuestion.correct = action.value;
           return newQuestion;
         }
         return question;
