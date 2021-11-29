@@ -8,6 +8,7 @@ import SettingBar from '../../components/Creator/SettingBar/SettingBar';
 import QuizEditor from '../../components/Creator/QuizEditor/QuizEditor';
 import { EditorContext, questionsReducer } from '../../lib/contexts/EditorContext';
 import clientPromise from '../../lib/utils/mongodb';
+import isNotEmpty from '../../lib/utils/isNotEmpty';
 import { QuizData, UserFromDB } from '../../lib/types';
 
 type Props = {
@@ -19,17 +20,26 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
   const [settings, setSettings] = useState<QuizData | undefined>(quizData);
   const [questions, dispatchQuestions] = useReducer(questionsReducer, quizData?.questions);
 
-  const saveData = async () => {
+  const saveData = async (publish: boolean) => {
     const response = await fetch('/api/save-quiz', {
       method: 'POST',
       body: JSON.stringify({
         quizId,
         ...settings,
         questions,
+        status: publish ? 'published' : 'draft',
       }),
     });
     if (response.ok) {
       /* TODO: handle quiz is saved */
+    }
+  };
+
+  const publish = async () => {
+    if (settings && isNotEmpty({ ...settings, questions }) && questions && questions.length > 3) {
+      await saveData(true);
+    } else {
+      /* TODO: handle quiz cannot be published */
     }
   };
 
@@ -53,16 +63,18 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
           <QuizEditor />
         </EditorContext.Provider>
         <br />
-        <button type="button" onClick={saveData}>Save</button>
+        <button type="button" onClick={() => saveData}>Save</button>
         <br />
-        <button type="button" onClick={saveData}>Publish</button>
+        <button type="button" onClick={publish}>Publish</button>
       </main>
     </>
   );
 };
 
 Creator.defaultProps = {
-  quizData: {},
+  quizData: {
+    status: 'draft',
+  },
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
