@@ -74,6 +74,17 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
 Creator.defaultProps = {
   quizData: {
     status: 'draft',
+    questions: [
+      {
+        id: 1,
+        question: '',
+        responses: [
+          { id: 1, value: '' },
+          { id: 2, value: '' },
+        ],
+        correct: 0,
+      },
+    ],
   },
 };
 

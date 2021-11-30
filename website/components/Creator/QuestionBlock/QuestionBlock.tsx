@@ -4,10 +4,11 @@ import { QuizQuestion } from '../../../lib/types';
 import ResponseBlock from '../ResponseBlock/ResponseBlock';
 
 type Props = {
-  question: QuizQuestion
+  question: QuizQuestion,
+  canBeDeleted: boolean
 }
 
-const QuestionBlock: FC<Props> = ({ question }) => {
+const QuestionBlock: FC<Props> = ({ question, canBeDeleted }) => {
   const { dispatchQuestions } = useContext(EditorContext);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +35,9 @@ const QuestionBlock: FC<Props> = ({ question }) => {
 
   return (
     <div style={{ backgroundColor: '#EFEFEF' }}>
-      <button type="button" onClick={handleDelete}>X</button>
+      {canBeDeleted && (
+        <button type="button" onClick={handleDelete}>X</button>
+      )}
       <p>{question.id}</p>
       <input
         type="text"
