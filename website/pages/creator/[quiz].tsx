@@ -3,6 +3,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ObjectId } from 'mongodb';
 import SettingBar from '../../components/Creator/SettingBar/SettingBar';
 import QuizEditor from '../../components/Creator/QuizEditor/QuizEditor';
@@ -19,8 +20,9 @@ type Props = {
 const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
   const [settings, setSettings] = useState<QuizData | undefined>(quizData);
   const [questions, dispatchQuestions] = useReducer(questionsReducer, quizData?.questions);
+  const router = useRouter();
 
-  const saveData = async (publish: boolean) => {
+  const saveQuiz = async (publish: boolean) => {
     const response = await fetch('/api/save-quiz', {
       method: 'POST',
       body: JSON.stringify({
@@ -32,14 +34,28 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     });
     if (response.ok) {
       /* TODO: handle quiz is saved */
+    } else {
+      /* TODO: handle quiz cannot be saved */
     }
   };
 
-  const publish = async () => {
+  const publishQuiz = () => {
     if (settings && isNotEmpty({ ...settings, questions }) && questions && questions.length > 3) {
-      await saveData(true);
+      saveQuiz(true);
     } else {
       /* TODO: handle quiz cannot be published */
+    }
+  };
+
+  const deleteQuiz = async () => {
+    const response = await fetch('/api/delete-quiz', {
+      method: 'POST',
+      body: quizId,
+    });
+    if (response.ok) {
+      router.push('/?alert=quiz-succesfully-deleted', '/');
+    } else {
+      /* TODO: handle quiz cannot be deleted */
     }
   };
 
@@ -63,9 +79,11 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
           <QuizEditor />
         </EditorContext.Provider>
         <br />
-        <button type="button" onClick={() => saveData}>Save</button>
+        <button type="button" onClick={() => saveQuiz(false)}>Save</button>
         <br />
-        <button type="button" onClick={publish}>Publish</button>
+        <button type="button" onClick={publishQuiz}>Publish</button>
+        <br />
+        <button type="button" onClick={deleteQuiz}>Delete quiz</button>
       </main>
     </>
   );
