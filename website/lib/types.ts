@@ -37,7 +37,7 @@ export type QuizData = {
   status?: 'draft' | 'published',
   title?: string,
   description?: string,
-  themes?: string[],
+  theme?: string[],
   maxPlayers?: number,
   startDate?: number,
   questions?: QuizQuestion[]
