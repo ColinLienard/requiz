@@ -23,8 +23,17 @@ const Home: NextPage = () => {
             <button type="button" onClick={() => signOut()}>Sign out</button>
             <br />
             <br />
-            <Link href="/quiz/room">
+            <Link href="quiz/room">
               <a>Join a quiz</a>
+            </Link>
+            <br />
+            <br />
+            <Link href="creator/new">
+              <a>Create a new quiz</a>
+            </Link>
+            <br />
+            <Link href="creator/619bcec75a17878fd12d078f">
+              <a>Continue quiz</a>
             </Link>
           </>
         )}

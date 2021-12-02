@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import NextAuth, { Session } from 'next-auth';
+import NextAuth from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -87,23 +87,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => NextAuth(req
     jwt: async ({ token, user }) => {
       const newToken = token;
       if (user) {
-        // eslint-disable-next-line no-underscore-dangle
         newToken.userId = user._id;
       }
       return newToken;
     },
     session: async ({ session, token }) => {
-      interface SessionWithUserId extends Session {
-        user?: {
-          name?: string | null,
-          email?: string | null,
-          image?: string | null,
-          id?: string | null
-        } | undefined
-      }
-      const newSession: SessionWithUserId = session;
+      const newSession = session;
       if (newSession.user) {
-        newSession.user.id = token.userId ? token.userId as string : token.sub;
+        (newSession.user as {
+          id?: string | null
+        }).id = token.userId ? token.userId as string : token.sub;
       }
       return newSession;
     },

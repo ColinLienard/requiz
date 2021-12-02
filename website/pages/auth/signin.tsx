@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -11,22 +11,33 @@ type Props = {
   csrfToken: string
 }
 
+type Value = {
+  value: string
+}
+
+interface SignInFormData extends EventTarget {
+  email: Value,
+  password: Value
+}
+
+interface SignUpFormData extends EventTarget {
+  name: Value,
+  email: Value,
+  password: Value,
+  confirmPassword: Value
+}
+
 const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
-  const signInEmail = useRef<HTMLInputElement>(null);
-  const signInPassword = useRef<HTMLInputElement>(null);
-  const signUpName = useRef<HTMLInputElement>(null);
-  const signUpEmail = useRef<HTMLInputElement>(null);
-  const signUpPassword = useRef<HTMLInputElement>(null);
-  const signUpConfirmPassword = useRef<HTMLInputElement>(null);
   const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSignInSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    const { email, password } = event.target as SignInFormData;
     signIn('signin', {
       csrfToken,
-      email: signInEmail.current?.value,
-      password: signInPassword.current?.value,
+      email: email.value,
+      password: password.value,
       redirect: false,
     }).then((response: { error: string } | undefined) => {
       if (response?.error) {
@@ -39,19 +50,22 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
 
   const handleSignUpSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (
-      signUpPassword.current?.value.length
-      && signUpPassword.current?.value.length < 8
-    ) {
+    const {
+      name,
+      email,
+      password,
+      confirmPassword,
+    } = event.target as SignUpFormData;
+    if (password.value.length && password.value.length < 8) {
       setError('password-not-long-enough');
-    } else if (signUpPassword.current?.value !== signUpConfirmPassword.current?.value) {
+    } else if (password.value !== confirmPassword.value) {
       setError('passwords-do-not-match');
     } else {
       signIn('signup', {
         csrfToken,
-        name: signUpName.current?.value,
-        email: signUpEmail.current?.value,
-        password: signUpPassword.current?.value,
+        name: name.value,
+        email: email.value,
+        password: password.value,
         redirect: false,
       }).then((response: { error: string } | undefined) => {
         if (response?.error) {
@@ -90,9 +104,9 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <label htmlFor="email">
             Email
-            <input name="email" type="email" ref={signInEmail} required />
+            <input name="email" type="email" required />
           </label>
-          <PasswordInput label="Password" name="password" ref={signInPassword} />
+          <PasswordInput label="Password" name="password" />
           <button type="submit">Sign in</button>
         </form>
         <h2>Sign up with credentials</h2>
@@ -100,14 +114,14 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
           <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
           <label htmlFor="name">
             Name
-            <input name="name" type="text" ref={signUpName} required />
+            <input name="name" type="text" required />
           </label>
           <label htmlFor="email">
             Email
-            <input name="email" type="email" ref={signUpEmail} required />
+            <input name="email" type="email" required />
           </label>
-          <PasswordInput label="Password" name="password" ref={signUpPassword} />
-          <PasswordInput label="Confirm password" name="confirmPassword" ref={signUpConfirmPassword} />
+          <PasswordInput label="Password" name="password" />
+          <PasswordInput label="Confirm password" name="confirmPassword" />
           <button type="submit">Sign up</button>
         </form>
       </main>
