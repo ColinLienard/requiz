@@ -40,7 +40,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
   };
 
   const publishQuiz = () => {
-    if (settings && isNotEmpty({ ...settings, questions }) && questions && questions.length > 3) {
+    if (settings && questions && questions.length > 3 && isNotEmpty({ ...settings, questions })) {
       saveQuiz(true);
     } else {
       /* TODO: handle quiz cannot be published */
