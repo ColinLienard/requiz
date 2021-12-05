@@ -41,7 +41,7 @@ const Question: FC = () => {
   }, []);
 
   useEffect(() => {
-    isCorrect.current = selected === quizQuestion?.correct;
+    isCorrect.current = selected - 1 === quizQuestion?.correct;
   }, [selected, quizQuestion]);
 
   const handleSelect = (toSelect: number) => {
