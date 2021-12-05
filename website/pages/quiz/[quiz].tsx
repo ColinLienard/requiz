@@ -92,7 +92,7 @@ const Quiz: NextPage = () => {
             <Chat
               userName={userName}
               userId={userId}
-              room={quiz as string}
+              roomId={quiz as string}
             />
           </SocketContext.Provider>
         )}

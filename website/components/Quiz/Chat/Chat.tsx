@@ -13,17 +13,17 @@ import SocketContext from '../../../lib/contexts/SocketContext';
 type Props = {
   userName: string,
   userId: string,
-  room: string
+  roomId: string
 }
 
 const Chat: FC<Props> = ({
   userName,
   userId,
-  room,
+  roomId,
 }) => {
   const [message, setMessage] = useState<string>('');
   const [chatMessages, setChatMessages] = useState<ChatMessageType[]>([{
-    content: `🙋‍♂️ Welcome to ${room} !`,
+    content: `🙋‍♂️ Welcome to ${roomId} !`,
     id: `${userName}-0`,
   }]);
   const socket = useContext(SocketContext);
@@ -31,7 +31,7 @@ const Chat: FC<Props> = ({
   const randomId = () => Math.random().toString(36).substr(2, 9);
 
   useEffect(() => {
-    socket.emit('join', { userName, userId, room });
+    socket.emit('join', { userName, userId, roomId });
 
     socket.on('message', (author: string, content: string) => {
       setChatMessages((state) => [...state, {
@@ -63,7 +63,7 @@ const Chat: FC<Props> = ({
   const sendMessage = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (message.length > 0) {
-      socket.emit('message', { room, author: userName, content: message });
+      socket.emit('message', { roomId, author: userName, content: message });
       setChatMessages((state) => [...state, {
         author: 'Vous',
         content: message,

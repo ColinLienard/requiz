@@ -73,9 +73,9 @@ const Question: FC = () => {
       <h3>{quizQuestion?.question}</h3>
       <ul>
         {quizQuestion?.responses.map((response, index) => (
-          <li key={response}>
+          <li key={response.id}>
             <Response
-              text={response}
+              text={response.value}
               number={index + 1}
               selected={selected}
               select={handleSelect}
