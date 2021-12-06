@@ -2,7 +2,7 @@ export type User = {
   name: string,
   id: string,
   socketId: string,
-  room: string,
+  roomId: string,
   lives: number
 }
 

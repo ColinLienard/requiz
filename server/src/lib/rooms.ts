@@ -1,9 +1,18 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import { RoomState, Room } from './types';
 
-const rooms: Room[] = [];
+const rooms: (Room | { id: string })[] = [];
+
+export const deleteRoom = (id: string) => {
+  rooms.forEach((room, index) => {
+    if (room.id === id) {
+      rooms.splice(index, 1);
+    }
+  });
+};
 
 export const createRoom = async (id: string) => {
+  rooms.push({ id });
   const client = await new MongoClient(process.env.MONGODB_URI as string).connect();
   const response = await client.db().collection('quizzes').findOne({ _id: new ObjectId(id) });
   if (response) {
@@ -15,6 +24,7 @@ export const createRoom = async (id: string) => {
       startDate,
       questions,
     } = response;
+    deleteRoom(id);
     rooms.push({
       id,
       state: 'waiting',
@@ -26,22 +36,15 @@ export const createRoom = async (id: string) => {
       startDate,
       questions,
     });
-    return true;
+    return rooms[rooms.length - 1];
   }
-  return false;
+  deleteRoom(id);
+  return null;
 };
 
-export const getRoom = (id: string): Room => rooms.filter((room) => room.id === id)[0];
+export const getRoom = (id: string): Room => rooms.filter((room) => room.id === id)[0] as Room;
 
 export const updateRoomState = (name: string, newState: RoomState) => {
   const room = getRoom(name);
   room.state = newState;
-};
-
-export const deleteRoom = (id: string) => {
-  rooms.forEach((room, index) => {
-    if (room.id === id) {
-      rooms.splice(index, 1);
-    }
-  });
 };

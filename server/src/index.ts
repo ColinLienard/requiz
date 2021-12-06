@@ -26,8 +26,8 @@ io.on('connection', (socket: Socket) => {
     { userName: string, userId: string, roomId: string },
   ) => {
     if (!getRoom(roomId)) {
-      const isCreated = await createRoom(roomId);
-      if (!isCreated) {
+      const roomData = await createRoom(roomId);
+      if (!roomData) {
         io.to(socket.id).emit('game-full');
         /* TODO: handle error */
       }
@@ -59,21 +59,21 @@ io.on('connection', (socket: Socket) => {
   });
 
   socket.on('message', (
-    { room, author, content }:
-    { room: string, author: string, content: string },
+    { roomId, author, content }:
+    { roomId: string, author: string, content: string },
   ) => {
-    socket.to(room).emit('message', author, content);
+    socket.to(roomId).emit('message', author, content);
   });
 
   socket.on('disconnect', () => {
     const user: User | null = removeUser(socket.id);
     if (user) {
-      io.to(user.room).emit('user-left', user.name);
-      io.to(user.room).emit('get-users', getUsers(user.room));
+      io.to(user.roomId).emit('user-left', user.name);
+      io.to(user.roomId).emit('get-users', getUsers(user.roomId));
 
-      if (getUsers(user.room).length === 0) {
-        stopTimer(user.room);
-        deleteRoom(user.room);
+      if (getUsers(user.roomId).length === 0) {
+        stopTimer(user.roomId);
+        deleteRoom(user.roomId);
       }
     }
   });
