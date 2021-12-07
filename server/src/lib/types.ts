@@ -6,7 +6,7 @@ export type User = {
   lives: number
 }
 
-export type RoomState = 'waiting' | 'playing'
+export type RoomState = 'published' | 'waiting' | 'playing'
 
 export type QuizResponse = {
   id: number,

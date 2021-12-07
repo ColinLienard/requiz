@@ -9,11 +9,17 @@ import objectIdToJson from '../lib/utils/objectIdToJson';
 
 type Props = {
   user: UserFromDB,
+  liveQuizzes: QuizData[],
   publishedQuizzes: QuizData[],
   userQuizzes: QuizData[]
 }
 
-const Home: NextPage<Props> = ({ user, publishedQuizzes, userQuizzes }: Props) => {
+const Home: NextPage<Props> = ({
+  user,
+  liveQuizzes,
+  publishedQuizzes,
+  userQuizzes,
+}: Props) => {
   return (
     <>
       <Head>
@@ -29,6 +35,22 @@ const Home: NextPage<Props> = ({ user, publishedQuizzes, userQuizzes }: Props) =
             <p>Signed in as</p>
             <h3>{user.email}</h3>
             <button type="button" onClick={() => signOut()}>Sign out</button>
+            <br />
+            <br />
+            <h2>Live quizzes</h2>
+            <ul>
+              {liveQuizzes.map((quiz) => (
+                <li key={quiz._id}>
+                  <Game
+                    id={quiz._id as string}
+                    title={quiz.title as string}
+                    userId={quiz.userId as string}
+                    waiting={8}
+                    startsIn={3}
+                  />
+                </li>
+              ))}
+            </ul>
             <br />
             <br />
             <h2>Quizzes that will start soon</h2>
@@ -88,6 +110,24 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const session = await getSession({ req });
   if (session) {
     const client = await clientPromise;
+
+    const liveQuizzes = await client
+      .db()
+      .collection('quizzes')
+      .find(
+        {
+          status: 'waiting',
+        },
+        {
+          projection: {
+            userId: 1,
+            title: 1,
+          },
+        },
+      )
+      .limit(10)
+      .toArray();
+
     const publishedQuizzes = await client
       .db()
       .collection('quizzes')
@@ -124,6 +164,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     return {
       props: {
         user: session.user,
+        liveQuizzes: objectIdToJson(liveQuizzes),
         publishedQuizzes: objectIdToJson(publishedQuizzes),
         userQuizzes: objectIdToJson(userQuizzes),
       },

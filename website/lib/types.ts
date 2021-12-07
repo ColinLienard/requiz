@@ -34,7 +34,7 @@ export type QuizQuestion = {
 
 export type QuizData = {
   _id?: string,
-  status?: 'draft' | 'published',
+  status?: 'draft' | 'published' | 'waiting' | 'playing',
   title?: string,
   description?: string,
   userId?: string,

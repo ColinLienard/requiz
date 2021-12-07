@@ -36,7 +36,7 @@ io.on('connection', (socket: Socket) => {
       addUser(userName, userId, socket.id, roomId);
       listenToResponses(io, socket);
 
-      startTimer(io, roomId, 3, () => {
+      startTimer(io, roomId, 15, () => {
         // After the waiting room
         updateRoomState(roomId, 'playing');
         io.to(roomId).emit('game-state', 'playing');
@@ -73,6 +73,7 @@ io.on('connection', (socket: Socket) => {
 
       if (getUsers(user.roomId).length === 0) {
         stopTimer(user.roomId);
+        updateRoomState(user.roomId, 'published');
         deleteRoom(user.roomId);
       }
     }

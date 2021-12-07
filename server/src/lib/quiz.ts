@@ -1,11 +1,14 @@
 import { Server, Socket } from 'socket.io';
-import { deleteRoom, getRoom } from './rooms';
+import { deleteRoom, getRoom, updateRoomState } from './rooms';
 import { startTimer } from './timer';
 import { getUsers, updateUser } from './users';
 
 export const startQuiz = async (io: Server, socket: Socket, roomId: string, index = 0) => {
   const room = getRoom(roomId);
   if (room) {
+    if (index === 0) {
+      updateRoomState(roomId, 'playing');
+    }
     const { questions } = room;
     if (index < questions.length) {
       io.to(roomId).emit('question', questions[index]);
@@ -19,8 +22,10 @@ export const startQuiz = async (io: Server, socket: Socket, roomId: string, inde
     } else {
       io.to(roomId).emit('game-state', 'end');
       io.to(roomId).emit('get-users', getUsers(roomId));
+      /* TODO: game end after a while and game state become published */
     }
   } else {
+    updateRoomState(roomId, 'published');
     deleteRoom(roomId);
   }
 };
