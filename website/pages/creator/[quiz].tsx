@@ -142,9 +142,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
   const client = await clientPromise;
-  const response = await client.db().collection('quizzes').findOne({ _id: new ObjectId(quiz) });
+  const response: { _id: ObjectId | string } | null = await client
+    .db()
+    .collection('quizzes')
+    .findOne({ _id: new ObjectId(quiz) });
   if (response) {
-    response._id = response?._id.toHexString();
+    response._id = quiz;
   }
 
   return {

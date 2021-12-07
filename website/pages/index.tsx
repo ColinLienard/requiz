@@ -1,11 +1,19 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
-import { useSession, signIn, signOut } from 'next-auth/react';
+import { signIn, signOut, getSession } from 'next-auth/react';
 import Link from 'next/link';
+import clientPromise from '../lib/utils/mongodb';
+import { QuizData, UserFromDB } from '../lib/types';
+import Game from '../components/Dashboard/Game/Game';
+import objectIdToJson from '../lib/utils/objectIdToJson';
 
-const Home: NextPage = () => {
-  const { data: session } = useSession();
+type Props = {
+  user: UserFromDB,
+  publishedQuizzes: QuizData[],
+  userQuizzes: QuizData[]
+}
 
+const Home: NextPage<Props> = ({ user, publishedQuizzes, userQuizzes }: Props) => {
   return (
     <>
       <Head>
@@ -16,28 +24,56 @@ const Home: NextPage = () => {
 
       <main>
         <h1>Requiz</h1>
-        {session && (
+        {user && (
           <>
             <p>Signed in as</p>
-            <h3>{session.user?.email}</h3>
+            <h3>{user.email}</h3>
             <button type="button" onClick={() => signOut()}>Sign out</button>
             <br />
             <br />
-            <Link href="quiz/619bcec75a17878fd12d078f">
-              <a>Join a quiz</a>
-            </Link>
+            <h2>Quizzes that will start soon</h2>
+            <ul>
+              {publishedQuizzes.map((quiz) => (
+                <li key={quiz._id}>
+                  <Game
+                    id={quiz._id as string}
+                    title={quiz.title as string}
+                    userId={quiz.userId as string}
+                    waiting={8}
+                    startsIn={3}
+                  />
+                </li>
+              ))}
+            </ul>
             <br />
             <br />
-            <Link href="creator/new">
+            <h2>Your quizzes</h2>
+            <ul>
+              {userQuizzes.map((quiz) => (
+                <li key={quiz._id}>
+                  <Game
+                    fromUser
+                    id={quiz._id as string}
+                    title={quiz.title as string}
+                    userId={quiz.userId as string}
+                    waiting={8}
+                    startsIn={3}
+                  />
+                </li>
+              ))}
+            </ul>
+            <br />
+            <br />
+            <Link href="/creator/new">
               <a>Create a new quiz</a>
             </Link>
             <br />
-            <Link href="creator/619bcec75a17878fd12d078f">
+            <Link href="/creator/619bcec75a17878fd12d078f">
               <a>Continue quiz</a>
             </Link>
           </>
         )}
-        {!session && (
+        {!user && (
           <>
             <p>Not signed in.</p>
             <button type="button" onClick={() => signIn()}>Sign in</button>
@@ -46,6 +82,57 @@ const Home: NextPage = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const session = await getSession({ req });
+  if (session) {
+    const client = await clientPromise;
+    const publishedQuizzes = await client
+      .db()
+      .collection('quizzes')
+      .find(
+        {
+          status: 'published',
+        },
+        {
+          projection: {
+            userId: 1,
+            title: 1,
+          },
+        },
+      )
+      .limit(10)
+      .toArray();
+
+    const userQuizzes = await client
+      .db()
+      .collection('quizzes')
+      .find(
+        {
+          userId: (session.user as UserFromDB).id,
+        },
+        {
+          projection: {
+            title: 1,
+            status: 1,
+          },
+        },
+      )
+      .toArray();
+
+    return {
+      props: {
+        user: session.user,
+        publishedQuizzes: objectIdToJson(publishedQuizzes),
+        userQuizzes: objectIdToJson(userQuizzes),
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default Home;
