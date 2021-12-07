@@ -39,6 +39,14 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     }
   };
 
+  const handleSaveQuiz = () => {
+    if (settings?.title !== '') {
+      saveQuiz(false);
+    } else {
+      /* TODO: handle title required */
+    }
+  };
+
   const publishQuiz = () => {
     if (settings && questions && questions.length > 3 && isNotEmpty({ ...settings, questions })) {
       saveQuiz(true);
@@ -79,7 +87,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
           <QuizEditor />
         </EditorContext.Provider>
         <br />
-        <button type="button" onClick={() => saveQuiz(false)}>Save</button>
+        <button type="button" onClick={handleSaveQuiz}>Save</button>
         <br />
         <button type="button" onClick={publishQuiz}>Publish</button>
         <br />
@@ -146,15 +154,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .db()
     .collection('quizzes')
     .findOne({ _id: new ObjectId(quiz) });
-  if (response) {
+  if (response && (response as QuizData).userId === (session.user as UserFromDB).id) {
     response._id = quiz;
+
+    return {
+      props: {
+        quizId: quiz,
+        quizData: response,
+      },
+    };
   }
 
   return {
-    props: {
-      quizId: quiz,
-      quizData: response,
+    redirect: {
+      permanent: false,
+      destination: '/',
     },
+    props: {},
   };
 };
 
