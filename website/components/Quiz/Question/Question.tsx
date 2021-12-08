@@ -12,7 +12,7 @@ import Response from '../Response/Response';
 
 const Question: FC = () => {
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion>();
-  const [selected, setSelected] = useState<number>(0);
+  const [selected, setSelected] = useState<number>(-1);
   const [reveal, setReveal] = useState(false);
   const [lives, setLives] = useState(3);
   const socket = useContext(SocketContext);
@@ -22,15 +22,20 @@ const Question: FC = () => {
   useEffect(() => {
     socket.on('question', (newQuizQuestion: QuizQuestion) => {
       setQuizQuestion(newQuizQuestion);
-      setSelected(0);
+      setSelected(-1);
       setReveal(false);
     });
 
     socket.on('request-response', () => {
       setReveal(true);
       if (!isCorrect.current && lives > 0) {
-        socket.emit('response', false);
-        setLives((newLives) => newLives - 1);
+        setLives((newLives) => {
+          if (newLives > 0) {
+            socket.emit('response', false);
+            return newLives - 1;
+          }
+          return newLives;
+        });
       }
     });
 
@@ -41,11 +46,11 @@ const Question: FC = () => {
   }, []);
 
   useEffect(() => {
-    isCorrect.current = selected - 1 === quizQuestion?.correct;
+    isCorrect.current = selected === quizQuestion?.correct;
   }, [selected, quizQuestion]);
 
   const handleSelect = (toSelect: number) => {
-    if (!reveal) {
+    if (!reveal && lives > 0) {
       setSelected(toSelect);
     }
   };
@@ -66,7 +71,7 @@ const Question: FC = () => {
           : 'Eliminé'}
       </p>
       <h2>
-        {reveal
+        {reveal && lives > 0
           ? `${isCorrect.current}`
           : timer}
       </h2>
@@ -76,10 +81,10 @@ const Question: FC = () => {
           <li key={response.id}>
             <Response
               text={response.value}
-              number={index + 1}
+              index={index}
               selected={selected}
               select={handleSelect}
-              good={reveal ? quizQuestion.correct === index + 1 : undefined}
+              good={reveal ? quizQuestion.correct === index : undefined}
             />
           </li>
         ))}

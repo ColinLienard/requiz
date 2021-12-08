@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 type Props = {
   text: string,
-  number: number,
+  index: number,
   selected: number,
   select: (number: number) => void,
   good?: boolean
@@ -10,7 +10,7 @@ type Props = {
 
 const Response: FC<Props> = ({
   text,
-  number,
+  index,
   selected,
   select,
   good,
@@ -18,13 +18,13 @@ const Response: FC<Props> = ({
   return (
     <button
       type="button"
-      onClick={() => select(number)}
+      onClick={() => select(index)}
       style={{
-        backgroundColor: selected === number ? 'royalblue' : 'transparent',
+        backgroundColor: selected === index ? 'royalblue' : 'transparent',
         border: good ? '3px solid green' : 'none',
       }}
     >
-      <h4>{number}</h4>
+      <h4>{index + 1}</h4>
       <p>{text}</p>
     </button>
   );

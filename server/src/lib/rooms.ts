@@ -7,7 +7,9 @@ export const getRoom = (id: string): Room => rooms.filter((room) => room.id === 
 
 export const updateRoomState = async (id: string, newState: RoomState) => {
   const room = getRoom(id);
-  room.state = newState;
+  if (room) {
+    room.state = newState;
+  }
   const client = await new MongoClient(process.env.MONGODB_URI as string).connect();
   await client
     .db()
@@ -62,7 +64,7 @@ export const createRoom = async (id: string) => {
     });
     return rooms[rooms.length - 1];
   }
-  deleteRoom(id);
   updateRoomState(id, 'published');
+  deleteRoom(id);
   return null;
 };

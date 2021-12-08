@@ -36,7 +36,7 @@ io.on('connection', (socket: Socket) => {
       addUser(userName, userId, socket.id, roomId);
       listenToResponses(io, socket);
 
-      startTimer(io, roomId, 15, () => {
+      startTimer(io, roomId, 5, () => {
         // After the waiting room
         updateRoomState(roomId, 'playing');
         io.to(roomId).emit('game-state', 'playing');
