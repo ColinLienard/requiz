@@ -1,13 +1,38 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { UserFromDB } from '../../../lib/types';
 
 type Props = {
-  name: string,
-  lives: number
+  id: string
 }
 
-const UserItem: FC<Props> = ({ name, lives }) => {
+const UserItem: FC<Props> = ({ id }) => {
+  const [data, setData] = useState<{
+    name: string,
+    image?: string
+  } | null>(null);
+
+  const getUserData = async () => {
+    const response = await fetch('/api/get-user', {
+      method: 'POST',
+      body: id,
+    });
+    if (response.ok) {
+      const { name, image }: UserFromDB = await response.json();
+      setData({ name, image });
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+
   return (
-    <p>{`${name} - ${lives}💕`}</p>
+    <div>
+      {data?.image && (
+        <img src={data.image} alt="" />
+      )}
+      <p>{data?.name}</p>
+    </div>
   );
 };
 

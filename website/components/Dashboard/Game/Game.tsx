@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import Link from 'next/link';
+import UserItem from '../../Common/UserItem/UserItem';
 
 type Props = {
   fromUser?: boolean,
@@ -26,7 +27,7 @@ const Game: FC<Props> = ({
         <h4>{title}</h4>
         {fromUser
           ? <p>{status}</p>
-          : <p>{userId}</p>}
+          : <UserItem id={userId as string} />}
         <p>
           {waiting}
           are waiting

@@ -26,7 +26,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     const response = await fetch('/api/save-quiz', {
       method: 'POST',
       body: JSON.stringify({
-        quizId,
+        _id: quizId,
         ...settings,
         questions,
         status: publish ? 'published' : 'draft',

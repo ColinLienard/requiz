@@ -55,7 +55,11 @@ const Sidebar: FC<Props> = ({ userName, userId }) => {
       <ul>
         {userList.map((user) => (
           <li key={user.id}>
-            <UserItem name={user.name} lives={user.lives} />
+            <UserItem id={user.id} />
+            <p>
+              {user.lives}
+              💕
+            </p>
           </li>
         ))}
       </ul>

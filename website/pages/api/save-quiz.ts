@@ -5,7 +5,7 @@ import clientPromise from '../../lib/utils/mongodb';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {
-    quizId,
+    _id,
     status,
     title,
     description,
@@ -18,7 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const response = await client
     .db()
     .collection('quizzes')
-    .updateOne({ _id: new ObjectId(quizId) }, {
+    .updateOne({ _id: new ObjectId(_id) }, {
       $set: {
         status,
         title,
