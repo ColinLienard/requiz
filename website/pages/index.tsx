@@ -5,12 +5,14 @@ import Link from 'next/link';
 import clientPromise from '../lib/utils/mongodb';
 import { QuizData, UserFromDB } from '../lib/types';
 import Game from '../components/Dashboard/Game/Game';
+import User from '../components/Dashboard/User/User';
 import objectIdToJson from '../lib/utils/objectIdToJson';
 
 type Props = {
   user: UserFromDB,
   liveQuizzes: QuizData[],
   publishedQuizzes: QuizData[],
+  creators: UserFromDB[],
   userQuizzes: QuizData[]
 }
 
@@ -18,6 +20,7 @@ const Home: NextPage<Props> = ({
   user,
   liveQuizzes,
   publishedQuizzes,
+  creators,
   userQuizzes,
 }: Props) => {
   return (
@@ -64,6 +67,16 @@ const Home: NextPage<Props> = ({
                     waiting={8}
                     startsIn={3}
                   />
+                </li>
+              ))}
+            </ul>
+            <br />
+            <br />
+            <h2>Popular creators</h2>
+            <ul>
+              {creators.map((creator) => (
+                <li key={creator._id}>
+                  <User name={creator.name} image={creator.image} />
                 </li>
               ))}
             </ul>
@@ -145,12 +158,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       .limit(10)
       .toArray();
 
+    const creators = await client
+      .db()
+      .collection('users')
+      .find()
+      .limit(10)
+      .toArray();
+
     const userQuizzes = await client
       .db()
       .collection('quizzes')
       .find(
         {
-          userId: (session.user as UserFromDB).id,
+          userId: (session.user as UserFromDB)._id,
         },
         {
           projection: {
@@ -166,6 +186,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         user: session.user,
         liveQuizzes: objectIdToJson(liveQuizzes),
         publishedQuizzes: objectIdToJson(publishedQuizzes),
+        creators: objectIdToJson(creators),
         userQuizzes: objectIdToJson(userQuizzes),
       },
     };

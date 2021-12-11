@@ -95,8 +95,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => NextAuth(req
       const newSession = session;
       if (newSession.user) {
         (newSession.user as {
-          id?: string | null
-        }).id = token.userId ? token.userId as string : token.sub;
+          _id?: string | null
+        })._id = token.userId ? token.userId as string : token.sub;
       }
       return newSession;
     },

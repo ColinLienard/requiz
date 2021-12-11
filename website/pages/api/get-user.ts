@@ -8,7 +8,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const response = await client
     .db()
     .collection('users')
-    .findOne({ _id: new ObjectId(userId) });
+    .findOne({ _id: new ObjectId(userId) }, {
+      projection: {
+        name: 1,
+        image: 1,
+      },
+    });
   if (response) {
     res.status(200).json(response);
   } else {

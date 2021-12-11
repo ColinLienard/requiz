@@ -137,7 +137,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
   if (quiz === 'new') {
-    const { id: userId } = session.user as UserFromDB;
+    const { _id: userId } = session.user as UserFromDB;
     const client = await clientPromise;
     const response = await client.db().collection('quizzes').insertOne({ userId });
     const quizId = response.insertedId.toHexString();
@@ -154,7 +154,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     .db()
     .collection('quizzes')
     .findOne({ _id: new ObjectId(quiz) });
-  if (response && (response as QuizData).userId === (session.user as UserFromDB).id) {
+  if (response && (response as QuizData).userId === (session.user as UserFromDB)._id) {
     response._id = quiz;
 
     return {

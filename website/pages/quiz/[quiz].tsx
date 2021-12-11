@@ -15,7 +15,7 @@ import styles from '../../styles/pages/Quiz.module.scss';
 
 const Quiz: NextPage = () => {
   const { data: session } = useSession();
-  const { id: userId, name: userName } = session?.user as UserFromDB;
+  const { _id: userId, name: userName } = session?.user as UserFromDB;
   const router = useRouter();
   const { quiz } = router.query;
   const [socket, setSocket] = useState<Socket>();

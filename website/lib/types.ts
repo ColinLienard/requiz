@@ -11,7 +11,7 @@ export type User = {
 }
 
 export type UserFromDB = {
-  id: string,
+  _id: string,
   name: string,
   email: string,
   image?: string
