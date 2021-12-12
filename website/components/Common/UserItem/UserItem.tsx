@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { UserFromDB } from '../../../lib/types';
+import { PropsToGetDBData, UserFromDB } from '../../../lib/types';
 
 type Props = {
   id: string
@@ -12,9 +12,17 @@ const UserItem: FC<Props> = ({ id }) => {
   } | null>(null);
 
   const getUserData = async () => {
-    const response = await fetch('/api/get-user', {
+    const response = await fetch('/api/get-db-data', {
       method: 'POST',
-      body: id,
+      body: JSON.stringify({
+        id,
+        collection: 'users',
+        projection: {
+          _id: 0,
+          name: 1,
+          image: 1,
+        },
+      } as PropsToGetDBData),
     });
     if (response.ok) {
       const { name, image }: UserFromDB = await response.json();

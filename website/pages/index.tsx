@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { signIn, signOut, getSession } from 'next-auth/react';
@@ -6,6 +7,7 @@ import clientPromise from '../lib/utils/mongodb';
 import { QuizData, UserFromDB } from '../lib/types';
 import Game from '../components/Dashboard/Game/Game';
 import User from '../components/Dashboard/User/User';
+import Modal from '../components/Dashboard/Modal/Modal';
 import objectIdToJson from '../lib/utils/objectIdToJson';
 
 type Props = {
@@ -23,6 +25,8 @@ const Home: NextPage<Props> = ({
   creators,
   userQuizzes,
 }: Props) => {
+  const [modalQuizId, setModalQuizId] = useState<string | undefined>();
+
   return (
     <>
       <Head>
@@ -61,6 +65,7 @@ const Home: NextPage<Props> = ({
               {publishedQuizzes.map((quiz) => (
                 <li key={quiz._id}>
                   <Game
+                    onClick={() => setModalQuizId(quiz._id)}
                     id={quiz._id as string}
                     title={quiz.title as string}
                     userId={quiz.userId as string}
@@ -80,6 +85,9 @@ const Home: NextPage<Props> = ({
                 </li>
               ))}
             </ul>
+            <br />
+            <br />
+            <Modal id={modalQuizId} />
             <br />
             <br />
             <h2>Your quizzes</h2>

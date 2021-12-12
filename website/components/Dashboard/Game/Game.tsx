@@ -4,6 +4,7 @@ import UserItem from '../../Common/UserItem/UserItem';
 
 type Props = {
   fromUser?: boolean,
+  onClick?: () => void,
   id: string,
   title: string,
   userId?: string,
@@ -14,6 +15,7 @@ type Props = {
 
 const Game: FC<Props> = ({
   fromUser,
+  onClick,
   id,
   title,
   userId,
@@ -21,29 +23,45 @@ const Game: FC<Props> = ({
   waiting,
   startsIn,
 }) => {
+  if (fromUser) {
+    return (
+      <Link href={`/creator/${id}`}>
+        <a>
+          <h4>{title}</h4>
+          <p>{status}</p>
+          <p>
+            {waiting}
+            are waiting
+          </p>
+          <p>
+            Starts in
+            {startsIn}
+            min
+          </p>
+        </a>
+      </Link>
+    );
+  }
   return (
-    <Link href={`/${fromUser ? 'creator' : 'quiz'}/${id}`}>
-      <a>
-        <h4>{title}</h4>
-        {fromUser
-          ? <p>{status}</p>
-          : <UserItem id={userId as string} />}
-        <p>
-          {waiting}
-          are waiting
-        </p>
-        <p>
-          Starts in
-          {startsIn}
-          min
-        </p>
-      </a>
-    </Link>
+    <button type="button" onClick={onClick}>
+      <h4>{title}</h4>
+      <UserItem id={userId as string} />
+      <p>
+        {waiting}
+        are waiting
+      </p>
+      <p>
+        Starts in
+        {startsIn}
+        min
+      </p>
+    </button>
   );
 };
 
 Game.defaultProps = {
   fromUser: false,
+  onClick: undefined,
   userId: '',
   status: '',
 };

@@ -43,3 +43,9 @@ export type QuizData = {
   startDate?: number,
   questions?: QuizQuestion[]
 }
+
+export type PropsToGetDBData = {
+  id: string,
+  collection: 'accounts' | 'quizzes' | 'sessions' | 'users',
+  projection?: Record<string, number>
+}

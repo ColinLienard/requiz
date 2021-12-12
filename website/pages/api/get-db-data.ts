@@ -1,19 +1,22 @@
 import { ObjectId } from 'mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { PropsToGetDBData } from '../../lib/types';
 import clientPromise from '../../lib/utils/mongodb';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const userId = req.body;
+  const {
+    id,
+    collection,
+    projection,
+  }: PropsToGetDBData = JSON.parse(req.body);
   const client = await clientPromise;
   const response = await client
     .db()
-    .collection('users')
-    .findOne({ _id: new ObjectId(userId) }, {
-      projection: {
-        name: 1,
-        image: 1,
-      },
-    });
+    .collection(collection)
+    .findOne(
+      { _id: new ObjectId(id) },
+      projection ? { projection } : undefined,
+    );
   if (response) {
     res.status(200).json(response);
   } else {
