@@ -9,7 +9,7 @@ type Props = {
   title: string,
   userId?: string,
   status?: string,
-  waiting: number,
+  peopleIn?: number,
   startsIn: number
 }
 
@@ -20,7 +20,7 @@ const Game: FC<Props> = ({
   title,
   userId,
   status,
-  waiting,
+  peopleIn,
   startsIn,
 }) => {
   if (fromUser) {
@@ -30,7 +30,7 @@ const Game: FC<Props> = ({
           <h4>{title}</h4>
           <p>{status}</p>
           <p>
-            {waiting}
+            {peopleIn}
             are waiting
           </p>
           <p>
@@ -46,10 +46,12 @@ const Game: FC<Props> = ({
     <button type="button" onClick={onClick}>
       <h4>{title}</h4>
       <UserItem id={userId as string} />
-      <p>
-        {waiting}
-        are waiting
-      </p>
+      {peopleIn && (
+        <p>
+          {peopleIn}
+          are waiting
+        </p>
+      )}
       <p>
         Starts in
         {startsIn}
@@ -64,6 +66,7 @@ Game.defaultProps = {
   onClick: undefined,
   userId: '',
   status: '',
+  peopleIn: undefined,
 };
 
 export default Game;

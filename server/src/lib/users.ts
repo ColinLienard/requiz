@@ -1,6 +1,24 @@
+import { MongoClient, ObjectId } from 'mongodb';
 import { User } from './types';
 
 const users: User[] = [];
+
+export const updateUserNumber = async (roomId: string) => {
+  const peopleIn = users.filter((user) => user.roomId === roomId).length;
+  const client = await new MongoClient(process.env.MONGODB_URI as string).connect();
+  await client
+    .db()
+    .collection('quizzes')
+    .updateOne(
+      { _id: new ObjectId(roomId) },
+      {
+        $set: {
+          peopleIn,
+        },
+      },
+    );
+  client.close();
+};
 
 export const addUser = (
   userName: string,
@@ -16,10 +34,11 @@ export const addUser = (
     lives: 3,
   };
   users.push(user);
+  updateUserNumber(user.roomId);
 };
 
 export const removeUser = (id: string): User | null => {
-  let toRemove = null;
+  let toRemove: User | null = null;
   users.forEach((user, index) => {
     if (id === user.socketId) {
       [toRemove] = users.splice(index, 1);
@@ -37,10 +56,5 @@ export const updateUser = (id: string, correctResponse: boolean): User => {
   if (!correctResponse) {
     userToUpdate.lives -= 1;
   }
-  // users.forEach((user, index) => {
-  //   if (id === user.socketId) {
-  //     users.splice(index, 1, userToUpdate);
-  //   }
-  // });
   return userToUpdate;
 };

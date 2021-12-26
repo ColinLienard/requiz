@@ -40,8 +40,9 @@ export type QuizData = {
   userId?: string,
   theme?: string[],
   maxPlayers?: number,
-  startDate?: number,
-  questions?: QuizQuestion[]
+  startDate?: string,
+  questions?: QuizQuestion[],
+  peopleIn?: number,
 }
 
 export type PropsToGetDBData = {

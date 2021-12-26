@@ -27,6 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         maxPlayers,
         startDate,
         questions,
+        peopleIn: 0,
       },
     });
   if (response.modifiedCount) {

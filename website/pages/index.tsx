@@ -52,7 +52,7 @@ const Home: NextPage<Props> = ({
                     id={quiz._id as string}
                     title={quiz.title as string}
                     userId={quiz.userId as string}
-                    waiting={8}
+                    peopleIn={quiz.peopleIn as number}
                     startsIn={3}
                   />
                 </li>
@@ -69,7 +69,7 @@ const Home: NextPage<Props> = ({
                     id={quiz._id as string}
                     title={quiz.title as string}
                     userId={quiz.userId as string}
-                    waiting={8}
+                    peopleIn={quiz.peopleIn as number}
                     startsIn={3}
                   />
                 </li>
@@ -99,7 +99,7 @@ const Home: NextPage<Props> = ({
                     id={quiz._id as string}
                     title={quiz.title as string}
                     userId={quiz.userId as string}
-                    waiting={8}
+                    peopleIn={quiz.peopleIn as number}
                     startsIn={3}
                   />
                 </li>
@@ -143,6 +143,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
           projection: {
             userId: 1,
             title: 1,
+            peopleIn: 1,
           },
         },
       )

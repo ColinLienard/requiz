@@ -29,5 +29,6 @@ export type Room = {
   theme: string[],
   maxPlayers: number,
   startDate: number,
-  questions: QuizQuestion[]
+  questions: QuizQuestion[],
+  peopleIn: number
 }

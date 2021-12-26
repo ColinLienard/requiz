@@ -1,5 +1,10 @@
 import { Server, Socket } from 'socket.io';
-import { addUser, getUsers, removeUser } from './lib/users';
+import {
+  addUser,
+  getUsers,
+  removeUser,
+  updateUserNumber,
+} from './lib/users';
 import { startTimer, stopTimer } from './lib/timer';
 import { listenToResponses, startQuiz } from './lib/quiz';
 import {
@@ -14,7 +19,7 @@ require('dotenv').config({ debug: process.env.DEBUG });
 
 const io = new Server(8000, {
   cors: {
-    origin: '*',
+    origin: 'http://localhost:3000',
   },
 });
 
@@ -70,6 +75,7 @@ io.on('connection', (socket: Socket) => {
     if (user) {
       io.to(user.roomId).emit('user-left', user.name);
       io.to(user.roomId).emit('get-users', getUsers(user.roomId));
+      updateUserNumber(user.roomId);
 
       if (getUsers(user.roomId).length === 0) {
         stopTimer(user.roomId);
