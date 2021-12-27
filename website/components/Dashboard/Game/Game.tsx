@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import UserItem from '../../Common/UserItem/UserItem';
+import useDate from '../../../lib/hooks/useDate';
 
 type Props = {
   fromUser?: boolean,
@@ -10,7 +11,7 @@ type Props = {
   userId?: string,
   status?: string,
   peopleIn?: number,
-  startsIn: number
+  startsIn: string
 }
 
 const Game: FC<Props> = ({
@@ -23,6 +24,8 @@ const Game: FC<Props> = ({
   peopleIn,
   startsIn,
 }) => {
+  const date = useDate(startsIn);
+
   if (fromUser) {
     return (
       <Link href={`/creator/${id}`}>
@@ -35,8 +38,7 @@ const Game: FC<Props> = ({
           </p>
           <p>
             Starts in
-            {startsIn}
-            min
+            {date}
           </p>
         </a>
       </Link>
@@ -54,8 +56,7 @@ const Game: FC<Props> = ({
       )}
       <p>
         Starts in
-        {startsIn}
-        min
+        {date}
       </p>
     </button>
   );

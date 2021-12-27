@@ -53,7 +53,7 @@ const Home: NextPage<Props> = ({
                     title={quiz.title as string}
                     userId={quiz.userId as string}
                     peopleIn={quiz.peopleIn as number}
-                    startsIn={3}
+                    startsIn={quiz.startDate as string}
                   />
                 </li>
               ))}
@@ -70,7 +70,7 @@ const Home: NextPage<Props> = ({
                     title={quiz.title as string}
                     userId={quiz.userId as string}
                     peopleIn={quiz.peopleIn as number}
-                    startsIn={3}
+                    startsIn={quiz.startDate as string}
                   />
                 </li>
               ))}
@@ -100,7 +100,7 @@ const Home: NextPage<Props> = ({
                     title={quiz.title as string}
                     userId={quiz.userId as string}
                     peopleIn={quiz.peopleIn as number}
-                    startsIn={3}
+                    startsIn={quiz.startDate as string}
                   />
                 </li>
               ))}
@@ -109,10 +109,6 @@ const Home: NextPage<Props> = ({
             <br />
             <Link href="/creator/new">
               <a>Create a new quiz</a>
-            </Link>
-            <br />
-            <Link href="/creator/619bcec75a17878fd12d078f">
-              <a>Continue quiz</a>
             </Link>
           </>
         )}
@@ -143,6 +139,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
           projection: {
             userId: 1,
             title: 1,
+            startDate: 1,
             peopleIn: 1,
           },
         },
@@ -161,6 +158,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
           projection: {
             userId: 1,
             title: 1,
+            startDate: 1,
           },
         },
       )
@@ -185,6 +183,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
           projection: {
             title: 1,
             status: 1,
+            startDate: 1,
           },
         },
       )
