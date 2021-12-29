@@ -10,10 +10,16 @@
   },
   "scripts": {
     "dev:app": "yarn --cwd app dev",
-    "dev:server": "yarn --cwd server dev"
+    "dev:server": "yarn --cwd server dev",
+    "lint:app": "yarn --cwd app lint",
+    "lint:server": "yarn --cwd server lint",
+    "prepare": "husky install"
   },
   "workspaces": [
     "app",
     "server"
-  ]
+  ],
+  "devDependencies": {
+    "husky": "^7.0.4"
+  }
 }
