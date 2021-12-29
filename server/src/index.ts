@@ -1,5 +1,10 @@
 import { Server, Socket } from 'socket.io';
-import { addUser, getUsers, removeUser } from './lib/users';
+import {
+  addUser,
+  getUsers,
+  removeUser,
+  updateUserNumber,
+} from './lib/users';
 import { startTimer, stopTimer } from './lib/timer';
 import { listenToResponses, startQuiz } from './lib/quiz';
 import {
@@ -10,64 +15,72 @@ import {
 } from './lib/rooms';
 import { User } from './lib/types';
 
+require('dotenv').config({ debug: process.env.DEBUG });
+
 const io = new Server(8000, {
   cors: {
-    origin: '*',
+    origin: 'http://localhost:3000',
   },
 });
 
 const maxUsers = 10;
 
 io.on('connection', (socket: Socket) => {
-  socket.on('join', (
-    { userName, userId, room }:
-    { userName: string, userId: string, room: string },
+  socket.on('join', async (
+    { userName, userId, roomId }:
+    { userName: string, userId: string, roomId: string },
   ) => {
-    if (!getRoom(room)) {
-      createRoom(room);
+    if (!getRoom(roomId)) {
+      const roomData = await createRoom(roomId);
+      if (!roomData) {
+        io.to(socket.id).emit('game-full');
+        /* TODO: handle error */
+      }
 
-      socket.join(room);
-      addUser(userName, userId, socket.id, room);
+      socket.join(roomId);
+      addUser(userName, userId, socket.id, roomId);
       listenToResponses(io, socket);
 
-      startTimer(io, room, 3, () => {
+      startTimer(io, roomId, 5, () => {
         // After the waiting room
-        updateRoomState(room, 'playing');
-        io.to(room).emit('game-state', 'playing');
-        startQuiz(io, socket, room);
+        updateRoomState(roomId, 'playing');
+        io.to(roomId).emit('game-state', 'playing');
+        startQuiz(io, socket, roomId);
       });
-    } else if (getRoom(room).state !== 'waiting') {
+    } else if (getRoom(roomId).state !== 'waiting') {
       // If the game is started, redirect user to home
       io.to(socket.id).emit('game-started');
-    } else if (getUsers(room).length === maxUsers) {
+    } else if (getUsers(roomId).length === maxUsers) {
       // If the game is full, redirect user to home
       io.to(socket.id).emit('game-full');
     } else {
-      socket.join(room);
-      addUser(userName, userId, socket.id, room);
+      socket.join(roomId);
+      addUser(userName, userId, socket.id, roomId);
       listenToResponses(io, socket);
 
-      socket.to(room).emit('user-joined', userName, userId);
-      io.to(socket.id).emit('get-users', getUsers(room));
+      socket.to(roomId).emit('user-joined', userName, userId);
+      io.to(socket.id).emit('get-users', getUsers(roomId));
     }
   });
 
   socket.on('message', (
-    { room, author, content }:
-    { room: string, author: string, content: string },
+    { roomId, author, content }:
+    { roomId: string, author: string, content: string },
   ) => {
-    socket.to(room).emit('message', author, content);
+    socket.to(roomId).emit('message', author, content);
   });
 
   socket.on('disconnect', () => {
     const user: User | null = removeUser(socket.id);
     if (user) {
-      io.to(user.room).emit('user-left', user.name);
-      io.to(user.room).emit('get-users', getUsers(user.room));
+      io.to(user.roomId).emit('user-left', user.name);
+      io.to(user.roomId).emit('get-users', getUsers(user.roomId));
+      updateUserNumber(user.roomId);
 
-      if (getUsers(user.room).length === 0) {
-        stopTimer(user.room);
-        deleteRoom(user.room);
+      if (getUsers(user.roomId).length === 0) {
+        stopTimer(user.roomId);
+        updateRoomState(user.roomId, 'published');
+        deleteRoom(user.roomId);
       }
     }
   });

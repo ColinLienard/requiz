@@ -9,11 +9,11 @@
     "url": "https://colin-lienard.fr/"
   },
   "scripts": {
-    "dev:web": "yarn --cwd website dev",
-    "dev:serv": "yarn --cwd server dev"
+    "dev:app": "yarn --cwd app dev",
+    "dev:server": "yarn --cwd server dev"
   },
   "workspaces": [
-    "website",
+    "app",
     "server"
   ]
 }
