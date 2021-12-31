@@ -1,0 +1,31 @@
+@use "./variables";
+
+@font-face {
+  font-family: Inter;
+  src: url("../public/fonts/Inter-SemiBold.ttf");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: Inter;
+  src: url("../public/fonts/Inter-Bold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: Nunito;
+  src: url("../public/fonts/Nunito-Regular.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Nunito;
+  src: url("../public/fonts/Nunito-Bold.ttf");
+  font-weight: 700;
+}
+
+body {
+  background-color: variables.$dark;
+  font-family: Nunito, sans-serif;
+  color: white;
+}
