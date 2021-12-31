@@ -1,0 +1,7 @@
+@use "screens";
+
+@mixin heading1 {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+}

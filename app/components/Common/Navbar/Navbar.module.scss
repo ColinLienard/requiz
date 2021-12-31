@@ -9,12 +9,25 @@
   display: flex;
   align-items: center;
   padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  transition: background 0.3s ease-in-out;
+
+  &.scrolled {
+    background: variables.$darker;
+  }
 
   .hero {
     font-family: Inter, sans-serif;
     font-weight: 600;
     font-size: 1rem;
     margin: 0 auto 0 0.75rem;
+  }
+
+  .profilePictureButton {
+    font-size: 0;
   }
 
   .profilePicture {

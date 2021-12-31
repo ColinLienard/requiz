@@ -1,6 +1,7 @@
 {
   "extends": "stylelint-config-standard-scss",
   "rules": {
-    "selector-class-pattern": "[a-z]+"
+    "selector-class-pattern": "[a-z]+",
+    "color-function-notation": "legacy"
   }
 }

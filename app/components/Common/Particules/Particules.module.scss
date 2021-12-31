@@ -1,0 +1,62 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+@keyframes particule {
+  from {
+    top: 100%;
+  }
+
+  to {
+    top: -0.5rem;
+  }
+}
+
+.particulesContainer {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: -1;
+
+  .particule {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: rgba(variables.$light-blue, 0.1);
+    position: absolute;
+
+    &:nth-of-type(1) {
+      left: 10%;
+      animation: particule 8s 2s linear infinite;
+    }
+
+    &:nth-of-type(2) {
+      left: 15%;
+      animation: particule 10s linear infinite;
+    }
+
+    &:nth-of-type(3) {
+      left: 30%;
+      animation: particule 12s 2s linear infinite;
+    }
+
+    &:nth-of-type(4) {
+      left: 50%;
+      animation: particule 10s 4s linear infinite;
+    }
+
+    &:nth-of-type(5) {
+      left: 80%;
+      animation: particule 8s linear infinite;
+    }
+
+    &:nth-of-type(6) {
+      left: 90%;
+      animation: particule 8s 4s linear infinite;
+    }
+  }
+}

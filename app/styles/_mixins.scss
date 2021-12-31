@@ -1,0 +1,16 @@
+@use "variables";
+
+@mixin input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: variables.$darker;
+  border-radius: variables.$radius;
+  padding: 0.6em 1em;
+  width: 80%;
+
+  svg {
+    width: 1em;
+    fill: rgba(white, 0.3);
+  }
+}

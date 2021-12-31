@@ -1,0 +1,70 @@
+@use "../variables";
+@use "../mixins";
+@use "../typography";
+@use "../screens";
+
+@keyframes float {
+  0% { transform: translateY(-0.5rem); }
+
+  50% { transform: translateY(0.5rem); }
+
+  100% { transform: translateY(-0.5rem); }
+}
+
+.header {
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  .hero {
+    @include typography.heading1;
+
+    margin: 4rem 0 0.8rem;
+  }
+
+  .searchInput {
+    @include mixins.input;
+  }
+
+  .planet1 {
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    width: 4rem;
+    animation: float 10s ease-in-out infinite;
+  }
+
+  .planet2 {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2rem;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .planet3 {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    width: 1.8rem;
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+.gradient {
+  width: 100%;
+  height: 32rem;
+  background:
+    radial-gradient(
+      ellipse 120% 50%,
+      rgba(variables.$orange, 0.25),
+      rgba(variables.$blue, 0.05),
+      transparent
+    );
+  position: absolute;
+  top: -6rem;
+  left: 0;
+  z-index: -1;
+}
