@@ -5,3 +5,19 @@
   font-weight: 600;
   font-size: 1.5rem;
 }
+
+@mixin heading2 {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+@mixin heading3 {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+@mixin small {
+  font-size: 0.6rem;
+}

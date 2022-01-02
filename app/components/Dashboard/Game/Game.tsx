@@ -2,6 +2,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import UserItem from '../../Common/UserItem/UserItem';
 import useDate from '../../../lib/hooks/useDate';
+import styles from './Game.module.scss';
 
 type Props = {
   fromUser?: boolean,
@@ -29,7 +30,7 @@ const Game: FC<Props> = ({
   if (fromUser) {
     return (
       <Link href={`/creator/${id}`}>
-        <a>
+        <a className={styles.game}>
           <h4>{title}</h4>
           <p>{status}</p>
           <p>
@@ -45,19 +46,28 @@ const Game: FC<Props> = ({
     );
   }
   return (
-    <button type="button" onClick={onClick}>
-      <h4>{title}</h4>
-      <UserItem id={userId as string} />
-      {peopleIn && (
-        <p>
-          {peopleIn}
-          are waiting
+    <button className={styles.game} type="button" onClick={onClick}>
+      <div className={styles.theme}>
+        <p className={styles.emoji}>🌍</p>
+        <p className={styles.name}>Overall culture</p>
+      </div>
+      <h4 className={styles.title}>{title}</h4>
+      <div className={styles.userContainer}>
+        <p>by</p>
+        <UserItem id={userId as string} small />
+      </div>
+      <div className={styles.infos}>
+        {peopleIn && (
+          <p className={styles.peopleIn}>
+            {peopleIn}
+            are waiting
+          </p>
+        )}
+        <p className={styles.date}>
+          Starts in
+          {date}
         </p>
-      )}
-      <p>
-        Starts in
-        {date}
-      </p>
+      </div>
     </button>
   );
 };
