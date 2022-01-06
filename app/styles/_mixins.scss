@@ -20,3 +20,9 @@
   border: variables.$border;
   border-radius: variables.$radius;
 }
+
+@mixin button($color) {
+  background-color: $color;
+  padding: 1em 1.5em;
+  border-radius: variables.$radius;
+}

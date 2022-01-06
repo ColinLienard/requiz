@@ -4,18 +4,21 @@
   font-family: Inter, sans-serif;
   font-weight: 600;
   font-size: 1.5rem;
+  line-height: normal;
 }
 
 @mixin heading2 {
   font-family: Inter, sans-serif;
   font-weight: 600;
   font-size: 1.25rem;
+  line-height: normal;
 }
 
 @mixin heading3 {
   font-family: Inter, sans-serif;
   font-weight: 600;
   font-size: 1rem;
+  line-height: normal;
 }
 
 @mixin small {
