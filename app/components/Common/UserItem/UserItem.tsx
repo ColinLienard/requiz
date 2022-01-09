@@ -4,7 +4,7 @@ import { PropsToGetDBData, UserFromDB } from '../../../lib/types';
 import styles from './UserItem.module.scss';
 
 type Props = {
-  id: string,
+  id?: string,
   small?: boolean,
 };
 
@@ -34,8 +34,10 @@ const UserItem: FC<Props> = ({ id, small }) => {
   };
 
   useEffect(() => {
-    getUserData();
-  }, []);
+    if (id) {
+      getUserData();
+    }
+  }, [id]);
 
   return (
     <div className={`${styles.userItem} ${small && styles.small}`}>
@@ -55,6 +57,7 @@ const UserItem: FC<Props> = ({ id, small }) => {
 };
 
 UserItem.defaultProps = {
+  id: undefined,
   small: false,
 };
 

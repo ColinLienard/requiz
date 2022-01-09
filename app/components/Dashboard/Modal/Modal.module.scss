@@ -1,0 +1,126 @@
+/* stylelint-disable scss/no-global-function-names */
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.modal {
+  position: fixed;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 4rem);
+  background-color: variables.$darker;
+  border-radius: 1.5rem 1.5rem 0 0;
+  overflow: hidden;
+  z-index: 10;
+  transition: top 0.3s ease-out;
+
+  &.visible {
+    top: 4rem;
+  }
+
+  .header {
+    padding: 1.5rem 1.5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    z-index: -1;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 400%;
+      aspect-ratio: 1 / 1;
+      background-color: rgba(variables.$dark, 0.08);
+      border-radius: 50%;
+      transform: translate(-50%, -25%);
+      z-index: -1;
+      transition: 1.5s cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 25%;
+      left: 0;
+      height: 150%;
+      aspect-ratio: 1 / 1;
+      background-color: rgba(variables.$dark, 0.08);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      z-index: -1;
+      transition: 2s cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    &:not(&.visible) {
+      &::before,
+      &::after {
+        height: 0;
+        top: 100%;
+        transition: none;
+      }
+    }
+
+    .cross {
+      width: fit-content;
+      fill: white;
+    }
+
+    .theme {
+      padding: 0.8em 1em;
+      border-radius: variables.$radius;
+      background-color: rgba(variables.$dark, 0.08);
+      width: fit-content;
+      margin: 1rem auto;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: bold;
+
+      .emoji {
+        font-size: 1rem;
+      }
+    }
+
+    .title {
+      @include typography.heading2;
+    }
+  }
+
+  .main {
+    padding: 1rem 1.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+
+    .userContainer {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .description {
+      margin: 2rem 0;
+    }
+
+    .date {
+      text-align: center;
+    }
+
+    .button {
+      @include mixins.button(variables.$blue);
+
+      font-weight: bold;
+      margin: 1rem auto 0;
+    }
+
+    .title {
+      @include typography.heading2;
+
+      margin-top: 3rem;
+    }
+  }
+}

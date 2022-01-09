@@ -1,5 +1,5 @@
 /*
-  * tinyreset.css • v1.1.0
+  * tinyreset.css • v1.2.0
   * MIT License
   * https://github.com/ColinLienard/tinyreset.css
 */
@@ -25,7 +25,7 @@ html {
 /*
   * 1. Body takes at least all the space in the screen
   * 2. Set fonts to default
-  * 3. Optimize text rendering
+  * 3. Optimize rendering speed of texts
 */
 body {
   /* 1 */
@@ -82,16 +82,11 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-/* Make images and videos easier to work with */
+/* Make images, videos and svgs easier to work with */
 img,
-video {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-/* Make svg easier to work with */
+video,
 svg {
+  display: block;
   max-width: 100%;
 }
 

@@ -12,7 +12,8 @@ import Navbar from '../components/Common/Navbar/Navbar';
 import Particules from '../components/Common/Particules/Particules';
 import SearchIcon from '../public/icons/iconComponents/SearchIcon';
 import objectIdToJson from '../lib/utils/objectIdToJson';
-import { QuizData, UserFromDB } from '../lib/types';
+import { QuizData, QuizThemes, UserFromDB } from '../lib/types';
+import PlusIcon from '../public/icons/iconComponents/PlusIcon';
 import styles from '../styles/pages/Dashboard.module.scss';
 
 type Props = {
@@ -20,8 +21,8 @@ type Props = {
   liveQuizzes: QuizData[],
   publishedQuizzes: QuizData[],
   creators: UserFromDB[],
-  userQuizzes: QuizData[]
-}
+  userQuizzes: QuizData[],
+};
 
 const Dashboard: NextPage<Props> = ({
   user,
@@ -30,7 +31,11 @@ const Dashboard: NextPage<Props> = ({
   creators,
   userQuizzes,
 }: Props) => {
-  const [modalQuizId, setModalQuizId] = useState<string | undefined>();
+  const [modalQuiz, setModalQuiz] = useState<QuizData>();
+
+  const onModalClose = () => {
+    setModalQuiz(undefined);
+  };
 
   return (
     <>
@@ -40,7 +45,7 @@ const Dashboard: NextPage<Props> = ({
         <link rel="icon" href="/favicon.svg" />
       </Head>
 
-      <main>
+      <main className={styles.main}>
         <Navbar user={user} />
         <Particules />
         <header className={styles.header}>
@@ -60,30 +65,38 @@ const Dashboard: NextPage<Props> = ({
           </div>
         </header>
         <div className={styles.gradient} />
-        <h2>Live quizzes</h2>
-        <ul>
-          {liveQuizzes.map((quiz) => (
-            <li key={quiz._id}>
-              <Game
-                id={quiz._id as string}
-                title={quiz.title as string}
-                userId={quiz.userId as string}
-                peopleIn={quiz.peopleIn as number}
-                startsIn={quiz.startDate as string}
-              />
-            </li>
-          ))}
-        </ul>
-        <br />
-        <br />
-        <h2>Quizzes that will start soon</h2>
-        <ul>
+        <Modal quiz={modalQuiz} onClose={onModalClose} />
+        <h2 className={styles.title}>Live quizzes</h2>
+        {liveQuizzes.length > 0
+          ? (
+            <ul className={styles.gameList}>
+              {liveQuizzes.map((quiz) => (
+                <li key={quiz._id}>
+                  <Game
+                    onClick={() => setModalQuiz(quiz)}
+                    id={quiz._id as string}
+                    title={quiz.title as string}
+                    theme={quiz.theme as QuizThemes}
+                    userId={quiz.userId as string}
+                    peopleIn={quiz.peopleIn as number}
+                    startsIn={quiz.startDate as string}
+                  />
+                </li>
+              ))}
+            </ul>
+          )
+          : (
+            <p className={styles.text}>🥲 No quiz is live...</p>
+          )}
+        <h2 className={styles.title}>Quizzes that will start soon</h2>
+        <ul className={styles.gameList}>
           {publishedQuizzes.map((quiz) => (
             <li key={quiz._id}>
               <Game
-                onClick={() => setModalQuizId(quiz._id)}
+                onClick={() => setModalQuiz(quiz)}
                 id={quiz._id as string}
                 title={quiz.title as string}
+                theme={quiz.theme as QuizThemes}
                 userId={quiz.userId as string}
                 peopleIn={quiz.peopleIn as number}
                 startsIn={quiz.startDate as string}
@@ -91,47 +104,42 @@ const Dashboard: NextPage<Props> = ({
             </li>
           ))}
         </ul>
-        <br />
-        <br />
-        <h2>Popular creators</h2>
-        <ul>
+        <h2 className={styles.title}>Popular creators</h2>
+        <ul className={styles.userList}>
           {creators.map((creator) => (
             <li key={creator._id}>
               <User name={creator.name} image={creator.image} />
             </li>
           ))}
         </ul>
-        <br />
-        <br />
-        <Modal id={modalQuizId} />
-        <br />
-        <br />
-        <h2>Your quizzes</h2>
-        <ul>
+        <h2 className={styles.title}>Your quizzes</h2>
+        <ul className={styles.gameList}>
           {userQuizzes.map((quiz) => (
             <li key={quiz._id}>
               <Game
                 fromUser
                 id={quiz._id as string}
                 title={quiz.title as string}
-                userId={quiz.userId as string}
+                theme={quiz.theme as QuizThemes}
+                status={quiz.status as string}
                 peopleIn={quiz.peopleIn as number}
                 startsIn={quiz.startDate as string}
               />
             </li>
           ))}
         </ul>
-        <br />
-        <br />
         <Link href="/creator/new">
-          <a>Create a new quiz</a>
+          <a className={styles.button}>
+            <PlusIcon />
+            <p>Create a new quiz</p>
+          </a>
         </Link>
       </main>
     </>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const session = await getSession({ req });
   if (session) {
     const client = await clientPromise;
@@ -147,6 +155,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
           projection: {
             userId: 1,
             title: 1,
+            theme: 1,
+            description: 1,
             startDate: 1,
             peopleIn: 1,
           },
@@ -166,6 +176,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
           projection: {
             userId: 1,
             title: 1,
+            theme: 1,
+            description: 1,
             startDate: 1,
           },
         },
@@ -190,6 +202,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
         {
           projection: {
             title: 1,
+            theme: 1,
             status: 1,
             startDate: 1,
           },
@@ -208,11 +221,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     };
   }
 
-  res.setHeader('location', '/');
-  res.statusCode = 302;
-  res.end();
   return {
-    props: {},
+    redirect: {
+      destination: '/',
+      permanent: false,
+    },
   };
 };
 

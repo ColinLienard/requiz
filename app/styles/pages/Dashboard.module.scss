@@ -11,6 +11,12 @@
   100% { transform: translateY(-0.5rem); }
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4rem;
+}
+
 .header {
   padding: 0 1.5rem;
   display: flex;
@@ -22,6 +28,7 @@
     @include typography.heading1;
 
     margin: 4rem 0 0.8rem;
+    text-align: center;
   }
 
   .searchInput {
@@ -67,4 +74,39 @@
   top: -6rem;
   left: 0;
   z-index: -1;
+}
+
+.title {
+  @include typography.heading2;
+
+  margin: 3rem 0 1.5rem 3rem;
+}
+
+.gameList,
+.userList {
+  display: flex;
+  gap: 1rem;
+  padding: 0 1.5rem;
+  width: 100%;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.gameList {
+  padding-top: 0.75rem;
+}
+
+.text {
+  padding-left: 3rem;
+}
+
+.button {
+  @include mixins.button(variables.$blue);
+
+  font-weight: bold;
+  margin: 1.5rem auto 0;
 }

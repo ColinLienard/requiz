@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import Image from 'next/image';
-import { signIn } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import Popup from 'react-customizable-popup';
 import useIntersection from '../../../lib/hooks/useIntersection';
 import { UserFromDB } from '../../../lib/types';
@@ -39,6 +39,7 @@ const Navbar: FC<Props> = ({ user }) => {
             <h2 className={styles.name}>{user.name}</h2>
             <p className={styles.email}>{user.email}</p>
             <button className={styles.button} type="button">See your profile</button>
+            <button className={styles.link} onClick={() => signOut()} type="button">Sign out</button>
           </section>
           <section className={styles.section}>
             <h3 className={styles.title}>Online friends</h3>
