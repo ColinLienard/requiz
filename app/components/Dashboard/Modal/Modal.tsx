@@ -31,41 +31,49 @@ const Modal: FC<Props> = ({ quiz, onClose }) => {
   }, [quiz]);
 
   return (
-    <aside className={`${styles.modal} ${visible && styles.visible}`}>
-      <div className={`${styles.header} ${visible && styles.visible}`} style={{ backgroundColor: theme?.color }}>
-        <button className={styles.cross} type="button" onClick={handleClose}>
-          <CrossIcon />
-        </button>
-        <span className={styles.theme}>
-          <span className={styles.emoji}>{theme?.emoji}</span>
-          {theme?.name}
-        </span>
-        <h3 className={styles.title}>{quiz?.title}</h3>
-      </div>
-      <div className={styles.main}>
-        <div className={styles.userContainer}>
-          <p>by</p>
-          <UserItem id={quiz?.userId} small />
+    <>
+      <div
+        className={`${styles.backdrop} ${visible && styles.visible}`}
+        onClick={handleClose}
+        role="button"
+        aria-hidden="true"
+      />
+      <aside className={`${styles.modal} ${visible && styles.visible}`}>
+        <div className={`${styles.header} ${visible && styles.visible}`} style={{ backgroundColor: theme?.color }}>
+          <button className={styles.cross} type="button" onClick={handleClose}>
+            <CrossIcon />
+          </button>
+          <span className={styles.theme}>
+            <span className={styles.emoji}>{theme?.emoji}</span>
+            {theme?.name}
+          </span>
+          <h3 className={styles.title}>{quiz?.title}</h3>
         </div>
-        <p className={styles.description}>{quiz?.description}</p>
-        <p className={styles.date}>Starts in <b>{date}</b></p>
-        {/* {data?.status === 'waiting' && (
-          <>
-            <Link href={`/quiz/${id}`}>
-              <a className={styles.button}>Join</a>
-            </Link>
-            <h4 className={styles.title}>Waiting</h4>
-          </>
-        )}
-        {data?.status === 'published' && (
-          <button className={styles.button} type="button">Notify me</button>
-        )} */}
-        <Link href={`/quiz/${quiz?._id}`}>
-          <a className={styles.button}>Join</a>
-        </Link>
-        <h4 className={styles.title}>Waiting</h4>
-      </div>
-    </aside>
+        <div className={styles.main}>
+          <div className={styles.userContainer}>
+            <p>by</p>
+            <UserItem id={quiz?.userId} small />
+          </div>
+          <p className={styles.description}>{quiz?.description}</p>
+          <p className={styles.date}>Starts in <b>{date}</b></p>
+          {/* {data?.status === 'waiting' && (
+            <>
+              <Link href={`/quiz/${id}`}>
+                <a className={styles.button}>Join</a>
+              </Link>
+              <h4 className={styles.title}>Waiting</h4>
+            </>
+          )}
+          {data?.status === 'published' && (
+            <button className={styles.button} type="button">Notify me</button>
+          )} */}
+          <Link href={`/quiz/${quiz?._id}`}>
+            <a className={styles.button}>Join</a>
+          </Link>
+          <h4 className={styles.title}>Waiting</h4>
+        </div>
+      </aside>
+    </>
   );
 };
 

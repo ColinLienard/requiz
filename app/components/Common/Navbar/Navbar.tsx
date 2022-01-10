@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { signIn, signOut } from 'next-auth/react';
 import Popup from 'react-customizable-popup';
 import useIntersection from '../../../lib/hooks/useIntersection';
+import useMobile from '../../../lib/hooks/useMobile';
 import { UserFromDB } from '../../../lib/types';
 import CrossIcon from '../../../public/icons/iconComponents/CrossIcon';
 import styles from './Navbar.module.scss';
@@ -12,6 +13,7 @@ type Props = {
 }
 
 const Navbar: FC<Props> = ({ user }) => {
+  const isMobile = useMobile();
   const [scrolled, setScrolled] = useState(false);
   const intersection = useIntersection(64, () => setScrolled(true), () => setScrolled(false));
 
@@ -22,7 +24,12 @@ const Navbar: FC<Props> = ({ user }) => {
           root="#__next"
           toggler={(
             <button className={styles.profilePictureButton} type="button">
-              <Image className={styles.profilePicture} src={user.image} width={28} height={28} />
+              <Image
+                className={styles.profilePicture}
+                src={user.image}
+                width={isMobile ? 28 : 32}
+                height={isMobile ? 28 : 32}
+              />
             </button>
           )}
           className={styles.popup}
@@ -35,7 +42,12 @@ const Navbar: FC<Props> = ({ user }) => {
             <CrossIcon />
           </button>
           <section className={`${styles.section} ${styles.centered}`}>
-            <Image className={styles.profilePicture} src={user.image} width={64} height={64} />
+            <Image
+              className={styles.profilePicture}
+              src={user.image}
+              width={isMobile ? 64 : 80}
+              height={isMobile ? 64 : 80}
+            />
             <h2 className={styles.name}>{user.name}</h2>
             <p className={styles.email}>{user.email}</p>
             <button className={styles.button} type="button">See your profile</button>

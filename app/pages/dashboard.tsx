@@ -12,7 +12,7 @@ import Navbar from '../components/Common/Navbar/Navbar';
 import Particules from '../components/Common/Particules/Particules';
 import SearchIcon from '../public/icons/iconComponents/SearchIcon';
 import objectIdToJson from '../lib/utils/objectIdToJson';
-import { QuizData, QuizThemes, UserFromDB } from '../lib/types';
+import { QuizData, UserFromDB } from '../lib/types';
 import PlusIcon from '../public/icons/iconComponents/PlusIcon';
 import styles from '../styles/pages/Dashboard.module.scss';
 
@@ -45,95 +45,104 @@ const Dashboard: NextPage<Props> = ({
         <link rel="icon" href="/favicon.svg" />
       </Head>
 
+      <Navbar user={user} />
+      <Particules />
+      <header className={styles.header}>
+        <h2 className={styles.hero}>Welcome, {user.name}.</h2>
+        <label className={styles.searchInput} htmlFor="search">
+          <SearchIcon />
+          <input id="search" type="text" placeholder="Search" />
+        </label>
+        <div className={styles.planet1}>
+          <Image src="/icons/planet1.svg" alt="" width={100} height={55} />
+        </div>
+        <div className={styles.planet2}>
+          <Image src="/icons/planet2.svg" alt="" width={40} height={40} />
+        </div>
+        <div className={styles.planet3}>
+          <Image src="/icons/planet3.svg" alt="" width={36} height={36} />
+        </div>
+      </header>
+      <div className={styles.gradient} />
       <main className={styles.main}>
-        <Navbar user={user} />
-        <Particules />
-        <header className={styles.header}>
-          <h2 className={styles.hero}>Welcome, {user.name}.</h2>
-          <div className={styles.searchInput}>
-            <SearchIcon />
-            <input type="text" placeholder="Search" />
-          </div>
-          <div className={styles.planet1}>
-            <Image src="/icons/planet1.svg" alt="" width={100} height={55} />
-          </div>
-          <div className={styles.planet2}>
-            <Image src="/icons/planet2.svg" alt="" width={40} height={40} />
-          </div>
-          <div className={styles.planet3}>
-            <Image src="/icons/planet3.svg" alt="" width={36} height={36} />
-          </div>
-        </header>
-        <div className={styles.gradient} />
         <Modal quiz={modalQuiz} onClose={onModalClose} />
-        <h2 className={styles.title}>Live quizzes</h2>
-        {liveQuizzes.length > 0
-          ? (
-            <ul className={styles.gameList}>
-              {liveQuizzes.map((quiz) => (
+        <section className={styles.mainSection}>
+          <h2 className={styles.title}>Live quizzes</h2>
+          {liveQuizzes.length > 0
+            ? (
+              <ul className={styles.gameList}>
+                {liveQuizzes.map((quiz) => (
+                  <li key={quiz._id}>
+                    <Game
+                      onClick={() => setModalQuiz(quiz)}
+                      id={quiz._id as string}
+                      title={quiz.title as QuizData['title']}
+                      theme={quiz.theme as QuizData['theme']}
+                      userId={quiz.userId}
+                      peopleIn={quiz.peopleIn}
+                      startsIn={quiz.startDate as string}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )
+            : (
+              <p className={styles.text}>🥲 No quiz is live...</p>
+            )}
+          <h2 className={styles.title}>Quizzes that will start soon</h2>
+          <ul className={styles.gameList}>
+            {publishedQuizzes.map((quiz) => (
+              <li key={quiz._id}>
+                <Game
+                  onClick={() => setModalQuiz(quiz)}
+                  id={quiz._id as string}
+                  title={quiz.title as QuizData['title']}
+                  theme={quiz.theme as QuizData['theme']}
+                  userId={quiz.userId}
+                  peopleIn={quiz.peopleIn}
+                  startsIn={quiz.startDate as string}
+                />
+              </li>
+            ))}
+          </ul>
+          <h2 className={styles.title}>Popular creators</h2>
+          <ul className={styles.userList}>
+            {creators.map((creator) => (
+              <li key={creator._id}>
+                <User name={creator.name} image={creator.image} />
+              </li>
+            ))}
+          </ul>
+        </section>
+        <hr className={styles.separator} />
+        <section className={styles.sideSection}>
+          <h2 className={styles.title}>Your quizzes</h2>
+          {userQuizzes.length > 0 ? (
+            <ul className={`${styles.gameList} ${styles.vertical}`}>
+              {userQuizzes.map((quiz) => (
                 <li key={quiz._id}>
                   <Game
-                    onClick={() => setModalQuiz(quiz)}
+                    fromUser
                     id={quiz._id as string}
-                    title={quiz.title as string}
-                    theme={quiz.theme as QuizThemes}
-                    userId={quiz.userId as string}
-                    peopleIn={quiz.peopleIn as number}
+                    title={quiz.title as QuizData['title']}
+                    theme={quiz.theme as QuizData['theme']}
+                    status={quiz.status}
+                    peopleIn={quiz.peopleIn}
                     startsIn={quiz.startDate as string}
                   />
                 </li>
               ))}
             </ul>
-          )
-          : (
-            <p className={styles.text}>🥲 No quiz is live...</p>
+          ) : (
+            <p className={styles.empty}>You have not created any quiz yet.</p>
           )}
-        <h2 className={styles.title}>Quizzes that will start soon</h2>
-        <ul className={styles.gameList}>
-          {publishedQuizzes.map((quiz) => (
-            <li key={quiz._id}>
-              <Game
-                onClick={() => setModalQuiz(quiz)}
-                id={quiz._id as string}
-                title={quiz.title as string}
-                theme={quiz.theme as QuizThemes}
-                userId={quiz.userId as string}
-                peopleIn={quiz.peopleIn as number}
-                startsIn={quiz.startDate as string}
-              />
-            </li>
-          ))}
-        </ul>
-        <h2 className={styles.title}>Popular creators</h2>
-        <ul className={styles.userList}>
-          {creators.map((creator) => (
-            <li key={creator._id}>
-              <User name={creator.name} image={creator.image} />
-            </li>
-          ))}
-        </ul>
-        <h2 className={styles.title}>Your quizzes</h2>
-        <ul className={styles.gameList}>
-          {userQuizzes.map((quiz) => (
-            <li key={quiz._id}>
-              <Game
-                fromUser
-                id={quiz._id as string}
-                title={quiz.title as string}
-                theme={quiz.theme as QuizThemes}
-                status={quiz.status as string}
-                peopleIn={quiz.peopleIn as number}
-                startsIn={quiz.startDate as string}
-              />
-            </li>
-          ))}
-        </ul>
-        <Link href="/creator/new">
-          <a className={styles.button}>
-            <PlusIcon />
-            <p>Create a new quiz</p>
-          </a>
-        </Link>
+          <Link href="/creator/new">
+            <a className={styles.button}>
+              <PlusIcon />
+              <p>Create a new quiz</p>
+            </a>
+          </Link>
+        </section>
       </main>
     </>
   );

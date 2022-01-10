@@ -3,20 +3,21 @@ import Link from 'next/link';
 import UserItem from '../../Common/UserItem/UserItem';
 import useDate from '../../../lib/hooks/useDate';
 import useQuizTheme from '../../../lib/hooks/useQuizTheme';
-import { QuizThemes } from '../../../lib/types';
+import useQuizStatus from '../../../lib/hooks/useQuizStatus';
+import { QuizData } from '../../../lib/types';
 import styles from './Game.module.scss';
 
 type Props = {
   fromUser?: boolean,
   onClick?: () => void,
   id: string,
-  title: string,
-  theme: QuizThemes,
-  userId?: string,
-  status?: string,
-  peopleIn?: number,
-  startsIn: string
-}
+  title: QuizData['title'],
+  theme: QuizData['theme'],
+  userId?: QuizData['userId'],
+  status?: QuizData['status'],
+  peopleIn?: QuizData['peopleIn'],
+  startsIn: string,
+};
 
 const Game: FC<Props> = ({
   fromUser,
@@ -31,18 +32,19 @@ const Game: FC<Props> = ({
 }) => {
   const date = useDate(startsIn);
   const quizTheme = useQuizTheme(theme);
+  const quizStatus = useQuizStatus(status);
 
   if (fromUser) {
     return (
       <Link href={`/creator/${id}`}>
         <a className={styles.game}>
           <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
-            {quizTheme?.emoji}
+            <span className={styles.emoji}>{quizTheme?.emoji}</span>
           </div>
           <h4 className={styles.title}>{title}</h4>
           <div className={styles.statusContainer}>
-            <span className={styles.statusColor} />
-            <p>{status}</p>
+            <span className={styles.statusColor} style={{ backgroundColor: quizStatus?.color }} />
+            <p>{quizStatus?.name}</p>
           </div>
           <div className={styles.infos}>
             {peopleIn && (
@@ -63,7 +65,7 @@ const Game: FC<Props> = ({
   return (
     <button className={styles.game} type="button" onClick={onClick}>
       <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
-        {quizTheme?.emoji}
+        <span className={styles.emoji}>{quizTheme?.emoji}</span>
       </div>
       <h4 className={styles.title}>{title}</h4>
       <div className={styles.userContainer}>
@@ -90,7 +92,7 @@ Game.defaultProps = {
   fromUser: false,
   onClick: undefined,
   userId: '',
-  status: '',
+  status: undefined,
   peopleIn: undefined,
 };
 

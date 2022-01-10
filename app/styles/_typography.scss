@@ -5,6 +5,10 @@
   font-weight: 600;
   font-size: 1.5rem;
   line-height: normal;
+
+  @include screens.laptop {
+    font-size: 3rem;
+  }
 }
 
 @mixin heading2 {
@@ -12,6 +16,10 @@
   font-weight: 600;
   font-size: 1.25rem;
   line-height: normal;
+
+  @include screens.laptop {
+    font-size: 1.5rem;
+  }
 }
 
 @mixin heading3 {
@@ -19,8 +27,16 @@
   font-weight: 600;
   font-size: 1rem;
   line-height: normal;
+
+  @include screens.laptop {
+    font-size: 1.25rem;
+  }
 }
 
 @mixin small {
   font-size: 0.6rem;
+
+  @include screens.laptop {
+    font-size: 0.75rem;
+  }
 }

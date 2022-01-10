@@ -15,13 +15,13 @@ const useDate = (isoDate?: string) => {
         if (hours < 0) {
           const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
           const secs = Math.floor((time % (1000 * 60)) / 1000);
-          setTimeLeft(`${mins} min, ${secs} sec`);
+          setTimeLeft(`${mins}m ${secs}s`);
         } else {
-          setTimeLeft(`${hours} hours`);
+          setTimeLeft(`${hours}h`);
           clearInterval(interval);
         }
       } else {
-        setTimeLeft(`${days} day${days > 1 ? 's' : ''}`);
+        setTimeLeft(`${days}d`);
         clearInterval(interval);
       }
     } : () => null, 1000);

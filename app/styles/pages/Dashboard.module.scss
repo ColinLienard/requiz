@@ -12,9 +12,30 @@
 }
 
 .main {
+  width: 100%;
   display: flex;
   flex-direction: column;
   padding-bottom: 4rem;
+
+  @include screens.laptop {
+    flex-direction: row-reverse;
+    padding-top: 1rem;
+    padding-bottom: 8rem;
+  }
+
+  .mainSection {
+    width: 100%;
+
+    @include screens.laptop {
+      padding: 0 4rem;
+    }
+  }
+
+  .sideSection {
+    @include screens.laptop {
+      padding: 0 4rem;
+    }
+  }
 }
 
 .header {
@@ -27,12 +48,18 @@
   .hero {
     @include typography.heading1;
 
-    margin: 4rem 0 0.8rem;
+    margin: 4rem 0 0.75rem;
     text-align: center;
+
+    @include screens.laptop {
+      margin: 7rem 0 1rem;
+    }
   }
 
   .searchInput {
     @include mixins.input;
+
+    width: min(80%, 32rem);
   }
 
   .planet1 {
@@ -41,6 +68,11 @@
     left: 5%;
     width: 4rem;
     animation: float 10s ease-in-out infinite;
+
+    @include screens.laptop {
+      left: calc(50% - 28rem);
+      width: 6rem;
+    }
   }
 
   .planet2 {
@@ -49,14 +81,24 @@
     left: 50%;
     width: 2rem;
     animation: float 8s ease-in-out infinite;
+
+    @include screens.laptop {
+      left: calc(50% + 16rem);
+      width: 3rem;
+    }
   }
 
   .planet3 {
     position: absolute;
     top: 50%;
     right: 5%;
-    width: 1.8rem;
+    width: 1.75rem;
     animation: float 6s ease-in-out infinite;
+
+    @include screens.laptop {
+      left: calc(50% + 32rem);
+      width: 2.5rem;
+    }
   }
 }
 
@@ -74,12 +116,28 @@
   top: -6rem;
   left: 0;
   z-index: -1;
+
+  @include screens.laptop {
+    height: 48rem;
+    background:
+      radial-gradient(
+        ellipse 64rem 50%,
+        rgba(variables.$orange, 0.25),
+        rgba(variables.$blue, 0.05),
+        transparent
+      );
+    top: -8rem;
+  }
 }
 
 .title {
   @include typography.heading2;
 
   margin: 3rem 0 1.5rem 3rem;
+
+  @include screens.laptop {
+    margin: 4rem 0 2rem 2rem;
+  }
 }
 
 .gameList,
@@ -93,6 +151,15 @@
   &::-webkit-scrollbar {
     display: none;
   }
+
+  @include screens.laptop {
+    padding: 0;
+    gap: 1.5rem;
+
+    &.vertical {
+      flex-direction: column;
+    }
+  }
 }
 
 /* stylelint-disable-next-line no-descending-specificity */
@@ -100,8 +167,32 @@
   padding-top: 0.75rem;
 }
 
+.empty {
+  text-align: center;
+  width: 16rem;
+
+  @include screens.laptop {
+    width: 20rem;
+  }
+}
+
 .text {
   padding-left: 3rem;
+
+  @include screens.laptop {
+    padding-left: 2rem;
+  }
+}
+
+.separator {
+  margin-top: 3rem;
+  border: none;
+  border-top: variables.$border;
+
+  @include screens.laptop {
+    border: none;
+    border-left: variables.$border;
+  }
 }
 
 .button {
@@ -109,4 +200,8 @@
 
   font-weight: bold;
   margin: 1.5rem auto 0;
+
+  @include screens.laptop {
+    margin-top: 2rem;
+  }
 }

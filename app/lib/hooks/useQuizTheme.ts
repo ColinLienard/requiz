@@ -5,13 +5,13 @@ const themes = [
     id: 'overallCulture',
     name: 'Overall culture',
     emoji: '🌍',
-    color: '#00D287',
+    color: '#00d287',
   },
   {
     id: 'videoGames',
     name: 'Video games',
     emoji: '🎮',
-    color: '#F47851',
+    color: '#f47851',
   },
 ];
 
