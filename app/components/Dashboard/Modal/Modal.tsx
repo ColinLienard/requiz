@@ -9,10 +9,11 @@ import useQuizTheme from '../../../lib/hooks/useQuizTheme';
 
 type Props = {
   quiz?: QuizData,
+  fromUser: boolean,
   onClose: () => void,
 };
 
-const Modal: FC<Props> = ({ quiz, onClose }) => {
+const Modal: FC<Props> = ({ quiz, fromUser, onClose }) => {
   const [visible, setVisible] = useState(false);
   const date = useDate(quiz?.startDate as string);
   const theme = useQuizTheme(quiz?.theme);
@@ -21,6 +22,20 @@ const Modal: FC<Props> = ({ quiz, onClose }) => {
     setVisible(false);
     onClose();
   };
+
+  const handleEchapKey = (event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      handleClose();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleEchapKey);
+
+    return () => {
+      window.removeEventListener('keydown', handleEchapKey);
+    };
+  }, []);
 
   useEffect(() => {
     if (quiz) {
@@ -40,6 +55,7 @@ const Modal: FC<Props> = ({ quiz, onClose }) => {
       />
       <aside className={`${styles.modal} ${visible && styles.visible}`}>
         <div className={`${styles.header} ${visible && styles.visible}`} style={{ backgroundColor: theme?.color }}>
+          <div className={styles.noise} />
           <button className={styles.cross} type="button" onClick={handleClose}>
             <CrossIcon />
           </button>
@@ -52,7 +68,11 @@ const Modal: FC<Props> = ({ quiz, onClose }) => {
         <div className={styles.main}>
           <div className={styles.userContainer}>
             <p>by</p>
-            <UserItem id={quiz?.userId} small />
+            {fromUser ? (
+              <p>you</p>
+            ) : (
+              <UserItem id={quiz?.userId} small />
+            )}
           </div>
           <p className={styles.description}>{quiz?.description}</p>
           <p className={styles.date}>Starts in <b>{date}</b></p>
@@ -67,9 +87,15 @@ const Modal: FC<Props> = ({ quiz, onClose }) => {
           {data?.status === 'published' && (
             <button className={styles.button} type="button">Notify me</button>
           )} */}
-          <Link href={`/quiz/${quiz?._id}`}>
-            <a className={styles.button}>Join</a>
-          </Link>
+          {fromUser ? (
+            <Link href={`/creator/${quiz?._id}`}>
+              <a className={styles.button}>Continue</a>
+            </Link>
+          ) : (
+            <Link href={`/quiz/${quiz?._id}`}>
+              <a className={styles.button}>Join</a>
+            </Link>
+          )}
           <h4 className={styles.title}>Waiting</h4>
         </div>
       </aside>

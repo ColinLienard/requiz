@@ -5,7 +5,7 @@ const themes = [
     id: 'overallCulture',
     name: 'Overall culture',
     emoji: '🌍',
-    color: '#00d287',
+    color: '#00cf78',
   },
   {
     id: 'videoGames',

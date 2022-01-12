@@ -38,21 +38,59 @@
   }
 }
 
+.backgroundimage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(12rem - 1.25rem);
+  background: radial-gradient(ellipse 100% 50% at center bottom, #e683bb, variables.$blue);
+  z-index: -10;
+
+  @include screens.laptop {
+    height: calc(20rem - 1.25rem);
+  }
+
+  span {
+    width: 100% !important;
+    height: 100% !important;
+
+    img {
+      object-fit: cover;
+
+      @include screens.laptop {
+        object-fit: contain;
+      }
+    }
+  }
+
+  &::before {
+    @include mixins.noise;
+
+    content: "";
+    z-index: 1;
+  }
+}
+
 .header {
+  height: 8rem;
   padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
 
+  @include screens.laptop {
+    height: 14rem;
+  }
+
   .hero {
     @include typography.heading1;
 
-    margin: 4rem 0 0.75rem;
-    text-align: center;
+    margin: auto 0 0.75rem;
 
     @include screens.laptop {
-      margin: 7rem 0 1rem;
+      margin-bottom: 1rem;
     }
   }
 
@@ -62,44 +100,44 @@
     width: min(80%, 32rem);
   }
 
-  .planet1 {
-    position: absolute;
-    top: 10%;
-    left: 5%;
-    width: 4rem;
-    animation: float 10s ease-in-out infinite;
+  // .planet1 {
+  //   position: absolute;
+  //   top: 10%;
+  //   left: 5%;
+  //   width: 4rem;
+  //   animation: float 10s ease-in-out infinite;
 
-    @include screens.laptop {
-      left: calc(50% - 28rem);
-      width: 6rem;
-    }
-  }
+  //   @include screens.laptop {
+  //     left: calc(50% - 28rem);
+  //     width: 6rem;
+  //   }
+  // }
 
-  .planet2 {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 2rem;
-    animation: float 8s ease-in-out infinite;
+  // .planet2 {
+  //   position: absolute;
+  //   top: 0;
+  //   left: 50%;
+  //   width: 2rem;
+  //   animation: float 8s ease-in-out infinite;
 
-    @include screens.laptop {
-      left: calc(50% + 16rem);
-      width: 3rem;
-    }
-  }
+  //   @include screens.laptop {
+  //     left: calc(50% + 16rem);
+  //     width: 3rem;
+  //   }
+  // }
 
-  .planet3 {
-    position: absolute;
-    top: 50%;
-    right: 5%;
-    width: 1.75rem;
-    animation: float 6s ease-in-out infinite;
+  // .planet3 {
+  //   position: absolute;
+  //   top: 50%;
+  //   right: 5%;
+  //   width: 1.75rem;
+  //   animation: float 6s ease-in-out infinite;
 
-    @include screens.laptop {
-      left: calc(50% + 32rem);
-      width: 2.5rem;
-    }
-  }
+  //   @include screens.laptop {
+  //     left: calc(50% + 32rem);
+  //     width: 2.5rem;
+  //   }
+  // }
 }
 
 .gradient {

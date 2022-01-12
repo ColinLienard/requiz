@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import Link from 'next/link';
 import UserItem from '../../Common/UserItem/UserItem';
 import useDate from '../../../lib/hooks/useDate';
 import useQuizTheme from '../../../lib/hooks/useQuizTheme';
@@ -10,7 +9,6 @@ import styles from './Game.module.scss';
 type Props = {
   fromUser?: boolean,
   onClick?: () => void,
-  id: string,
   title: QuizData['title'],
   theme: QuizData['theme'],
   userId?: QuizData['userId'],
@@ -22,7 +20,6 @@ type Props = {
 const Game: FC<Props> = ({
   fromUser,
   onClick,
-  id,
   title,
   theme,
   userId,
@@ -34,44 +31,51 @@ const Game: FC<Props> = ({
   const quizTheme = useQuizTheme(theme);
   const quizStatus = useQuizStatus(status);
 
-  if (fromUser) {
-    return (
-      <Link href={`/creator/${id}`}>
-        <a className={styles.game}>
-          <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
-            <span className={styles.emoji}>{quizTheme?.emoji}</span>
-          </div>
-          <h4 className={styles.title}>{title}</h4>
-          <div className={styles.statusContainer}>
-            <span className={styles.statusColor} style={{ backgroundColor: quizStatus?.color }} />
-            <p>{quizStatus?.name}</p>
-          </div>
-          <div className={styles.infos}>
-            {peopleIn && (
-              <p className={styles.peopleIn}>
-                {peopleIn}
-                are waiting
-              </p>
-            )}
-            <p className={styles.date}>
-              Starts in
-              {date}
-            </p>
-          </div>
-        </a>
-      </Link>
-    );
-  }
+  // if (fromUser) {
+  //   return (
+  //     <Link href={`/creator/${id}`}>
+  //       <a className={styles.game}>
+  //         <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
+  //           <span className={styles.emoji}>{quizTheme?.emoji}</span>
+  //         </div>
+  //         <h4 className={styles.title}>{title}</h4>
+  //         <div className={styles.statusContainer}>
+  //           <span className={styles.statusColor} style={{ backgroundColor: quizStatus?.color }}/>
+  //           <p>{quizStatus?.name}</p>
+  //         </div>
+  //         <div className={styles.infos}>
+  //           {peopleIn && (
+  //             <p className={styles.peopleIn}>
+  //               {peopleIn}
+  //               are waiting
+  //             </p>
+  //           )}
+  //           <p className={styles.date}>
+  //             Starts in
+  //             {date}
+  //           </p>
+  //         </div>
+  //       </a>
+  //     </Link>
+  //   );
+  // }
   return (
     <button className={styles.game} type="button" onClick={onClick}>
       <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
         <span className={styles.emoji}>{quizTheme?.emoji}</span>
       </div>
       <h4 className={styles.title}>{title}</h4>
-      <div className={styles.userContainer}>
-        <p>by</p>
-        <UserItem id={userId} small />
-      </div>
+      {fromUser ? (
+        <div className={styles.statusContainer}>
+          <span className={styles.statusColor} style={{ backgroundColor: quizStatus?.color }} />
+          <p>{quizStatus?.name}</p>
+        </div>
+      ) : (
+        <div className={styles.userContainer}>
+          <p>by</p>
+          <UserItem id={userId} small />
+        </div>
+      )}
       <div className={styles.infos}>
         {peopleIn && (
           <p className={styles.peopleIn}>

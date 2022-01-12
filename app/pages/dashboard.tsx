@@ -33,10 +33,6 @@ const Dashboard: NextPage<Props> = ({
 }: Props) => {
   const [modalQuiz, setModalQuiz] = useState<QuizData>();
 
-  const onModalClose = () => {
-    setModalQuiz(undefined);
-  };
-
   return (
     <>
       <Head>
@@ -47,13 +43,16 @@ const Dashboard: NextPage<Props> = ({
 
       <Navbar user={user} />
       <Particules />
+      <div className={styles.backgroundimage}>
+        <Image src="/images/landscape.svg" width={1057} height={333} />
+      </div>
       <header className={styles.header}>
         <h2 className={styles.hero}>Welcome, {user.name}.</h2>
         <label className={styles.searchInput} htmlFor="search">
           <SearchIcon />
           <input id="search" type="text" placeholder="Search" />
         </label>
-        <div className={styles.planet1}>
+        {/* <div className={styles.planet1}>
           <Image src="/icons/planet1.svg" alt="" width={100} height={55} />
         </div>
         <div className={styles.planet2}>
@@ -61,11 +60,15 @@ const Dashboard: NextPage<Props> = ({
         </div>
         <div className={styles.planet3}>
           <Image src="/icons/planet3.svg" alt="" width={36} height={36} />
-        </div>
+        </div> */}
       </header>
       <div className={styles.gradient} />
       <main className={styles.main}>
-        <Modal quiz={modalQuiz} onClose={onModalClose} />
+        <Modal
+          quiz={modalQuiz}
+          fromUser={modalQuiz?.status !== undefined}
+          onClose={() => setModalQuiz(undefined)}
+        />
         <section className={styles.mainSection}>
           <h2 className={styles.title}>Live quizzes</h2>
           {liveQuizzes.length > 0
@@ -75,7 +78,6 @@ const Dashboard: NextPage<Props> = ({
                   <li key={quiz._id}>
                     <Game
                       onClick={() => setModalQuiz(quiz)}
-                      id={quiz._id as string}
                       title={quiz.title as QuizData['title']}
                       theme={quiz.theme as QuizData['theme']}
                       userId={quiz.userId}
@@ -95,7 +97,6 @@ const Dashboard: NextPage<Props> = ({
               <li key={quiz._id}>
                 <Game
                   onClick={() => setModalQuiz(quiz)}
-                  id={quiz._id as string}
                   title={quiz.title as QuizData['title']}
                   theme={quiz.theme as QuizData['theme']}
                   userId={quiz.userId}
@@ -123,7 +124,7 @@ const Dashboard: NextPage<Props> = ({
                 <li key={quiz._id}>
                   <Game
                     fromUser
-                    id={quiz._id as string}
+                    onClick={() => setModalQuiz(quiz)}
                     title={quiz.title as QuizData['title']}
                     theme={quiz.theme as QuizData['theme']}
                     status={quiz.status}

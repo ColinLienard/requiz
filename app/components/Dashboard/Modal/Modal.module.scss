@@ -62,7 +62,7 @@
       left: 0;
       height: 400%;
       aspect-ratio: 1 / 1;
-      background-color: rgba(variables.$dark, 0.08);
+      background: radial-gradient(transparent 50%, rgba(white, 0.25));
       border-radius: 50%;
       transform: translate(-50%, -25%);
       z-index: -1;
@@ -76,7 +76,7 @@
       left: 0;
       height: 150%;
       aspect-ratio: 1 / 1;
-      background-color: rgba(variables.$dark, 0.08);
+      background: radial-gradient(transparent 50%, rgba(white, 0.25));
       border-radius: 50%;
       transform: translateX(-50%);
       z-index: -1;
@@ -90,6 +90,12 @@
         top: 100%;
         transition: none;
       }
+    }
+
+    .noise {
+      @include mixins.noise;
+
+      z-index: -1;
     }
 
     .cross {

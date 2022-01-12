@@ -15,7 +15,11 @@ type Props = {
 const Navbar: FC<Props> = ({ user }) => {
   const isMobile = useMobile();
   const [scrolled, setScrolled] = useState(false);
-  const intersection = useIntersection(64, () => setScrolled(true), () => setScrolled(false));
+  const intersection = useIntersection(
+    isMobile ? 128 : 192,
+    () => setScrolled(true),
+    () => setScrolled(false),
+  );
 
   const renderProfilePicture = () => {
     if (user?.image) {
@@ -27,8 +31,8 @@ const Navbar: FC<Props> = ({ user }) => {
               <Image
                 className={styles.profilePicture}
                 src={user.image}
-                width={isMobile ? 28 : 32}
-                height={isMobile ? 28 : 32}
+                width={isMobile ? 28 : 40}
+                height={isMobile ? 28 : 40}
               />
             </button>
           )}
