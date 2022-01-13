@@ -1,0 +1,81 @@
+@use "../variables";
+@use "../mixins";
+@use "../typography";
+@use "../screens";
+
+.main {
+  padding: 2rem 1.5rem;
+
+  .hero {
+    @include typography.heading1;
+
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-bottom: 1rem;
+
+    .iconButton {
+      padding: 1em 1.5em;
+      border: variables.$border;
+      border-radius: variables.$radius;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      transition: background-color 0.2s ease-in-out;
+
+      &.discord:hover {
+        background-color: #5865f2;
+      }
+
+      &.google:hover {
+        background-color: #ea4435;
+      }
+    }
+  }
+
+  .gradient {
+    @include mixins.gradient;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+
+    .label {
+      margin: 1.5rem 0 0.5rem 1em;
+    }
+
+    .input {
+      @include mixins.input;
+
+      width: 100%;
+    }
+
+    .button {
+      @include mixins.button(variables.$blue);
+
+      margin: 1.5rem auto 0;
+    }
+  }
+
+  .subtext {
+    text-align: center;
+    margin: 1rem 0 0.25rem;
+  }
+
+  .link {
+    color: variables.$light-blue;
+    font-weight: bold;
+    margin: 0 auto;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

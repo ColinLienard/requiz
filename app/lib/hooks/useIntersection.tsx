@@ -11,7 +11,15 @@ const useIntersection = (past: number, enable: () => void, disable: () => void) 
         disable();
       }
     });
-    observer.observe(toWatch.current as HTMLDivElement);
+    if (toWatch.current) {
+      observer.observe(toWatch.current as HTMLDivElement);
+    }
+
+    return () => {
+      if (toWatch.current) {
+        observer.unobserve(toWatch.current);
+      }
+    };
   }, []);
 
   return (
