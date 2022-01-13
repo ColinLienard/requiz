@@ -5,19 +5,17 @@ type Props = {
   content: string
 }
 
-const ChatMessage: FC<Props> = ({ author, content }) => {
-  return (
-    <p>
-      {author && (
-        <span>
-          {author}
-          {': '}
-        </span>
-      )}
-      {content}
-    </p>
-  );
-};
+const ChatMessage: FC<Props> = ({ author, content }) => (
+  <p>
+    {author && (
+      <span>
+        {author}
+        {': '}
+      </span>
+    )}
+    {content}
+  </p>
+);
 
 ChatMessage.defaultProps = {
   author: '',

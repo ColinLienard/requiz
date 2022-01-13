@@ -28,11 +28,11 @@ type QuestionsAction = {
   value: number
 }
 
-const newId = (state: { id: number }[]) => {
-  return state.reduce((previous: number, current: { id: number }) => {
-    return current.id >= previous ? current.id + 1 : previous;
-  }, 0);
-};
+const newId = (state: { id: number }[]) => (
+  state.reduce((previous: number, current: { id: number }) => (
+    current.id >= previous ? current.id + 1 : previous
+  ), 0)
+);
 
 export const questionsReducer = (state: QuizQuestion[] | undefined, action: QuestionsAction) => {
   switch (action.type) {

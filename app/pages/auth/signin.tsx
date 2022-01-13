@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import { getSession, signIn, getCsrfToken } from 'next-auth/react';
 import authErrorIndex from '../../lib/utils/authErrorIndex';
 import PasswordInput from '../../components/Common/PasswordInput/PasswordInput';
+import Particules from '../../components/Common/Particules/Particules';
+import Navbar from '../../components/Common/Navbar/Navbar';
 
 type Props = {
   csrfToken: string
@@ -85,6 +87,8 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+      <Particules />
+      <Navbar />
       <main>
         <p><strong>{authErrorIndex[error]}</strong></p>
         <Link href="/">

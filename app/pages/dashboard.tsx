@@ -41,8 +41,8 @@ const Dashboard: NextPage<Props> = ({
         <link rel="icon" href="/favicon.svg" />
       </Head>
 
-      <Navbar user={user} />
       <Particules />
+      <Navbar user={user} />
       <div className={styles.backgroundimage}>
         <Image src="/images/landscape.svg" width={1057} height={333} />
       </div>

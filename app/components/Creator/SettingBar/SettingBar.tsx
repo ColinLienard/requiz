@@ -13,12 +13,10 @@ type Props = {
 
 const SettingBar: FC<Props> = ({ setSettings, defaultData }) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setSettings((settings) => {
-      return {
-        ...settings,
-        [event.target.name]: event.target.value,
-      };
-    });
+    setSettings((settings) => ({
+      ...settings,
+      [event.target.name]: event.target.value,
+    }));
   };
 
   return (

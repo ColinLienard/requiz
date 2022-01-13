@@ -44,12 +44,27 @@
   }
 
   .profilePictureButton {
-    border-radius: 50%;
-    overflow: hidden;
     font-size: 0;
+    position: relative;
 
-    &:hover {
-      box-shadow: 0 0.5rem 0.5rem rgba(variables.$darker, 0.25);
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow: 0 0.25rem 0.5rem rgba(variables.$darker, 0.25);
+      opacity: 0;
+      transition: 0.2s ease-in-out;
+    }
+
+    &:hover::before {
+      opacity: 1;
+    }
+
+    .profilePicture {
+      border-radius: 50%;
     }
   }
 }
@@ -93,7 +108,7 @@
     }
   }
 
-  .profilePicture {
+  .image {
     border-radius: 50%;
   }
 

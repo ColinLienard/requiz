@@ -7,18 +7,16 @@ type Props = {
   image?: string
 }
 
-const User: FC<Props> = ({ name, image }) => {
-  return (
-    <button className={styles.user} type="button">
-      {image ? (
-        <Image className={styles.profilePicture} src={image} width={64} height={64} alt="" />
-      ) : (
-        <span className={styles.noProfilePicture} />
-      )}
-      <p className={styles.name}>{name}</p>
-    </button>
-  );
-};
+const User: FC<Props> = ({ name, image }) => (
+  <button className={styles.user} type="button">
+    {image ? (
+      <Image className={styles.profilePicture} src={image} width={64} height={64} alt="" />
+    ) : (
+      <span className={styles.noProfilePicture} />
+    )}
+    <p className={styles.name}>{name}</p>
+  </button>
+);
 
 User.defaultProps = {
   image: undefined,

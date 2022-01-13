@@ -14,21 +14,19 @@ const Response: FC<Props> = ({
   selected,
   select,
   good,
-}) => {
-  return (
-    <button
-      type="button"
-      onClick={() => select(index)}
-      style={{
-        backgroundColor: selected === index ? 'royalblue' : 'transparent',
-        border: good ? '3px solid green' : 'none',
-      }}
-    >
-      <h4>{index + 1}</h4>
-      <p>{text}</p>
-    </button>
-  );
-};
+}) => (
+  <button
+    type="button"
+    onClick={() => select(index)}
+    style={{
+      backgroundColor: selected === index ? 'royalblue' : 'transparent',
+      border: good ? '3px solid green' : 'none',
+    }}
+  >
+    <h4>{index + 1}</h4>
+    <p>{text}</p>
+  </button>
+);
 
 Response.defaultProps = {
   good: false,
