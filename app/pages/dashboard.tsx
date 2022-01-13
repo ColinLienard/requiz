@@ -48,9 +48,11 @@ const Dashboard: NextPage<Props> = ({
       </div>
       <header className={styles.header}>
         <h2 className={styles.hero}>Welcome, {user.name}.</h2>
-        <label className={styles.searchInput} htmlFor="search">
-          <SearchIcon />
-          <input id="search" type="text" placeholder="Search" />
+        <label className={styles.searchInputContainer} htmlFor="search">
+          <input className={styles.searchInput} id="search" type="text" placeholder="Search" />
+          <button className={styles.iconButton} type="button">
+            <SearchIcon />
+          </button>
         </label>
         {/* <div className={styles.planet1}>
           <Image src="/icons/planet1.svg" alt="" width={100} height={55} />

@@ -48,7 +48,7 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
       if (response?.error) {
         setError(response?.error);
       } else {
-        router.push('/');
+        router.prefetch('/dashboard');
       }
     });
   };
@@ -96,83 +96,85 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
       <strong style={{ color: 'red' }}>{authErrorIndex[error]}</strong>
 
       <main className={styles.main}>
-        <div className={styles.gradient} />
-        <h2 className={styles.hero}>{sign === 'in' ? 'Sign in' : 'Sign up'}</h2>
-        <aside className={styles.buttonContainer}>
-          <button className={`${styles.iconButton} ${styles.discord}`} type="button" onClick={() => signIn('discord')}>
-            Continue with
-            <Image src="/icons/discord.svg" width={24} height={18} />
-          </button>
-          <button className={`${styles.iconButton} ${styles.google}`} type="button" onClick={() => signIn('google')}>
-            Continue with
-            <Image src="/icons/google.svg" width={18} height={18} />
-          </button>
-        </aside>
-        {sign === 'in' && (
-          <section>
-            <form className={styles.form} method="post" action="/api/auth/callback/signin" onSubmit={handleSignInSubmit}>
-              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-              <label className={styles.label} htmlFor="email">Email</label>
-              <input
-                className={styles.input}
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                required
-              />
-              <label className={styles.label} htmlFor="password">Password</label>
-              <PasswordInput
-                className={styles.input}
-                name="password"
-                placeholder="Enter your password"
-                required
-              />
-              <button className={styles.button} type="submit">Sign in</button>
-              <p className={styles.subtext}>Don&apos;t have an account ?</p>
-              <button className={styles.link} onClick={() => setSign('up')} type="button">Sign up.</button>
-            </form>
-          </section>
-        )}
-        {sign === 'up' && (
-          <section>
-            <form className={styles.form} method="post" action="/api/auth/callback/signup" onSubmit={handleSignUpSubmit}>
-              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-              <label className={styles.label} htmlFor="name">Name</label>
-              <input
-                className={styles.input}
-                name="name"
-                type="name"
-                placeholder="Enter your name"
-                required
-              />
-              <label className={styles.label} htmlFor="email">Email</label>
-              <input
-                className={styles.input}
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                required
-              />
-              <label className={styles.label} htmlFor="password">Password</label>
-              <PasswordInput
-                className={styles.input}
-                name="password"
-                placeholder="Enter your password"
-                required
-              />
-              <label className={styles.label} htmlFor="confirmPassword">Confirm password</label>
-              <PasswordInput
-                className={styles.input}
-                name="confirmPassword"
-                placeholder="Confirm your password"
-                required
-              />
-              <button className={styles.button} type="submit">Sign up</button>
-              <p className={styles.subtext}>Already have an account ?</p>
-              <button className={styles.link} onClick={() => setSign('in')} type="button">Sign in.</button>
-            </form>
-          </section>
-        )}
+        <div className={styles.wrapper}>
+          <div className={styles.gradient} />
+          <h2 className={styles.hero}>{sign === 'in' ? 'Sign in' : 'Sign up'}</h2>
+          <aside className={styles.buttonContainer}>
+            <button className={`${styles.iconButton} ${styles.discord}`} type="button" onClick={() => signIn('discord')}>
+              Continue with
+              <Image src="/icons/discord.svg" width={24} height={18} />
+            </button>
+            <button className={`${styles.iconButton} ${styles.google}`} type="button" onClick={() => signIn('google')}>
+              Continue with
+              <Image src="/icons/google.svg" width={18} height={18} />
+            </button>
+          </aside>
+          {sign === 'in' && (
+            <section>
+              <form className={styles.form} method="post" action="/api/auth/callback/signin" onSubmit={handleSignInSubmit}>
+                <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
+                <label className={styles.label} htmlFor="email">Email</label>
+                <input
+                  className={styles.input}
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  required
+                />
+                <label className={styles.label} htmlFor="password">Password</label>
+                <PasswordInput
+                  className={styles.input}
+                  name="password"
+                  placeholder="Enter your password"
+                  required
+                />
+                <button className={styles.button} type="submit">Sign in</button>
+                <p className={styles.subtext}>Don&apos;t have an account ?</p>
+                <button className={styles.link} onClick={() => setSign('up')} type="button">Sign up.</button>
+              </form>
+            </section>
+          )}
+          {sign === 'up' && (
+            <section>
+              <form className={styles.form} method="post" action="/api/auth/callback/signup" onSubmit={handleSignUpSubmit}>
+                <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
+                <label className={styles.label} htmlFor="name">Name</label>
+                <input
+                  className={styles.input}
+                  name="name"
+                  type="name"
+                  placeholder="Enter your name"
+                  required
+                />
+                <label className={styles.label} htmlFor="email">Email</label>
+                <input
+                  className={styles.input}
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  required
+                />
+                <label className={styles.label} htmlFor="password">Password</label>
+                <PasswordInput
+                  className={styles.input}
+                  name="password"
+                  placeholder="Enter your password"
+                  required
+                />
+                <label className={styles.label} htmlFor="confirmPassword">Confirm password</label>
+                <PasswordInput
+                  className={styles.input}
+                  name="confirmPassword"
+                  placeholder="Confirm your password"
+                  required
+                />
+                <button className={styles.button} type="submit">Sign up</button>
+                <p className={styles.subtext}>Already have an account ?</p>
+                <button className={styles.link} onClick={() => setSign('in')} type="button">Sign in.</button>
+              </form>
+            </section>
+          )}
+        </div>
       </main>
     </>
   );

@@ -9,10 +9,20 @@
   background-color: variables.$darker;
   border-radius: variables.$radius;
   padding: 0.8em 1em;
+  outline: solid 2px transparent;
+  transition: outline 0.2s ease-in-out;
 
   svg {
     width: 1em;
     fill: rgba(white, 0.3);
+  }
+
+  &::placeholder {
+    color: rgba(white, 0.25);
+  }
+
+  &:focus {
+    outline-color: variables.$light-blue;
   }
 }
 
