@@ -1,0 +1,16 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.sidebar {
+  position: fixed;
+  top: 100%;
+  height: calc(100vh - 6rem);
+  background-color: coral;
+  transition: top 0.3s ease-out;
+
+  &.visible {
+    top: 6rem;
+  }
+}

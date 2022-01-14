@@ -1,0 +1,22 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.button {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: variables.$radius;
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(white, 0.1);
+  }
+
+  svg {
+    fill: white;
+  }
+}

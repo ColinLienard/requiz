@@ -1,20 +1,20 @@
 import { FC } from 'react';
+import styles from './ChatMessage.module.scss';
 
 type Props = {
   author?: string,
-  content: string
-}
+  content: string,
+};
 
 const ChatMessage: FC<Props> = ({ author, content }) => (
-  <p>
+  <div className={styles.message}>
     {author && (
-      <span>
+      <span className={styles.author}>
         {author}
-        {': '}
       </span>
     )}
-    {content}
-  </p>
+    <p className={styles.content}>{content}</p>
+  </div>
 );
 
 ChatMessage.defaultProps = {

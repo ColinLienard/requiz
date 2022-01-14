@@ -44,7 +44,7 @@ const Dashboard: NextPage<Props> = ({
       <Particules />
       <Navbar user={user} />
       <div className={styles.backgroundimage}>
-        <Image src="/images/landscape.svg" width={1057} height={333} />
+        <Image src="/images/landscape.svg" width={1057} height={333} priority />
       </div>
       <header className={styles.header}>
         <h2 className={styles.hero}>Welcome, {user.name}.</h2>

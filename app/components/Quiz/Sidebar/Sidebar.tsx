@@ -1,5 +1,7 @@
 import {
+  Dispatch,
   FC,
+  SetStateAction,
   useContext,
   useEffect,
   useState,
@@ -8,13 +10,21 @@ import Link from 'next/link';
 import UserItem from '../../Common/UserItem/UserItem';
 import SocketContext from '../../../lib/contexts/SocketContext';
 import { User } from '../../../lib/types';
+import styles from './Sidebar.module.scss';
 
 type Props = {
   userName: string,
-  userId: string
-}
+  userId: string,
+  visible: boolean,
+  setVisible: Dispatch<SetStateAction<boolean>>,
+};
 
-const Sidebar: FC<Props> = ({ userName, userId }) => {
+const Sidebar: FC<Props> = ({
+  userName,
+  userId,
+  visible,
+  setVisible,
+}) => {
   const [userList, setUserList] = useState<User[]>([{
     name: userName,
     id: userId,
@@ -50,7 +60,8 @@ const Sidebar: FC<Props> = ({ userName, userId }) => {
   const closeSocket = () => socket.close();
 
   return (
-    <section>
+    <section className={`${styles.sidebar} ${visible && styles.visible}`}>
+      <button type="button" onClick={() => setVisible(false)}>close sidebar</button>
       <h1>A random quiz</h1>
       <ul>
         {userList.map((user) => (

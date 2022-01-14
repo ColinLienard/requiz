@@ -10,8 +10,8 @@ import CrossIcon from '../../../public/icons/iconComponents/CrossIcon';
 import styles from './Navbar.module.scss';
 
 type Props = {
-  user?: UserFromDB
-}
+  user?: UserFromDB,
+};
 
 const Navbar: FC<Props> = ({ user }) => {
   const isMobile = useMobile();

@@ -27,7 +27,7 @@
   width: 100%;
   height: calc(100vh - 6rem);
   background-color: variables.$darker;
-  border-radius: 1.5rem 1.5rem 0 0;
+  border-radius: variables.$big-radius variables.$big-radius 0 0;
   overflow: hidden;
   z-index: 10;
   transition: top 0.3s ease-out;
@@ -40,7 +40,7 @@
     width: 32rem;
     height: calc(100vh - 6rem - 3rem);
     left: calc(50% - 16rem);
-    border-radius: 1.5rem;
+    border-radius: variables.$big-radius;
   }
 
   .header {

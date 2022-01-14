@@ -7,14 +7,17 @@ import {
   useContext,
 } from 'react';
 import ChatMessage from '../ChatMessage/ChatMessage';
-import { ChatMessageType } from '../../../lib/types';
+import OptionButton from '../../Common/OptionButton/OptionButton';
 import SocketContext from '../../../lib/contexts/SocketContext';
+import { ChatMessageType } from '../../../lib/types';
+import styles from './Chat.module.scss';
+import ChatInput from '../ChatInput/ChatInput';
 
 type Props = {
   userName: string,
   userId: string,
-  roomId: string
-}
+  roomId: string,
+};
 
 const Chat: FC<Props> = ({
   userName,
@@ -56,12 +59,14 @@ const Chat: FC<Props> = ({
     };
   }, []);
 
-  const handleMessageChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleMessageChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
   };
 
-  const sendMessage = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const sendMessage = (event: FormEvent<HTMLFormElement> | undefined) => {
+    if (event) {
+      event.preventDefault();
+    }
     if (message.length > 0) {
       socket.emit('message', { roomId, author: userName, content: message });
       setChatMessages((state) => [...state, {
@@ -74,17 +79,25 @@ const Chat: FC<Props> = ({
   };
 
   return (
-    <section>
-      <ul>
+    <section className={styles.chat}>
+      <header className={styles.header}>
+        <span className={styles.dragger} />
+        <h3 className={styles.title}>Chat</h3>
+        <OptionButton className={styles.option} onClick={() => null} />
+      </header>
+      <ul className={styles.messages}>
         {chatMessages.map((chatMessage) => (
           <li key={chatMessage.id}>
             <ChatMessage author={chatMessage.author} content={chatMessage.content} />
           </li>
         ))}
       </ul>
-      <form onSubmit={sendMessage}>
-        <input type="text" placeholder="Message..." value={message} onChange={handleMessageChange} />
-        <input type="submit" value="Envoyer" />
+      <form className={styles.form} onSubmit={sendMessage}>
+        <ChatInput
+          message={message}
+          onChange={handleMessageChange}
+          onSubmit={sendMessage}
+        />
       </form>
     </section>
   );

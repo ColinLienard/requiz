@@ -1,0 +1,12 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.input {
+  @include mixins.input;
+
+  width: 100%;
+  border: 1px solid rgba(white, 0.2);
+  resize: none;
+}
