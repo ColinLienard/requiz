@@ -7,6 +7,14 @@
   background-color: variables.$darker;
   border-radius: variables.$big-radius variables.$big-radius 0 0;
   padding: 0.5rem 1.5rem 1.5rem;
+  position: fixed;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+
+  &.transition {
+    transition: top 0.2s ease-in-out;
+  }
 
   .header {
     display: flex;
@@ -38,5 +46,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    height: 100%;
+    overflow-y: auto;
   }
 }

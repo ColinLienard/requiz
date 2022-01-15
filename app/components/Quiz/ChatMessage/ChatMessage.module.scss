@@ -15,4 +15,16 @@
   .content {
     word-break: break-all;
   }
+
+  .info {
+    color: rgba(white, 0.5);
+    text-align: center;
+    width: 100%;
+    margin: 0.5rem 0;
+
+    .username {
+      font-weight: bold;
+      color: variables.$light-blue;
+    }
+  }
 }

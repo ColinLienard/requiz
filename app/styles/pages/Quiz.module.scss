@@ -10,10 +10,4 @@
 .main {
   width: 100vw;
   height: calc(100vh - 4rem);
-  display: flex;
-  flex-direction: column;
-
-  .game {
-    height: 100%;
-  }
 }

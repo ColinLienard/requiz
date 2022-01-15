@@ -1,6 +1,7 @@
 import {
   ChangeEvent,
   FC,
+  FocusEvent,
   KeyboardEvent,
   useEffect,
   useRef,
@@ -11,10 +12,18 @@ import styles from './ChatInput.module.scss';
 type Props = {
   message: string,
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void,
+  onFocus: (event: FocusEvent) => void,
+  onBlur: (event: FocusEvent) => void,
   onSubmit: (event?: undefined) => void,
 };
 
-const ChatInput: FC<Props> = ({ message, onChange, onSubmit }) => {
+const ChatInput: FC<Props> = ({
+  message,
+  onChange,
+  onFocus,
+  onBlur,
+  onSubmit,
+}) => {
   const [height, setHeight] = useState('auto');
   const textArea = useRef<HTMLTextAreaElement>(null);
 
@@ -42,6 +51,8 @@ const ChatInput: FC<Props> = ({ message, onChange, onSubmit }) => {
       value={message}
       onChange={onChange}
       onKeyPress={submitOnEnter}
+      onFocus={onFocus}
+      onBlur={onBlur}
       placeholder="Send a message"
     />
   );

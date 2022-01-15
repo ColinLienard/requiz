@@ -1,7 +1,7 @@
 export type ChatMessageType = {
   author?: string,
-  content: string,
-  id: string,
+  content: string | [string, string],
+  id: number,
 };
 
 export type User = {

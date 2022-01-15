@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -36,6 +36,10 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
   const [error, setError] = useState('');
   const router = useRouter();
 
+  useEffect(() => {
+    router.prefetch('/dashboard');
+  }, []);
+
   const handleSignInSubmit = async (event: FormEvent) => {
     event.preventDefault();
     const { email, password } = event.target as SignInFormData;
@@ -48,7 +52,7 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
       if (response?.error) {
         setError(response?.error);
       } else {
-        router.prefetch('/dashboard');
+        router.push('/dashboard');
       }
     });
   };
@@ -76,7 +80,7 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
         if (response?.error) {
           setError(response?.error);
         } else {
-          router.prefetch('/dashboard');
+          router.push('/dashboard');
         }
       });
     }
@@ -128,7 +132,8 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
                   placeholder="Enter your password"
                   required
                 />
-                <button className={styles.button} type="submit">Sign in</button>
+                <input className={styles.button} type="submit" value="Sign in" />
+                {/* <button className={styles.button} type="submit">Sign in</button> */}
                 <p className={styles.subtext}>Don&apos;t have an account ?</p>
                 <button className={styles.link} onClick={() => setSign('up')} type="button">Sign up.</button>
               </form>
@@ -168,7 +173,8 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
                   placeholder="Confirm your password"
                   required
                 />
-                <button className={styles.button} type="submit">Sign up</button>
+                <input className={styles.button} type="submit" value="Sign up" />
+                {/* <button className={styles.button} type="submit">Sign up</button> */}
                 <p className={styles.subtext}>Already have an account ?</p>
                 <button className={styles.link} onClick={() => setSign('in')} type="button">Sign in.</button>
               </form>
