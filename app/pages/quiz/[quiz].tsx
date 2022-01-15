@@ -86,9 +86,10 @@ const Quiz: NextPage = () => {
       <Navbar user={session?.user as UserFromDB} />
       <div className={styles.gradient} />
       <main className={styles.main}>
-        {socket && connected && (
+        {socket && connected && quiz && (
           <SocketContext.Provider value={socket}>
             <Sidebar
+              roomId={quiz as string}
               userName={userName}
               userId={userId}
               visible={sidebarVisible}

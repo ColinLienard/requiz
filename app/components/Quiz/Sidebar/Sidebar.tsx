@@ -8,11 +8,15 @@ import {
 } from 'react';
 import Link from 'next/link';
 import UserItem from '../../Common/UserItem/UserItem';
+import CrossIcon from '../../../public/icons/iconComponents/CrossIcon';
+import OptionButton from '../../Common/OptionButton/OptionButton';
+import useQuizTheme from '../../../lib/hooks/useQuizTheme';
 import SocketContext from '../../../lib/contexts/SocketContext';
-import { User } from '../../../lib/types';
+import { PropsToGetDBData, QuizData, User } from '../../../lib/types';
 import styles from './Sidebar.module.scss';
 
 type Props = {
+  roomId: string,
   userName: string,
   userId: string,
   visible: boolean,
@@ -20,6 +24,7 @@ type Props = {
 };
 
 const Sidebar: FC<Props> = ({
+  roomId,
   userName,
   userId,
   visible,
@@ -31,8 +36,31 @@ const Sidebar: FC<Props> = ({
     lives: 3,
   }]);
   const socket = useContext(SocketContext);
+  const [data, setData] = useState<QuizData>({});
+  const quizTheme = useQuizTheme(data.theme);
 
   useEffect(() => {
+    (async () => {
+      const response = await fetch('/api/get-db-data', {
+        method: 'POST',
+        body: JSON.stringify({
+          id: roomId,
+          collection: 'quizzes',
+          projection: {
+            _id: 0,
+            title: 1,
+            theme: 1,
+            description: 1,
+            userId: 1,
+          },
+        } as PropsToGetDBData),
+      });
+      if (response.ok) {
+        const newData: QuizData = await response.json();
+        setData(newData);
+      }
+    })();
+
     socket.on('get-users', (users: User[]) => {
       setUserList(users);
     });
@@ -57,20 +85,43 @@ const Sidebar: FC<Props> = ({
     };
   }, []);
 
+  useEffect(() => {
+    setUserList((state) => state.sort((previous, current) => previous.lives - current.lives));
+  }, [userList]);
+
   const closeSocket = () => socket.close();
+
+  const renderLives = (number: number) => {
+    const lives = [];
+    for (let i = 0; i < number; i += 1) {
+      lives.push(
+        <span className={styles.life} />,
+      );
+    }
+    return lives;
+  };
 
   return (
     <section className={`${styles.sidebar} ${visible && styles.visible}`}>
-      <button type="button" onClick={() => setVisible(false)}>close sidebar</button>
-      <h1>A random quiz</h1>
-      <ul>
+      <header className={styles.header}>
+        <button className={styles.cross} type="button" onClick={() => setVisible(false)}>
+          <CrossIcon />
+        </button>
+        <h2 className={styles.hero}>{data.title}</h2>
+        <OptionButton className={styles.option} />
+      </header>
+      <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
+        {quizTheme?.emoji} {quizTheme?.name}
+      </div>
+      <p className={styles.description}>{data.description}</p>
+      <h3 className={styles.title}>Players in competition</h3>
+      <ul className={styles.list}>
         {userList.map((user) => (
-          <li key={user.id}>
+          <li className={styles.user} key={user.id}>
             <UserItem id={user.id} />
-            <p>
-              {user.lives}
-              💕
-            </p>
+            <div className={styles.lives}>
+              {renderLives(user.lives)}
+            </div>
           </li>
         ))}
       </ul>

@@ -3,7 +3,7 @@ import styles from './OptionButton.module.scss';
 
 type Props = {
   className: string,
-  onClick: () => void,
+  onClick?: () => void,
 };
 
 const OptionButton: FC<Props> = ({ className, onClick }) => (
@@ -13,5 +13,9 @@ const OptionButton: FC<Props> = ({ className, onClick }) => (
     </svg>
   </button>
 );
+
+OptionButton.defaultProps = {
+  onClick: undefined,
+};
 
 export default OptionButton;

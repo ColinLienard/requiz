@@ -5,12 +5,89 @@
 
 .sidebar {
   position: fixed;
-  top: 100%;
-  height: calc(100vh - 6rem);
-  background-color: coral;
-  transition: top 0.3s ease-out;
+  top: 0;
+  left: 100%;
+  width: 100vw;
+  height: 100vh;
+  background-color: variables.$darker;
+  padding: 4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  transition: left 0.2s ease-out;
 
   &.visible {
-    top: 6rem;
+    left: 0;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+
+    .cross {
+      margin-left: auto;
+
+      svg {
+        fill: white;
+      }
+    }
+
+    .hero {
+      @include typography.heading2;
+
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .option {
+      position: absolute;
+      inset: auto 0 0 auto;
+    }
+  }
+
+  .theme {
+    padding: 0.8em 1em;
+    border-radius: variables.$radius;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    margin: 1rem auto 1.5rem;
+
+    .emoji {
+      font-size: 1.2em;
+    }
+  }
+
+  .title {
+    @include typography.heading3;
+
+    margin: 3rem 0 1rem;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .user {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .lives {
+        display: flex;
+        gap: 0.8rem;
+
+        .life {
+          width: 0.6rem;
+          height: 0.6rem;
+          border-radius: 50%;
+          background-color: variables.$light-blue;
+        }
+      }
+    }
   }
 }

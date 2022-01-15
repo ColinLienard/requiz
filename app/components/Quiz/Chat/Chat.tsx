@@ -142,7 +142,7 @@ const Chat: FC<Props> = ({
       >
         <span className={styles.dragger} />
         <h3 className={styles.title}>Chat</h3>
-        <OptionButton className={styles.option} onClick={() => null} />
+        <OptionButton className={styles.option} />
       </header>
       <ul className={styles.messages} ref={chat}>
         {chatMessages.map((chatMessage) => (
