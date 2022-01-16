@@ -8,6 +8,7 @@ import {
   useRef,
   TouchEvent,
 } from 'react';
+import Popup from 'react-customizable-popup';
 import ChatMessage from '../ChatMessage/ChatMessage';
 import OptionButton from '../../Common/OptionButton/OptionButton';
 import SocketContext from '../../../lib/contexts/SocketContext';
@@ -142,7 +143,18 @@ const Chat: FC<Props> = ({
       >
         <span className={styles.dragger} />
         <h3 className={styles.title}>Chat</h3>
-        <OptionButton className={styles.option} />
+        <Popup
+          root="#__next"
+          toggler={(
+            <OptionButton className={styles.option} />
+          )}
+          fixed
+          position={['midleft', 'bottom']}
+          className={styles.popup}
+          backdropClassName="backdrop"
+        >
+          <button className={styles.popupButton} type="button">Report someone</button>
+        </Popup>
       </header>
       <ul className={styles.messages} ref={chat}>
         {chatMessages.map((chatMessage) => (
@@ -156,7 +168,6 @@ const Chat: FC<Props> = ({
           message={message}
           onChange={handleMessageChange}
           onFocus={() => setChatTop(minChatTop)}
-          onBlur={() => setChatTop(maxChatTop)}
           onSubmit={sendMessage}
         />
       </form>

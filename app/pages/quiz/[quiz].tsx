@@ -11,6 +11,7 @@ import Question from '../../components/Quiz/Question/Question';
 import Results from '../../components/Quiz/Results/Results';
 import Particules from '../../components/Common/Particules/Particules';
 import Navbar from '../../components/Common/Navbar/Navbar';
+import MenuIcon from '../../public/icons/iconComponents/MenuIcon';
 import SocketContext from '../../lib/contexts/SocketContext';
 import { GameState, UserFromDB } from '../../lib/types';
 import styles from '../../styles/pages/Quiz.module.scss';
@@ -31,6 +32,8 @@ const Quiz: NextPage = () => {
     } else {
       router.push('/?error=socket-connection', '/');
     }
+
+    router.prefetch('/dashboard');
 
     return () => {
       socket?.close();
@@ -96,7 +99,9 @@ const Quiz: NextPage = () => {
               setVisible={setSidebarVisible}
             />
             <section className={styles.game}>
-              <button type="button" onClick={() => setSidebarVisible((state) => !state)}>show sidebar</button>
+              <button className={styles.menu} type="button" onClick={() => setSidebarVisible((state) => !state)}>
+                <MenuIcon />
+              </button>
               {renderGameState()}
             </section>
             <Chat

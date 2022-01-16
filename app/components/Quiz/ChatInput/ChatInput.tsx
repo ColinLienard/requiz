@@ -13,7 +13,6 @@ type Props = {
   message: string,
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void,
   onFocus: (event: FocusEvent) => void,
-  onBlur: (event: FocusEvent) => void,
   onSubmit: (event?: undefined) => void,
 };
 
@@ -21,7 +20,6 @@ const ChatInput: FC<Props> = ({
   message,
   onChange,
   onFocus,
-  onBlur,
   onSubmit,
 }) => {
   const [height, setHeight] = useState('auto');
@@ -52,7 +50,6 @@ const ChatInput: FC<Props> = ({
       onChange={onChange}
       onKeyPress={submitOnEnter}
       onFocus={onFocus}
-      onBlur={onBlur}
       placeholder="Send a message"
     />
   );

@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import Link from 'next/link';
+import Popup from 'react-customizable-popup';
 import UserItem from '../../Common/UserItem/UserItem';
 import CrossIcon from '../../../public/icons/iconComponents/CrossIcon';
 import OptionButton from '../../Common/OptionButton/OptionButton';
@@ -108,7 +109,28 @@ const Sidebar: FC<Props> = ({
           <CrossIcon />
         </button>
         <h2 className={styles.hero}>{data.title}</h2>
-        <OptionButton className={styles.option} />
+        <Popup
+          root="#__next"
+          toggler={(
+            <OptionButton className={styles.option} />
+          )}
+          fixed
+          position={['midleft', 'bottom']}
+          className={styles.popup}
+          backdropClassName="backdrop"
+        >
+          <Link href="/dashboard">
+            <a
+              className={styles.popupButton}
+              onClick={closeSocket}
+              role="button"
+              tabIndex={0}
+              onKeyPress={closeSocket}
+            >
+              Leave
+            </a>
+          </Link>
+        </Popup>
       </header>
       <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
         {quizTheme?.emoji} {quizTheme?.name}
@@ -125,16 +147,6 @@ const Sidebar: FC<Props> = ({
           </li>
         ))}
       </ul>
-      <Link href="/">
-        <a
-          onClick={closeSocket}
-          role="button"
-          tabIndex={0}
-          onKeyPress={closeSocket}
-        >
-          Leave
-        </a>
-      </Link>
     </section>
   );
 };

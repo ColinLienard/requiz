@@ -24,7 +24,6 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    position: relative;
 
     .cross {
       margin-left: auto;
@@ -43,7 +42,8 @@
 
     .option {
       position: absolute;
-      inset: auto 0 0 auto;
+      top: 6.25rem;
+      right: 1.5rem;
     }
   }
 
@@ -54,6 +54,7 @@
     align-items: center;
     gap: 0.5rem;
     font-weight: bold;
+    color: variables.$dark;
     margin: 1rem auto 1.5rem;
 
     .emoji {
@@ -90,4 +91,8 @@
       }
     }
   }
+}
+
+.popup {
+  @include mixins.popup(0.5rem);
 }

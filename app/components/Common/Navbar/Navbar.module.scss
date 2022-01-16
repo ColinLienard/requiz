@@ -96,17 +96,9 @@
 }
 
 .popup {
-  background-color: variables.$dark;
-  border: variables.$border;
-  border-radius: variables.$radius;
-  width: min(100%, 24rem);
-  transform: translate(5%, -5%) scale(0.9);
-  transition: transform 0.1s ease-in, opacity 0.1s ease-in;
+  @include mixins.popup(0);
 
-  &:global(.open) {
-    transform: none;
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-  }
+  width: min(100%, 24rem);
 
   .close {
     position: absolute;
