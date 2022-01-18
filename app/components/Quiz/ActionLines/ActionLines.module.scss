@@ -1,0 +1,71 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.linesContainer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  .line {
+    width: 0.25rem;
+    height: 10rem;
+    background-image: linear-gradient(rgba(white, 0.1), transparent);
+    position: absolute;
+    animation: pulse 6s ease-in-out infinite;
+
+    &:nth-last-of-type(1) {
+      transform: rotate(-40deg);
+      top: 2rem;
+      left: 2rem;
+    }
+
+    &:nth-last-of-type(2) {
+      transform: rotate(-15deg);
+      top: -2rem;
+      left: 30%;
+    }
+
+    &:nth-last-of-type(3) {
+      transform: rotate(25deg);
+      top: 1rem;
+      right: 1.5rem;
+    }
+
+    &:nth-last-of-type(4) {
+      transform: rotate(150deg);
+      bottom: 13rem;
+      right: 2rem;
+    }
+
+    &:nth-last-of-type(5) {
+      transform: rotate(170deg);
+      bottom: 11rem;
+      right: 40%;
+    }
+
+    &:nth-last-of-type(6) {
+      transform: rotate(-150deg);
+      bottom: 13rem;
+      left: 15%;
+    }
+  }
+}

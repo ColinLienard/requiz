@@ -147,7 +147,6 @@
   .button {
     @include mixins.button(variables.$blue);
 
-    font-weight: bold;
     text-align: center;
     margin: 1.5rem 0;
 

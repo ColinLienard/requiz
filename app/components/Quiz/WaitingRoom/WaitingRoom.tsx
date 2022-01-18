@@ -17,7 +17,7 @@ const WaitingRoom: FC = () => {
     <>
       <h3 className={styles.toptext}>Waiting room</h3>
       <p className={styles.title}>The quiz begins in</p>
-      <p className={styles.bigTitle}>{timer}</p>
+      <p className={styles.bigTitle}>{timer || '00:00'}</p>
       <Popup
         root="#__next"
         toggler={(

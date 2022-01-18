@@ -4,7 +4,7 @@
 @use "../screens";
 
 .gradient {
-  @include mixins.gradient("center");
+  @include mixins.gradient;
 }
 
 .main {

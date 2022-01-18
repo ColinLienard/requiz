@@ -6,6 +6,7 @@ import { io, Socket } from 'socket.io-client';
 import { useSession } from 'next-auth/react';
 import Chat from '../../components/Quiz/Chat/Chat';
 import Sidebar from '../../components/Quiz/Sidebar/Sidebar';
+import ActionLines from '../../components/Quiz/ActionLines/ActionLines';
 import WaitingRoom from '../../components/Quiz/WaitingRoom/WaitingRoom';
 import Question from '../../components/Quiz/Question/Question';
 import Results from '../../components/Quiz/Results/Results';
@@ -25,6 +26,7 @@ const Quiz: NextPage = () => {
   const [gameState, setGameState] = useState<GameState>('waiting');
   const [connected, setConnected] = useState(false);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [actionLinesVisible, setActionLinesVisible] = useState(false);
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_SERVER_URL) {
@@ -65,10 +67,12 @@ const Quiz: NextPage = () => {
           <WaitingRoom />
         );
       case 'playing':
+        setTimeout(() => setActionLinesVisible(true), 1000);
         return (
           <Question />
         );
       case 'end':
+        setTimeout(() => setActionLinesVisible(false), 1000);
         return (
           <Results />
         );
@@ -99,6 +103,7 @@ const Quiz: NextPage = () => {
               setVisible={setSidebarVisible}
             />
             <section className={styles.game}>
+              <ActionLines visible={actionLinesVisible} />
               <button className={styles.menu} type="button" onClick={() => setSidebarVisible((state) => !state)}>
                 <MenuIcon />
               </button>

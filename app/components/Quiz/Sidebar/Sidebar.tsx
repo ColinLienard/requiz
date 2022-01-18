@@ -96,7 +96,7 @@ const Sidebar: FC<Props> = ({
     const lives = [];
     for (let i = 0; i < number; i += 1) {
       lives.push(
-        <span className={styles.life} />,
+        <span className={styles.life} key={i} />,
       );
     }
     return lives;
