@@ -5,10 +5,12 @@ import {
   useRef,
   useState,
 } from 'react';
+import Image from 'next/image';
 import SocketContext from '../../../lib/contexts/SocketContext';
 import useTimer from '../../../lib/hooks/useTimer';
 import { QuizQuestion } from '../../../lib/types';
 import Response from '../Response/Response';
+import starIcon from '../../../public/icons/star.svg';
 import styles from './Question.module.scss';
 
 const Question: FC = () => {
@@ -56,21 +58,25 @@ const Question: FC = () => {
     }
   };
 
-  const renderLives = () => {
-    let hearts = '';
-    for (let i = 0; i < lives; i += 1) {
-      hearts += '💖';
-    }
-    return hearts;
-  };
-
   return (
     <>
-      <p>
-        {lives > 0
-          ? renderLives()
-          : 'Eliminated'}
-      </p>
+      <div className={styles.topbar}>
+        <ul className={styles.lives}>
+          <li className={`${styles.star} ${lives === 0 && styles.hidden}`}>
+            <Image src={starIcon} width={24} height={24} />
+          </li>
+          <li className={`${styles.star} ${lives <= 1 && styles.hidden}`}>
+            <Image src={starIcon} width={24} height={24} />
+          </li>
+          <li className={`${styles.star} ${lives <= 2 && styles.hidden}`}>
+            <Image src={starIcon} width={24} height={24} />
+          </li>
+          {lives <= 0 && (
+            <li className={styles.over}>Eliminated</li>
+          )}
+        </ul>
+        <div className={styles.progressbar}>1 / 10</div>
+      </div>
       <div className={styles.timer}>
         {reveal && lives > 0 ? (
           <h3 className={styles.text}>

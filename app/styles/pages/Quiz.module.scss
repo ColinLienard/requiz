@@ -18,9 +18,11 @@
   align-items: center;
   height: 100%;
   padding: 0 1.5rem 15.5rem;
+  position: relative;
 
   .menu {
-    margin-left: auto;
+    position: absolute;
+    inset: 0.5rem 1.5rem auto auto;
 
     svg {
       fill: white;
