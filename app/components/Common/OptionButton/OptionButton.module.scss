@@ -10,9 +10,10 @@
   align-items: center;
   justify-content: center;
   border-radius: variables.$radius;
-  transition: 0.2s ease-in-out;
+  transition: background-color 0.2s ease-in-out;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: rgba(white, 0.1);
   }
 

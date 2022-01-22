@@ -47,7 +47,8 @@
   gap: 0.5rem;
   line-height: 1;
   font-weight: bold;
-  transition: background-color 0.2s ease-in-out;
+  outline: solid 2px transparent;
+  transition: background-color 0.2s ease-in-out, outline 0.2s ease-in-out;
 
   svg {
     width: 1.25em;
@@ -55,8 +56,13 @@
     fill: white;
   }
 
-  &:hover {
-    background-color: color.adjust($color, $lightness: 3%);
+  &:hover,
+  &:focus {
+    background-color: color.adjust($color, $lightness: 4%);
+  }
+
+  &:focus {
+    outline-color: white;
   }
 }
 
@@ -71,32 +77,24 @@
   width: 100%;
   position: absolute;
   left: 0;
+  background:
+    radial-gradient(
+      ellipse 120% 50%,
+      rgba(variables.$orange, 0.2),
+      rgba(variables.$blue, 0.05),
+      transparent
+    );
   z-index: -1;
 
   @if $position == "top" {
     height: 32rem;
-    background:
-      radial-gradient(
-        ellipse 120% 50%,
-        rgba(variables.$orange, 0.2),
-        rgba(variables.$blue, 0.05),
-        transparent
-      );
     top: -6rem;
   } @else if $position == "center" {
     height: 32rem;
-    background:
-      radial-gradient(
-        ellipse 120% 50%,
-        rgba(variables.$orange, 0.2),
-        rgba(variables.$blue, 0.05),
-        transparent
-      );
     top: calc(50% - 20rem);
   }
 
   @include screens.laptop {
-    height: 48rem;
     background:
       radial-gradient(
         ellipse 64rem 50%,
@@ -104,7 +102,14 @@
         rgba(variables.$blue, 0.05),
         transparent
       );
-    top: -8rem;
+
+    @if $position == "top" {
+      height: 48rem;
+      top: -8rem;
+    } @else if $position == "center" {
+      height: 100%;
+      top: 0;
+    }
   }
 }
 

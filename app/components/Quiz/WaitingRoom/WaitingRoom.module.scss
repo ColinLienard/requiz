@@ -2,9 +2,11 @@
 @use "../../../styles/mixins";
 @use "../../../styles/typography";
 @use "../../../styles/screens";
+@use "sass:color";
 
 .toptext {
   margin: auto 0 4rem;
+  font-weight: bold;
 }
 
 .title {
@@ -22,7 +24,7 @@
 .button {
   @include mixins.button(variables.$blue);
 
-  margin: 1.5rem 0 auto;
+  margin: 2rem 0 auto;
 }
 
 .reactions {
@@ -31,12 +33,20 @@
 
   .reaction {
     font-size: 1rem;
-    padding: 0.3rem 0.5rem;
+    padding: 0.3em 0.5em;
     border-radius: variables.$radius;
     background-color: rgba(white, 0.1);
 
+    @include screens.laptop {
+      font-size: 1.2rem;
+    }
+
     &:hover {
       background-color: variables.$blue;
+    }
+
+    &:active {
+      background-color: color.adjust(variables.$blue, $lightness: 4%);
     }
   }
 }

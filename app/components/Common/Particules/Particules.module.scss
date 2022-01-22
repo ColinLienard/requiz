@@ -22,6 +22,10 @@
   pointer-events: none;
   z-index: -1;
 
+  &.small {
+    width: 75%;
+  }
+
   .particule {
     top: 100%;
     width: 0.4rem;

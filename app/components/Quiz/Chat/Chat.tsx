@@ -12,6 +12,7 @@ import Popup from 'react-customizable-popup';
 import ChatMessage from '../ChatMessage/ChatMessage';
 import OptionButton from '../../Common/OptionButton/OptionButton';
 import SocketContext from '../../../lib/contexts/SocketContext';
+import useMobile from '../../../lib/hooks/useMobile';
 import { ChatMessageType } from '../../../lib/types';
 import styles from './Chat.module.scss';
 import ChatInput from '../ChatInput/ChatInput';
@@ -38,6 +39,8 @@ const Chat: FC<Props> = ({
   const socket = useContext(SocketContext);
   const [chatTransition, setChatTransition] = useState(true);
   const [chatTop, setChatTop] = useState(maxChatTop);
+  const isMobile = useMobile();
+
   const oldChatTop = useRef(maxChatTop);
   const touchOffset = useRef(0);
   const messageIndex = useRef(1);
@@ -133,15 +136,24 @@ const Chat: FC<Props> = ({
     }
   };
 
+  const dragEvents = isMobile ? {
+    onTouchStart: handleDrag,
+    onTouchMove: handleDrag,
+    onTouchEnd: handleDrag,
+  } : {};
+
   return (
-    <section className={`${styles.chat} ${chatTransition && styles.transition}`} style={{ top: `${chatTop}px` }}>
+    <section
+      className={`${styles.chat} ${chatTransition && styles.transition}`}
+      style={isMobile ? { top: `${chatTop}px` } : {}}
+    >
       <header
         className={styles.header}
-        onTouchStart={handleDrag}
-        onTouchMove={handleDrag}
-        onTouchEnd={handleDrag}
+        {...dragEvents}
       >
-        <span className={styles.dragger} />
+        {isMobile && (
+          <span className={styles.dragger} />
+        )}
         <h3 className={styles.title}>Chat</h3>
         <Popup
           root="#__next"
@@ -167,7 +179,7 @@ const Chat: FC<Props> = ({
         <ChatInput
           message={message}
           onChange={handleMessageChange}
-          onFocus={() => setChatTop(minChatTop)}
+          onFocus={() => (isMobile ? setChatTop(minChatTop) : null)}
           onSubmit={sendMessage}
         />
       </form>

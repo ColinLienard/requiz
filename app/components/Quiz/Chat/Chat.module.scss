@@ -16,10 +16,25 @@
     transition: top 0.2s ease-in-out;
   }
 
+  @include screens.laptop {
+    position: relative;
+    padding: 3rem 2rem;
+    border-radius: 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: auto 0 100% 0;
+      height: 6rem;
+      background-color: inherit;
+    }
+  }
+
   .header {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 
     .dragger {
       width: 5rem;
@@ -37,6 +52,10 @@
       position: absolute;
       top: 2rem;
       right: 1.5rem;
+
+      @include screens.laptop {
+        top: 0;
+      }
     }
   }
 
@@ -47,6 +66,10 @@
     gap: 0.5rem;
     height: 100%;
     overflow-y: auto;
+
+    @include screens.laptop {
+      margin: 3rem 0;
+    }
   }
 }
 

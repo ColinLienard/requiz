@@ -4,12 +4,22 @@
 @use "../screens";
 
 .gradient {
-  @include mixins.gradient;
+  @include mixins.gradient("center");
+
+  @include screens.laptop {
+    @include mixins.gradient("center");
+  }
 }
 
 .main {
   width: 100vw;
   height: calc(100vh - 4rem);
+
+  @include screens.laptop {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    height: calc(100vh - 6rem);
+  }
 }
 
 .game {
@@ -19,6 +29,10 @@
   height: 100%;
   padding: 0 1.5rem 15.5rem;
   position: relative;
+
+  @include screens.laptop {
+    padding: 0 4rem 3rem;
+  }
 
   .menu {
     position: absolute;

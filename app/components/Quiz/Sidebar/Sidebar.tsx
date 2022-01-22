@@ -13,6 +13,7 @@ import CrossIcon from '../../../public/icons/iconComponents/CrossIcon';
 import OptionButton from '../../Common/OptionButton/OptionButton';
 import useQuizTheme from '../../../lib/hooks/useQuizTheme';
 import SocketContext from '../../../lib/contexts/SocketContext';
+import useMobile from '../../../lib/hooks/useMobile';
 import { PropsToGetDBData, QuizData, User } from '../../../lib/types';
 import styles from './Sidebar.module.scss';
 
@@ -39,6 +40,7 @@ const Sidebar: FC<Props> = ({
   const socket = useContext(SocketContext);
   const [data, setData] = useState<QuizData>({});
   const quizTheme = useQuizTheme(data.theme);
+  const isMobile = useMobile();
 
   useEffect(() => {
     (async () => {
@@ -105,9 +107,11 @@ const Sidebar: FC<Props> = ({
   return (
     <section className={`${styles.sidebar} ${visible && styles.visible}`}>
       <header className={styles.header}>
-        <button className={styles.cross} type="button" onClick={() => setVisible(false)}>
-          <CrossIcon />
-        </button>
+        {isMobile && (
+          <button className={styles.cross} type="button" onClick={() => setVisible(false)}>
+            <CrossIcon />
+          </button>
+        )}
         <h2 className={styles.hero}>{data.title}</h2>
         <Popup
           root="#__next"

@@ -14,6 +14,7 @@ import Particules from '../../components/Common/Particules/Particules';
 import Navbar from '../../components/Common/Navbar/Navbar';
 import MenuIcon from '../../public/icons/iconComponents/MenuIcon';
 import SocketContext from '../../lib/contexts/SocketContext';
+import useMobile from '../../lib/hooks/useMobile';
 import { GameState, UserFromDB } from '../../lib/types';
 import styles from '../../styles/pages/Quiz.module.scss';
 
@@ -27,6 +28,7 @@ const Quiz: NextPage = () => {
   const [connected, setConnected] = useState(false);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [actionLinesVisible, setActionLinesVisible] = useState(false);
+  const isMobile = useMobile();
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_SERVER_URL) {
@@ -89,7 +91,7 @@ const Quiz: NextPage = () => {
         <link rel="icon" href="/favicon.svg" />
       </Head>
 
-      <Particules />
+      <Particules small={!isMobile} />
       <Navbar user={session?.user as UserFromDB} />
       <div className={styles.gradient} />
       <main className={styles.main}>
@@ -104,9 +106,11 @@ const Quiz: NextPage = () => {
             />
             <section className={styles.game}>
               <ActionLines visible={actionLinesVisible} />
-              <button className={styles.menu} type="button" onClick={() => setSidebarVisible((state) => !state)}>
-                <MenuIcon />
-              </button>
+              {isMobile && (
+                <button className={styles.menu} type="button" onClick={() => setSidebarVisible((state) => !state)}>
+                  <MenuIcon />
+                </button>
+              )}
               {renderGameState()}
             </section>
             <Chat
