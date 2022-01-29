@@ -156,7 +156,6 @@ const Chat: FC<Props> = ({
         )}
         <h3 className={styles.title}>Chat</h3>
         <Popup
-          root="#__next"
           toggler={(
             <OptionButton className={styles.option} />
           )}

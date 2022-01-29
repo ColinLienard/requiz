@@ -113,15 +113,22 @@
   }
 }
 
-@mixin popup($padding) {
+@mixin popup($padding: 0.5rem, $translate-from: center) {
   background-color: variables.$dark;
   border: variables.$border;
   border-radius: variables.$radius;
   padding: $padding;
   display: flex;
   flex-direction: column;
-  transform: translate(2.5%, -2.5%) scale(0.95);
   transition: transform 0.1s ease-in, opacity 0.1s ease-in;
+
+  @if $translate-from == left {
+    transform: translate(-2.5%, -2.5%) scale(0.95);
+  } @else if $translate-from == center {
+    transform: translate(0, -2.5%) scale(0.95);
+  } @else if $translate-from == right {
+    transform: translate(2.5%, -2.5%) scale(0.95);
+  }
 
   &:global(.open) {
     transform: none;

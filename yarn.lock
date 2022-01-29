@@ -3594,10 +3594,10 @@ rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-customizable-popup@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/react-customizable-popup/-/react-customizable-popup-1.2.1.tgz#510b0582d54a03416a71f5f309c7d40df359bfd5"
-  integrity sha512-WdZBl/hv4NLCK79m1zlK9MrjHBWu8sS/6aEjtYfOLSy0MudyhykfBRTgtGWMBmnrDHM8X2IUY+Q6iaNBvjA6UA==
+react-customizable-popup@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/react-customizable-popup/-/react-customizable-popup-1.3.1.tgz#368c606a661383b9bb6814db06ae8e6869a6369f"
+  integrity sha512-V5rmRQLy5Gp7qKF4lOdGaI9b7Q8TgTKsArOu/CTzePiacl92VT1hp7x9uyoSPgJbMy/KPmjGVOXI9Wqc3GaeCw==
 
 react-dom@17.0.2:
   version "17.0.2"

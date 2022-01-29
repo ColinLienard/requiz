@@ -19,7 +19,6 @@ const WaitingRoom: FC = () => {
       <p className={styles.title}>The quiz begins in</p>
       <p className={styles.bigTitle}>{timer || '00:00'}</p>
       <Popup
-        root="#__next"
         toggler={(
           <button className={styles.button} type="submit">
             <ShareIcon />

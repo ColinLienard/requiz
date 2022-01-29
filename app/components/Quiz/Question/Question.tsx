@@ -10,6 +10,7 @@ import SocketContext from '../../../lib/contexts/SocketContext';
 import useTimer from '../../../lib/hooks/useTimer';
 import { QuizQuestion } from '../../../lib/types';
 import Response from '../Response/Response';
+import useMobile from '../../../lib/hooks/useMobile';
 import starIcon from '../../../public/icons/star.svg';
 import styles from './Question.module.scss';
 
@@ -21,6 +22,7 @@ const Question: FC = () => {
   const socket = useContext(SocketContext);
   const timer = useTimer(socket, 'secondes');
   const isCorrect = useRef(false);
+  const isMobile = useMobile();
 
   useEffect(() => {
     socket.on('question', (newQuizQuestion: QuizQuestion) => {
@@ -63,13 +65,13 @@ const Question: FC = () => {
       <div className={styles.topbar}>
         <ul className={styles.lives}>
           <li className={`${styles.star} ${lives === 0 && styles.hidden}`}>
-            <Image src={starIcon} width={24} height={24} />
+            <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
           </li>
           <li className={`${styles.star} ${lives <= 1 && styles.hidden}`}>
-            <Image src={starIcon} width={24} height={24} />
+            <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
           </li>
           <li className={`${styles.star} ${lives <= 2 && styles.hidden}`}>
-            <Image src={starIcon} width={24} height={24} />
+            <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
           </li>
           {lives <= 0 && (
             <li className={styles.over}>Eliminated</li>

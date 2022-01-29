@@ -52,5 +52,5 @@
 }
 
 .popup {
-  @include mixins.popup(0.5rem);
+  @include mixins.popup;
 }

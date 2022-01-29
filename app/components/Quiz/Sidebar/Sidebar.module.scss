@@ -56,17 +56,6 @@
         margin-top: 0;
       }
     }
-
-    .option {
-      position: absolute;
-      top: 6.75rem;
-      right: 1.5rem;
-
-      @include screens.laptop {
-        top: 0;
-        right: 0;
-      }
-    }
   }
 
   .theme {
@@ -76,11 +65,24 @@
     align-items: center;
     gap: 0.5rem;
     font-weight: bold;
-    color: variables.$dark;
-    margin: 1rem auto 1.5rem;
+    margin: 1.5rem auto 1rem;
 
     .emoji {
       font-size: 1.2em;
+    }
+  }
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    .description {
+      width: 100%;
+    }
+
+    .option {
+      flex: 1 0 auto;
     }
   }
 
@@ -99,6 +101,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      color: variables.$light-blue;
 
       .lives {
         display: flex;
@@ -108,7 +111,11 @@
           width: 0.6rem;
           height: 0.6rem;
           border-radius: 50%;
-          background-color: variables.$light-blue;
+          background-color: variables.$orange;
+
+          &.hidden {
+            opacity: 0.25;
+          }
         }
       }
     }
@@ -116,5 +123,5 @@
 }
 
 .popup {
-  @include mixins.popup(0.5rem);
+  @include mixins.popup(0.5rem, right);
 }

@@ -96,7 +96,7 @@
 }
 
 .popup {
-  @include mixins.popup(0);
+  @include mixins.popup(0, right);
 
   width: min(100%, 24rem);
 

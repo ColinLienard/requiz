@@ -31,12 +31,25 @@
   gap: 1rem;
   margin-bottom: 2rem;
 
+  @include screens.laptop {
+    margin: 0;
+    padding: 0;
+  }
+
   .lives {
     flex: 0 0 fit-content;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+
+    @include screens.laptop {
+      position: absolute;
+      top: -3rem;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      gap: 1.25rem;
+    }
 
     .star {
       animation: bounce 8s ease-out infinite;
@@ -73,6 +86,15 @@
     background-color: rgba(white, 0.04);
     position: relative;
 
+    @include screens.laptop {
+      height: 3rem;
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 8rem);
+    }
+
     &::before {
       content: "";
       position: absolute;
@@ -95,6 +117,16 @@
   align-items: center;
   justify-content: center;
   position: relative;
+
+  @include screens.laptop {
+    width: 4rem;
+    height: 4rem;
+    margin-top: 3rem;
+  }
+
+  .text {
+    @include typography.heading2;
+  }
 
   .circles {
     position: absolute;
@@ -133,6 +165,10 @@
   @include typography.heading2;
 
   margin: 2rem 0;
+
+  @include screens.laptop {
+    margin: 4.5rem 0 3rem;
+  }
 }
 
 .responses {
@@ -140,4 +176,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+
+  @include screens.laptop {
+    gap: 1.5rem;
+  }
 }

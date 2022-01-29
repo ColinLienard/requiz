@@ -21,6 +21,10 @@
   opacity: 0;
   transition: opacity 2s ease-in-out;
 
+  @include screens.laptop {
+    inset: 0 25%;
+  }
+
   &.visible {
     opacity: 1;
   }
@@ -32,40 +36,71 @@
     position: absolute;
     animation: pulse 6s ease-in-out infinite;
 
+    @include screens.laptop {
+      height: 16rem;
+    }
+
     &:nth-last-of-type(1) {
       transform: rotate(-40deg);
       top: 2rem;
       left: 2rem;
+
+      @include screens.laptop {
+        top: -2rem;
+      }
     }
 
     &:nth-last-of-type(2) {
       transform: rotate(-15deg);
       top: -2rem;
-      left: 30%;
+      left: 35%;
+
+      @include screens.laptop {
+        top: -4rem;
+      }
     }
 
     &:nth-last-of-type(3) {
       transform: rotate(25deg);
       top: 1rem;
       right: 1.5rem;
+
+      @include screens.laptop {
+        top: 0;
+        right: 2rem;
+      }
     }
 
     &:nth-last-of-type(4) {
       transform: rotate(150deg);
       bottom: 13rem;
       right: 2rem;
+
+      @include screens.laptop {
+        bottom: 0;
+        right: 3rem;
+      }
     }
 
     &:nth-last-of-type(5) {
       transform: rotate(170deg);
       bottom: 11rem;
       right: 40%;
+
+      @include screens.laptop {
+        bottom: -2rem;
+      }
     }
 
     &:nth-last-of-type(6) {
       transform: rotate(-150deg);
       bottom: 13rem;
       left: 15%;
+
+      @include screens.laptop {
+        bottom: -2rem;
+        left: 10%;
+      }
     }
   }
 }

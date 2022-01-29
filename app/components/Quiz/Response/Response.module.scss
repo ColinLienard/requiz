@@ -12,6 +12,10 @@
   position: relative;
   transition: background-color 0.2s ease-in-out, border 0.2s ease-in-out;
 
+  @include screens.laptop {
+    padding: 1.5rem;
+  }
+
   &.selected {
     background-color: rgba(white, 0.08);
     border-color: variables.$blue;
@@ -30,6 +34,13 @@
     position: absolute;
     top: -1rem;
     left: calc(50% - 1rem);
+
+    @include screens.laptop {
+      width: 2.5rem;
+      height: 2.5rem;
+      top: -1.25rem;
+      left: calc(50% - 1.25rem);
+    }
   }
 
   .text {
@@ -42,6 +53,7 @@
 
     .number {
       background-color: variables.$green;
+      color: variables.$dark;
     }
   }
 

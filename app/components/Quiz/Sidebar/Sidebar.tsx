@@ -94,16 +94,6 @@ const Sidebar: FC<Props> = ({
 
   const closeSocket = () => socket.close();
 
-  const renderLives = (number: number) => {
-    const lives = [];
-    for (let i = 0; i < number; i += 1) {
-      lives.push(
-        <span className={styles.life} key={i} />,
-      );
-    }
-    return lives;
-  };
-
   return (
     <section className={`${styles.sidebar} ${visible && styles.visible}`}>
       <header className={styles.header}>
@@ -113,8 +103,13 @@ const Sidebar: FC<Props> = ({
           </button>
         )}
         <h2 className={styles.hero}>{data.title}</h2>
+      </header>
+      <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
+        {quizTheme?.emoji} {quizTheme?.name}
+      </div>
+      <div className={styles.wrapper}>
+        <p className={styles.description}>{data.description}</p>
         <Popup
-          root="#__next"
           toggler={(
             <OptionButton className={styles.option} />
           )}
@@ -135,18 +130,16 @@ const Sidebar: FC<Props> = ({
             </a>
           </Link>
         </Popup>
-      </header>
-      <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
-        {quizTheme?.emoji} {quizTheme?.name}
       </div>
-      <p className={styles.description}>{data.description}</p>
       <h3 className={styles.title}>Players in competition</h3>
       <ul className={styles.list}>
         {userList.map((user) => (
           <li className={styles.user} key={user.id}>
             <UserItem id={user.id} />
             <div className={styles.lives}>
-              {renderLives(user.lives)}
+              <span className={styles.life} />
+              <span className={`${styles.life} ${user.lives <= 1 && styles.hidden}`} />
+              <span className={`${styles.life} ${user.lives <= 2 && styles.hidden}`} />
             </div>
           </li>
         ))}

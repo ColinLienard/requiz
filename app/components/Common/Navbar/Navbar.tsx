@@ -32,7 +32,6 @@ const Navbar: FC<Props> = ({ user }) => {
               <h1 className={styles.hero}>Requiz</h1>
             </div>
             <Popup
-              root="#__next"
               toggler={(
                 <button className={styles.profilePictureButton} type="button">
                   <Image

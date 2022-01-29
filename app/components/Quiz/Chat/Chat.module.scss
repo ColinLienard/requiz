@@ -50,8 +50,8 @@
 
     .option {
       position: absolute;
-      top: 2rem;
-      right: 1.5rem;
+      bottom: 0;
+      right: 0;
 
       @include screens.laptop {
         top: 0;
@@ -74,5 +74,5 @@
 }
 
 .popup {
-  @include mixins.popup(0.5rem);
+  @include mixins.popup(0.5rem, right);
 }
