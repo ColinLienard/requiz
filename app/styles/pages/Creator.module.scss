@@ -1,0 +1,47 @@
+@use "../variables";
+@use "../mixins";
+@use "../typography";
+@use "../screens";
+
+.header {
+  padding: 2rem 1.5rem;
+  position: relative;
+
+  .hero {
+    @include typography.heading1;
+  }
+
+  .menu {
+    position: absolute;
+    inset: 2rem 1.5rem auto auto;
+
+    svg {
+      fill: white;
+    }
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    .button {
+      &.green {
+        @include mixins.button(variables.$green, variables.$dark);
+      }
+
+      &.blue {
+        @include mixins.button(variables.$blue);
+      }
+
+      &.red {
+        @include mixins.button(variables.$red);
+      }
+    }
+  }
+}
+
+.gradient {
+  @include mixins.gradient;
+}

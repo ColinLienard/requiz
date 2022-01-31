@@ -1,0 +1,52 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.questionBlock {
+  background-color: rgba(white, 0.04);
+  border: variables.$border;
+  border-radius: variables.$radius;
+
+  .questionContainer {
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .input {
+      width: 100%;
+    }
+
+    .delete {
+      fill: white;
+    }
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    li {
+      &:nth-of-type(1),
+      &:nth-of-type(2) {
+        border-top: variables.$border;
+        border-bottom: variables.$border;
+      }
+
+      &:nth-of-type(1),
+      &:nth-of-type(3) {
+        border-right: variables.$border;
+      }
+    }
+
+    .add {
+      padding: 1.25rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      fill: white;
+    }
+  }
+}

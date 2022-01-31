@@ -1,13 +1,16 @@
 import { ChangeEvent, FC, useContext } from 'react';
 import { EditorContext } from '../../../lib/contexts/EditorContext';
+import CheckIcon from '../../../public/icons/iconComponents/CheckIcon';
+import TrashIcon from '../../../public/icons/iconComponents/TrashIcon';
+import styles from './ResponseBlock.module.scss';
 
 type Props = {
   id: number,
   index: number,
   response: string,
   canBeDeleted: boolean,
-  isCorrect: boolean
-}
+  isCorrect: boolean,
+};
 
 const ResponseBlock: FC<Props> = ({
   id,
@@ -44,17 +47,22 @@ const ResponseBlock: FC<Props> = ({
   };
 
   return (
-    <div style={{ backgroundColor: '#D7D7D7', border: isCorrect ? '2px solid green' : '' }}>
-      {canBeDeleted && (
-        <button type="button" onClick={handleDelete}>X</button>
-      )}
-      <button type="button" onClick={handleCorrect}>O</button>
+    <div className={`${styles.responseBlock} ${isCorrect && styles.correct}`}>
+      <span className={styles.number}>{index + 1}</span>
       <input
         type="text"
         placeholder="A response here"
         value={response}
         onChange={handleChange}
       />
+      <div className={styles.buttonContainer}>
+        <button className={`${styles.check} ${isCorrect && styles.correct}`} type="button" onClick={handleCorrect}>
+          <CheckIcon />
+        </button>
+        <button className={`${styles.delete} ${!canBeDeleted && styles.hidden}`} type="button" onClick={handleDelete}>
+          <TrashIcon />
+        </button>
+      </div>
     </div>
   );
 };

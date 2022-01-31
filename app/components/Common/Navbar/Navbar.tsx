@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Popup from 'react-customizable-popup';
 import useIntersection from '../../../lib/hooks/useIntersection';
 import useMobile from '../../../lib/hooks/useMobile';
@@ -9,11 +9,10 @@ import { UserFromDB } from '../../../lib/types';
 import CrossIcon from '../../../public/icons/iconComponents/CrossIcon';
 import styles from './Navbar.module.scss';
 
-type Props = {
-  user?: UserFromDB,
-};
-
-const Navbar: FC<Props> = ({ user }) => {
+const Navbar: FC = () => {
+  const { data: session } = useSession();
+  const { user } = session || {};
+  user as UserFromDB;
   const isMobile = useMobile();
   const [scrolled, setScrolled] = useState(false);
   const intersection = useIntersection(

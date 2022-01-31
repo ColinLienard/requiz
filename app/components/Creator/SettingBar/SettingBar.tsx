@@ -5,13 +5,21 @@ import {
   SetStateAction,
 } from 'react';
 import { QuizData } from '../../../lib/types';
+import styles from './SettingBar.module.scss';
 
 type Props = {
+  visible: boolean,
+  hide: () => void,
   setSettings: Dispatch<SetStateAction<QuizData | undefined>>,
-  defaultData?: QuizData
-}
+  defaultData?: QuizData,
+};
 
-const SettingBar: FC<Props> = ({ setSettings, defaultData }) => {
+const SettingBar: FC<Props> = ({
+  visible,
+  hide,
+  setSettings,
+  defaultData,
+}) => {
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setSettings((settings) => ({
       ...settings,
@@ -20,7 +28,10 @@ const SettingBar: FC<Props> = ({ setSettings, defaultData }) => {
   };
 
   return (
-    <section>
+    <section className={`${styles.settingBar} ${visible && styles.visible}`}>
+      <button onClick={hide} type="button">
+        close
+      </button>
       <h2>Settings</h2>
       <label htmlFor="title">
         Title

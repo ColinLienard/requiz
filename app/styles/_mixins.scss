@@ -37,8 +37,9 @@
   }
 }
 
-@mixin button($color) {
+@mixin button($color, $text-color: white) {
   background-color: $color;
+  color: $text-color;
   padding: 1em 1.5em;
   border-radius: variables.$radius;
   width: fit-content;
