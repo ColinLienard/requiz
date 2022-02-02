@@ -2,11 +2,11 @@
 @use "screens";
 @use "sass:color";
 
-@mixin input {
+@mixin input($color: variables.$darker) {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: variables.$darker;
+  background-color: $color;
   border-radius: variables.$radius;
   padding: 0.8em 1em;
   outline: solid 2px transparent;

@@ -2,6 +2,7 @@ import { ChangeEvent, FC, useContext } from 'react';
 import { EditorContext } from '../../../lib/contexts/EditorContext';
 import { QuizQuestion } from '../../../lib/types';
 import ResponseBlock from '../ResponseBlock/ResponseBlock';
+import AutoResizeInput from '../../Common/AutoResizeInput/AutoResizeInput';
 import TrashIcon from '../../../public/icons/iconComponents/TrashIcon';
 import PlusIcon from '../../../public/icons/iconComponents/PlusIcon';
 import styles from './QuestionBlock.module.scss';
@@ -14,7 +15,7 @@ type Props = {
 const QuestionBlock: FC<Props> = ({ question, canBeDeleted }) => {
   const { dispatchQuestions } = useContext(EditorContext);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     dispatchQuestions({
       type: 'modifyQuestion',
       id: question.id,
@@ -39,9 +40,7 @@ const QuestionBlock: FC<Props> = ({ question, canBeDeleted }) => {
   return (
     <section className={styles.questionBlock}>
       <div className={styles.questionContainer}>
-        <input
-          className={styles.input}
-          type="text"
+        <AutoResizeInput
           placeholder="Your question here"
           value={question.question}
           onChange={handleChange}

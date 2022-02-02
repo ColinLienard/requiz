@@ -8,6 +8,7 @@ import SettingBar from '../../components/Creator/SettingBar/SettingBar';
 import Particules from '../../components/Common/Particules/Particules';
 import QuizEditor from '../../components/Creator/QuizEditor/QuizEditor';
 import { EditorContext, questionsReducer } from '../../lib/contexts/EditorContext';
+import QuizStatusIndicator from '../../components/Common/QuizStatusIndicator/QuizStatusIndicator';
 import clientPromise from '../../lib/utils/mongodb';
 import isNotEmpty from '../../lib/utils/isNotEmpty';
 import MenuIcon from '../../public/icons/iconComponents/MenuIcon';
@@ -80,12 +81,13 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
       <Particules />
       <header className={styles.header}>
         <h1 className={styles.hero}>{settings?.title || 'Your new quiz'}</h1>
+        <QuizStatusIndicator status={settings?.status} />
         <button className={styles.menu} onClick={() => setSettingBarVisible(true)} type="button">
           <MenuIcon />
         </button>
         <div className={styles.buttonContainer}>
-          <button className={`${styles.button} ${styles.green}`} type="button" onClick={handleSaveQuiz}>Save</button>
-          <button className={`${styles.button} ${styles.blue}`} type="button" onClick={publishQuiz}>Publish</button>
+          <button className={`${styles.button} ${styles.blue}`} type="button" onClick={handleSaveQuiz}>Save</button>
+          <button className={`${styles.button} ${styles.green}`} type="button" onClick={publishQuiz}>Publish</button>
           <button className={`${styles.button} ${styles.red}`} type="button" onClick={deleteQuiz}>Delete quiz</button>
         </div>
       </header>

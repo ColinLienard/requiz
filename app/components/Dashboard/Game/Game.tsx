@@ -2,9 +2,9 @@ import { FC } from 'react';
 import UserItem from '../../Common/UserItem/UserItem';
 import useDate from '../../../lib/hooks/useDate';
 import useQuizTheme from '../../../lib/hooks/useQuizTheme';
-import useQuizStatus from '../../../lib/hooks/useQuizStatus';
 import { QuizData } from '../../../lib/types';
 import styles from './Game.module.scss';
+import QuizStatusIndicator from '../../Common/QuizStatusIndicator/QuizStatusIndicator';
 
 type Props = {
   fromUser?: boolean,
@@ -29,36 +29,7 @@ const Game: FC<Props> = ({
 }) => {
   const date = useDate(startsIn);
   const quizTheme = useQuizTheme(theme);
-  const quizStatus = useQuizStatus(status);
 
-  // if (fromUser) {
-  //   return (
-  //     <Link href={`/creator/${id}`}>
-  //       <a className={styles.game}>
-  //         <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
-  //           <span className={styles.emoji}>{quizTheme?.emoji}</span>
-  //         </div>
-  //         <h4 className={styles.title}>{title}</h4>
-  //         <div className={styles.statusContainer}>
-  //           <span className={styles.statusColor} style={{ backgroundColor: quizStatus?.color }}/>
-  //           <p>{quizStatus?.name}</p>
-  //         </div>
-  //         <div className={styles.infos}>
-  //           {peopleIn && (
-  //             <p className={styles.peopleIn}>
-  //               {peopleIn}
-  //               are waiting
-  //             </p>
-  //           )}
-  //           <p className={styles.date}>
-  //             Starts in
-  //             {date}
-  //           </p>
-  //         </div>
-  //       </a>
-  //     </Link>
-  //   );
-  // }
   return (
     <button className={styles.game} type="button" onClick={onClick}>
       <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
@@ -67,8 +38,7 @@ const Game: FC<Props> = ({
       <h4 className={styles.title}>{title}</h4>
       {fromUser ? (
         <div className={styles.statusContainer}>
-          <span className={styles.statusColor} style={{ backgroundColor: quizStatus?.color }} />
-          <p>{quizStatus?.name}</p>
+          <QuizStatusIndicator status={status} />
         </div>
       ) : (
         <div className={styles.userContainer}>

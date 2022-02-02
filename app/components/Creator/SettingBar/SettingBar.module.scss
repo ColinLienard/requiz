@@ -19,4 +19,41 @@
   &.visible {
     left: 0;
   }
+
+  .cross {
+    margin: 0.5rem 0 0 auto;
+    position: relative;
+    top: 1.25rem;
+
+    svg {
+      fill: white;
+    }
+  }
+
+  .title {
+    @include typography.heading2;
+
+    margin-left: 0.875rem;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+
+    .label {
+      margin: 1.5rem 0 0.5rem 1em;
+    }
+
+    .input {
+      @include mixins.input(rgba(white, 0.04));
+
+      width: 100%;
+    }
+
+    .button {
+      @include mixins.button(variables.$blue);
+
+      margin: 1.5rem auto 0;
+    }
+  }
 }

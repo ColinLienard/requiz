@@ -1,0 +1,16 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.themeSelect {
+  font-weight: bold;
+  border-radius: variables.$radius;
+  padding: 0.8em 1em;
+  outline: solid 2px transparent;
+  transition: outline 0.2s ease-in-out;
+
+  &:focus {
+    outline-color: white;
+  }
+}

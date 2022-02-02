@@ -1,0 +1,11 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.textarea {
+  width: 100%;
+  border: 1px solid transparent;
+  resize: none;
+  overflow: hidden;
+}

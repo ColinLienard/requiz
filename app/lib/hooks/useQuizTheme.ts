@@ -1,6 +1,13 @@
 import { QuizThemes } from '../types';
 
-const themes = [
+type Theme = {
+  id: QuizThemes,
+  name: string,
+  emoji: string,
+  color: string,
+};
+
+export const themes: Theme[] = [
   {
     id: 'overallCulture',
     name: 'Overall culture',
@@ -15,7 +22,7 @@ const themes = [
   },
 ];
 
-const useQuizTheme = (id?: QuizThemes) => {
+const useQuizTheme = (id?: QuizThemes): Theme | undefined => {
   if (id) {
     return themes.filter((theme) => theme.id === id)[0];
   }

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { FormEvent, useState, useEffect } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
@@ -112,18 +111,19 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
             <section>
               <form className={styles.form} method="post" action="/api/auth/callback/signin" onSubmit={handleSignInSubmit}>
                 <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-                <label className={styles.label} htmlFor="email">Email</label>
+                <label className={styles.label} htmlFor="signInEmail">Email</label>
                 <input
                   className={styles.input}
-                  name="email"
+                  name="signInEmail"
+                  id="signInEmail"
                   type="email"
                   placeholder="Enter your email"
                   required
                 />
-                <label className={styles.label} htmlFor="password">Password</label>
+                <label className={styles.label} htmlFor="signInPassword">Password</label>
                 <PasswordInput
                   className={styles.input}
-                  name="password"
+                  name="signInPassword"
                   placeholder="Enter your password"
                   required
                 />
@@ -138,38 +138,39 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
             <section>
               <form className={styles.form} method="post" action="/api/auth/callback/signup" onSubmit={handleSignUpSubmit}>
                 <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-                <label className={styles.label} htmlFor="name">Name</label>
+                <label className={styles.label} htmlFor="signUpName">Name</label>
                 <input
                   className={styles.input}
-                  name="name"
+                  name="signUpName"
+                  id="signUpName"
                   type="name"
                   placeholder="Enter your name"
                   required
                 />
-                <label className={styles.label} htmlFor="email">Email</label>
+                <label className={styles.label} htmlFor="signUpEmail">Email</label>
                 <input
                   className={styles.input}
-                  name="email"
+                  name="signUpEmail"
+                  id="signUpEmail"
                   type="email"
                   placeholder="Enter your email"
                   required
                 />
-                <label className={styles.label} htmlFor="password">Password</label>
+                <label className={styles.label} htmlFor="signUpPassword">Password</label>
                 <PasswordInput
                   className={styles.input}
-                  name="password"
+                  name="signUpPassword"
                   placeholder="Enter your password"
                   required
                 />
-                <label className={styles.label} htmlFor="confirmPassword">Confirm password</label>
+                <label className={styles.label} htmlFor="signUpConfirmPassword">Confirm password</label>
                 <PasswordInput
                   className={styles.input}
-                  name="confirmPassword"
+                  name="signUpConfirmPassword"
                   placeholder="Confirm your password"
                   required
                 />
                 <input className={styles.button} type="submit" value="Sign up" />
-                {/* <button className={styles.button} type="submit">Sign up</button> */}
                 <p className={styles.subtext}>Already have an account ?</p>
                 <button className={styles.link} onClick={() => setSign('in')} type="button">Sign in.</button>
               </form>

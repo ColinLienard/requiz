@@ -4,7 +4,9 @@ import {
   FC,
   SetStateAction,
 } from 'react';
-import { QuizData } from '../../../lib/types';
+import { QuizData, QuizThemes } from '../../../lib/types';
+import CrossIcon from '../../../public/icons/iconComponents/CrossIcon';
+import ThemeSelect from '../ThemeSelect/ThemeSelect';
 import styles from './SettingBar.module.scss';
 
 type Props = {
@@ -27,62 +29,65 @@ const SettingBar: FC<Props> = ({
     }));
   };
 
+  const handleThemeChange = (value: QuizThemes) => {
+    setSettings((settings) => ({
+      ...settings,
+      theme: value,
+    }));
+  };
+
   return (
     <section className={`${styles.settingBar} ${visible && styles.visible}`}>
-      <button onClick={hide} type="button">
-        close
+      <button className={styles.cross} onClick={hide} type="button">
+        <CrossIcon />
       </button>
-      <h2>Settings</h2>
-      <label htmlFor="title">
-        Title
+      <h2 className={styles.title}>Settings</h2>
+      <div className={styles.form}>
+        <label className={styles.label} htmlFor="title">Title of your quiz</label>
         <input
-          type="text"
+          className={styles.input}
           name="title"
+          id="title"
+          type="text"
           defaultValue={defaultData?.title}
           onChange={handleChange}
         />
-      </label>
-      <label htmlFor="description">
-        Description
+        <label className={styles.label} htmlFor="description">Description</label>
         <input
-          type="text"
+          className={styles.input}
           name="description"
+          id="description"
+          type="text"
           defaultValue={defaultData?.description}
           onChange={handleChange}
         />
-      </label>
-      <label htmlFor="themes">
-        Theme
-        <select
-          name="theme"
+        <label className={styles.label} htmlFor="themes">Theme</label>
+        <ThemeSelect
           defaultValue={defaultData?.theme}
-          onChange={handleChange}
-        >
-          <option value="none">Choose a theme</option>
-          <option value="videoGames">Video games</option>
-          <option value="overallCulture">Overall culture</option>
-        </select>
-      </label>
-      <label htmlFor="maxPlayers">
-        Maximum number of players
+          onChange={handleThemeChange}
+        />
+        <label className={styles.label} htmlFor="maxPlayers">Maximum number of players</label>
         <input
-          type="number"
+          className={styles.input}
           name="maxPlayers"
+          id="maxPlayers"
+          type="number"
           defaultValue={defaultData?.maxPlayers}
           min={4}
           max={40}
           onChange={handleChange}
         />
-      </label>
-      <label htmlFor="startDate">
-        Start date
+        <label className={styles.label} htmlFor="startDate">Start date</label>
         <input
-          type="datetime-local"
+          className={styles.input}
           name="startDate"
+          id="startDate"
+          type="datetime-local"
           defaultValue={defaultData?.startDate}
           onChange={handleChange}
         />
-      </label>
+        <button className={styles.button} onClick={hide} type="button">OK</button>
+      </div>
     </section>
   );
 };

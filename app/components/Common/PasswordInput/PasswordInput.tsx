@@ -23,6 +23,7 @@ const PasswordInput: FC<Props> = ({
       <input
         className={className}
         name={name}
+        id={name}
         required={required}
         placeholder={placeholder}
         type={visible ? 'text' : 'password'}

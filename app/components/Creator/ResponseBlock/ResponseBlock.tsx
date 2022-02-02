@@ -1,4 +1,11 @@
-import { ChangeEvent, FC, useContext } from 'react';
+import {
+  ChangeEvent,
+  FC,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react';
+import AutoResizeInput from '../../Common/AutoResizeInput/AutoResizeInput';
 import { EditorContext } from '../../../lib/contexts/EditorContext';
 import CheckIcon from '../../../public/icons/iconComponents/CheckIcon';
 import TrashIcon from '../../../public/icons/iconComponents/TrashIcon';
@@ -20,8 +27,9 @@ const ResponseBlock: FC<Props> = ({
   isCorrect,
 }) => {
   const { dispatchQuestions } = useContext(EditorContext);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     dispatchQuestions({
       type: 'modifyResponse',
       id,
@@ -46,11 +54,16 @@ const ResponseBlock: FC<Props> = ({
     });
   };
 
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [inputRef]);
+
   return (
     <div className={`${styles.responseBlock} ${isCorrect && styles.correct}`}>
       <span className={styles.number}>{index + 1}</span>
-      <input
-        type="text"
+      <AutoResizeInput
         placeholder="A response here"
         value={response}
         onChange={handleChange}
