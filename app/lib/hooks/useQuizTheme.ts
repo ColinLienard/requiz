@@ -20,6 +20,18 @@ export const themes: Theme[] = [
     emoji: '🎮',
     color: '#f47851',
   },
+  {
+    id: 'moviesAndSeries',
+    name: 'Movies and Series',
+    emoji: '🎞️',
+    color: '#297bc6',
+  },
+  {
+    id: 'books',
+    name: 'Books',
+    emoji: '📚',
+    color: '#dc3c75',
+  },
 ];
 
 const useQuizTheme = (id?: QuizThemes): Theme | undefined => {

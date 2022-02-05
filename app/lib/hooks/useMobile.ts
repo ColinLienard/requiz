@@ -4,7 +4,7 @@ const useMobile = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   const handleIsMobile = () => {
-    setIsMobile(window.innerWidth <= 480);
+    setIsMobile(window.screen.width <= 480);
   };
 
   useEffect(() => {

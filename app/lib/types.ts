@@ -20,7 +20,7 @@ export type UserFromDB = {
 
 export type GameState = 'waiting' | 'playing' | 'end';
 
-export type QuizThemes = 'overallCulture' | 'videoGames';
+export type QuizThemes = 'overallCulture' | 'videoGames' | 'moviesAndSeries' | 'books';
 
 export type QuizResponse = {
   id: number,
