@@ -1,6 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-const useIntersection = (past: number, enable: () => void, disable: () => void) => {
+const useIntersection = (
+  past: number,
+  enable: () => void,
+  disable: () => void,
+) => {
   const toWatch = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -11,8 +15,9 @@ const useIntersection = (past: number, enable: () => void, disable: () => void) 
         disable();
       }
     });
+
     if (toWatch.current) {
-      observer.observe(toWatch.current as HTMLDivElement);
+      observer.observe(toWatch.current);
     }
 
     return () => {

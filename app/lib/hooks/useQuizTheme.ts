@@ -12,7 +12,7 @@ export const themes: Theme[] = [
     id: 'overallCulture',
     name: 'Overall culture',
     emoji: '🌍',
-    color: '#00cf78',
+    color: '#38c157',
   },
   {
     id: 'videoGames',

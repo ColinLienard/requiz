@@ -15,20 +15,20 @@ type Props = {
 
 const AutoResizeInput: FC<Props> = ({ value, onChange, placeholder }) => {
   const [height, setHeight] = useState('auto');
-  const textArea = useRef<HTMLTextAreaElement>(null);
+  const ref = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (value === '') {
       setHeight('auto');
-    } else if (textArea.current) {
-      setHeight(`${textArea.current.scrollHeight + 2}px`);
+    } else if (ref.current) {
+      setHeight(`${ref.current.scrollHeight + 2}px`);
     }
   }, [value]);
 
   return (
     <textarea
       className={styles.textarea}
-      ref={textArea}
+      ref={ref}
       rows={1}
       style={{ height }}
       value={value}

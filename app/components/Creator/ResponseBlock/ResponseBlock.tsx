@@ -72,7 +72,7 @@ const ResponseBlock: FC<Props> = ({
         <button className={`${styles.check} ${isCorrect && styles.correct}`} type="button" onClick={handleCorrect}>
           <CheckIcon />
         </button>
-        <button className={`${styles.delete} ${!canBeDeleted && styles.hidden}`} type="button" onClick={handleDelete}>
+        <button className={`${styles.delete} ${!canBeDeleted && styles.hidden}`} type="button" onClick={canBeDeleted ? handleDelete : () => null}>
           <TrashIcon />
         </button>
       </div>

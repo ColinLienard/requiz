@@ -3,17 +3,67 @@
 @use "../typography";
 @use "../screens";
 
+.wrapper {
+  margin-top: 2rem;
+
+  @include screens.laptop {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 4rem;
+  }
+}
+
+.main {
+  width: 100%;
+  padding: 0 1.5rem;
+
+  @include screens.laptop {
+    padding: 0 4rem;
+    border-left: variables.$border;
+  }
+}
+
 .header {
-  padding: 2rem 1.5rem;
-  position: relative;
+  position: sticky;
+  top: 6rem;
+  z-index: 1;
+
+  @include screens.laptop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -6rem -1.5rem -2rem;
+    z-index: -1;
+    background-color: rgba(variables.$dark, 0.1);
+    border-bottom: variables.$border;
+    backdrop-filter: blur(1rem);
+    opacity: 0;
+    transition: 0.2s ease-in-out;
+
+    @include screens.laptop {
+      inset: -6rem -4rem -2rem;
+    }
+  }
+
+  &.background::before {
+    opacity: 1;
+  }
 
   .hero {
     @include typography.heading1;
+
+    margin-bottom: 0.5rem;
   }
 
   .menu {
     position: absolute;
-    inset: 2rem 1.5rem auto auto;
+    inset: 0 0 auto auto;
 
     svg {
       fill: white;
@@ -25,6 +75,11 @@
     justify-content: center;
     gap: 1rem;
     margin-top: 1rem;
+
+    @include screens.laptop {
+      margin: 0;
+      flex: 0 0 auto;
+    }
 
     .button {
       &.green {

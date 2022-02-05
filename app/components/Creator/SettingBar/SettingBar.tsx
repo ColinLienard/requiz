@@ -4,6 +4,8 @@ import {
   FC,
   SetStateAction,
 } from 'react';
+import Link from 'next/link';
+import useMobile from '../../../lib/hooks/useMobile';
 import { QuizData, QuizThemes } from '../../../lib/types';
 import CrossIcon from '../../../public/icons/iconComponents/CrossIcon';
 import ThemeSelect from '../ThemeSelect/ThemeSelect';
@@ -22,7 +24,9 @@ const SettingBar: FC<Props> = ({
   setSettings,
   defaultData,
 }) => {
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const isMobile = useMobile();
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSettings((settings) => ({
       ...settings,
       [event.target.name]: event.target.value,
@@ -37,11 +41,18 @@ const SettingBar: FC<Props> = ({
   };
 
   return (
-    <section className={`${styles.settingBar} ${visible && styles.visible}`}>
-      <button className={styles.cross} onClick={hide} type="button">
-        <CrossIcon />
-      </button>
-      <h2 className={styles.title}>Settings</h2>
+    <aside className={`${styles.settingBar} ${visible && styles.visible}`}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>Settings</h2>
+        <Link href="/dashboard">
+          <a className={styles.link}>Back to the home page</a>
+        </Link>
+        {isMobile && (
+          <button className={styles.cross} onClick={hide} type="button">
+            <CrossIcon />
+          </button>
+        )}
+      </div>
       <div className={styles.form}>
         <label className={styles.label} htmlFor="title">Title of your quiz</label>
         <input
@@ -51,15 +62,17 @@ const SettingBar: FC<Props> = ({
           type="text"
           defaultValue={defaultData?.title}
           onChange={handleChange}
+          placeholder="Give your quiz a great name !"
         />
         <label className={styles.label} htmlFor="description">Description</label>
-        <input
-          className={styles.input}
+        <textarea
+          className={styles.textarea}
           name="description"
           id="description"
-          type="text"
+          rows={4}
           defaultValue={defaultData?.description}
           onChange={handleChange}
+          placeholder="Write a short description of your quiz topic."
         />
         <label className={styles.label} htmlFor="themes">Theme</label>
         <ThemeSelect
@@ -86,9 +99,11 @@ const SettingBar: FC<Props> = ({
           defaultValue={defaultData?.startDate}
           onChange={handleChange}
         />
-        <button className={styles.button} onClick={hide} type="button">OK</button>
+        {isMobile && (
+          <button className={styles.button} onClick={hide} type="button">OK</button>
+        )}
       </div>
-    </section>
+    </aside>
   );
 };
 

@@ -12,7 +12,7 @@ const QuizEditor: FC = () => {
   };
 
   return (
-    <main className={styles.main}>
+    <section className={styles.container}>
       <ul className={styles.list}>
         {questions?.map((question) => (
           <li key={question.id}>
@@ -27,7 +27,7 @@ const QuizEditor: FC = () => {
         <PlusIcon />
         Add question
       </button>
-    </main>
+    </section>
   );
 };
 

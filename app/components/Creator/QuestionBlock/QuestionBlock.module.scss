@@ -14,6 +14,10 @@
     align-items: center;
     gap: 1rem;
 
+    @include screens.laptop {
+      padding: 2rem;
+    }
+
     .input {
       width: 100%;
     }
@@ -48,6 +52,15 @@
       align-items: center;
       justify-content: center;
       fill: white;
+
+      @include screens.laptop {
+        padding: 2rem;
+        transition: background-color 0.2s ease-in-out;
+
+        &:hover {
+          background-color: rgba(white, 0.04);
+        }
+      }
     }
   }
 }

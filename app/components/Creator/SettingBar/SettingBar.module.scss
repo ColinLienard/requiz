@@ -10,30 +10,52 @@
   width: 100vw;
   height: 100vh;
   background-color: variables.$darker;
-  padding: 4rem 1.5rem;
+  padding: 6rem 1.5rem 4rem;
   display: flex;
   flex-direction: column;
   z-index: 10;
   transition: left 0.4s variables.$transition;
 
+  @include screens.laptop {
+    position: sticky;
+    top: 6rem;
+    left: 0;
+    flex: 0 0 min(40%, 40rem);
+    height: fit-content;
+    background-color: transparent;
+    padding: 0 4rem;
+  }
+
   &.visible {
     left: 0;
   }
 
-  .cross {
-    margin: 0.5rem 0 0 auto;
-    position: relative;
-    top: 1.25rem;
+  .header {
+    display: flex;
+    align-items: baseline;
 
-    svg {
-      fill: white;
+    .title {
+      @include typography.heading2;
+
+      margin: 0 1.5rem 0 0.875rem;
     }
-  }
 
-  .title {
-    @include typography.heading2;
+    .link {
+      font-weight: bold;
+      color: variables.$light-blue;
 
-    margin-left: 0.875rem;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .cross {
+      margin: auto 0 auto auto;
+
+      svg {
+        fill: white;
+      }
+    }
   }
 
   .form {
@@ -44,10 +66,15 @@
       margin: 1.5rem 0 0.5rem 1em;
     }
 
-    .input {
+    .input,
+    .textarea {
       @include mixins.input(rgba(white, 0.04));
 
       width: 100%;
+    }
+
+    .textarea {
+      resize: none;
     }
 
     .button {

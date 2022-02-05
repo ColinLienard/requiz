@@ -9,6 +9,8 @@ import Particules from '../../components/Common/Particules/Particules';
 import QuizEditor from '../../components/Creator/QuizEditor/QuizEditor';
 import { EditorContext, questionsReducer } from '../../lib/contexts/EditorContext';
 import QuizStatusIndicator from '../../components/Common/QuizStatusIndicator/QuizStatusIndicator';
+import useMobile from '../../lib/hooks/useMobile';
+import useIntersection from '../../lib/hooks/useIntersection';
 import clientPromise from '../../lib/utils/mongodb';
 import isNotEmpty from '../../lib/utils/isNotEmpty';
 import MenuIcon from '../../public/icons/iconComponents/MenuIcon';
@@ -24,7 +26,14 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
   const [settings, setSettings] = useState<QuizData | undefined>(quizData);
   const [questions, dispatchQuestions] = useReducer(questionsReducer, quizData?.questions);
   const [settingBarVisible, setSettingBarVisible] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
+  const isMobile = useMobile();
+  const intersection = useIntersection(
+    isMobile ? 96 : 128,
+    () => setScrolled(true),
+    () => setScrolled(false),
+  );
 
   const saveQuiz = async (publish: boolean) => {
     const response = await fetch('/api/save-quiz', {
@@ -79,28 +88,37 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
       </Head>
 
       <Particules />
-      <header className={styles.header}>
-        <h1 className={styles.hero}>{settings?.title || 'Your new quiz'}</h1>
-        <QuizStatusIndicator status={settings?.status} />
-        <button className={styles.menu} onClick={() => setSettingBarVisible(true)} type="button">
-          <MenuIcon />
-        </button>
-        <div className={styles.buttonContainer}>
-          <button className={`${styles.button} ${styles.blue}`} type="button" onClick={handleSaveQuiz}>Save</button>
-          <button className={`${styles.button} ${styles.green}`} type="button" onClick={publishQuiz}>Publish</button>
-          <button className={`${styles.button} ${styles.red}`} type="button" onClick={deleteQuiz}>Delete quiz</button>
-        </div>
-      </header>
-      <div className={styles.gradient} />
-      <EditorContext.Provider value={{ questions, dispatchQuestions }}>
-        <QuizEditor />
-      </EditorContext.Provider>
-      <SettingBar
-        visible={settingBarVisible}
-        hide={() => setSettingBarVisible(false)}
-        setSettings={setSettings}
-        defaultData={quizData}
-      />
+      <div className={styles.wrapper}>
+        <main className={styles.main}>
+          {intersection}
+          <header className={`${styles.header} ${scrolled && styles.background}`}>
+            <div className={styles.heroContainer}>
+              <h1 className={styles.hero}>{settings?.title || 'Your new quiz'}</h1>
+              <QuizStatusIndicator status={settings?.status} />
+            </div>
+            {isMobile && (
+              <button className={styles.menu} onClick={() => setSettingBarVisible(true)} type="button">
+                <MenuIcon />
+              </button>
+            )}
+            <div className={styles.buttonContainer}>
+              <button className={`${styles.button} ${styles.blue}`} type="button" onClick={handleSaveQuiz}>Save</button>
+              <button className={`${styles.button} ${styles.green}`} type="button" onClick={publishQuiz}>Publish</button>
+              <button className={`${styles.button} ${styles.red}`} type="button" onClick={deleteQuiz}>Delete quiz</button>
+            </div>
+          </header>
+          <div className={styles.gradient} />
+          <EditorContext.Provider value={{ questions, dispatchQuestions }}>
+            <QuizEditor />
+          </EditorContext.Provider>
+        </main>
+        <SettingBar
+          visible={settingBarVisible}
+          hide={() => setSettingBarVisible(false)}
+          setSettings={setSettings}
+          defaultData={quizData}
+        />
+      </div>
     </>
   );
 };

@@ -33,11 +33,12 @@ const ThemeSelect: FC<Props> = ({ defaultValue, onChange }) => {
       ref={popupRef}
       position={['center', 'center']}
       arrow={false}
+      fixed
       className={styles.popup}
       backdropClassName={styles.backdrop}
     >
       <ul className={styles.list}>
-        <li key={quizTheme?.id}>
+        <li className={styles.item} key={quizTheme?.id}>
           <button
             className={styles.theme}
             type="button"
@@ -53,7 +54,7 @@ const ThemeSelect: FC<Props> = ({ defaultValue, onChange }) => {
             return null;
           }
           return (
-            <li key={theme.id}>
+            <li className={styles.item} key={theme.id}>
               <button
                 className={styles.theme}
                 type="button"

@@ -10,6 +10,16 @@
   gap: 1rem;
   position: relative;
 
+  @include screens.laptop {
+    padding: 2rem;
+    flex-direction: row;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: rgba(white, 0.04);
+    }
+  }
+
   .number {
     @include typography.heading3;
 
@@ -36,16 +46,29 @@
   .buttonContainer {
     margin: 0 auto;
     display: flex;
+    flex: 1 0 auto;
     gap: 1rem;
     fill: white;
-    transition: fill 0.2s ease-in-out, opacity 0.2s ease-in-out;
 
-    .check.correct {
-      fill: variables.$green;
+    @include screens.laptop {
+      flex-direction: column;
     }
 
-    .delete.hidden {
-      opacity: 0.25;
+    .check {
+      transition: fill 0.2s ease-in-out;
+
+      &.correct {
+        fill: variables.$green;
+      }
+    }
+
+    .delete {
+      transition: opacity 0.2s ease-in-out;
+
+      &.hidden {
+        opacity: 0.25;
+        cursor: default;
+      }
     }
   }
 

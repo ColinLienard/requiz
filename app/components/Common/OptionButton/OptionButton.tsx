@@ -26,6 +26,4 @@ OptionButton.defaultProps = {
   onClick: undefined,
 };
 
-OptionButton.displayName = 'OptionButton';
-
 export default OptionButton;
