@@ -2,8 +2,6 @@ import {
   ChangeEvent,
   FC,
   useContext,
-  useEffect,
-  useRef,
 } from 'react';
 import AutoResizeInput from '../../Common/AutoResizeInput/AutoResizeInput';
 import { EditorContext } from '../../../lib/contexts/EditorContext';
@@ -27,7 +25,6 @@ const ResponseBlock: FC<Props> = ({
   isCorrect,
 }) => {
   const { dispatchQuestions } = useContext(EditorContext);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     dispatchQuestions({
@@ -53,12 +50,6 @@ const ResponseBlock: FC<Props> = ({
       value: index,
     });
   };
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [inputRef]);
 
   return (
     <div className={`${styles.responseBlock} ${isCorrect && styles.correct}`}>

@@ -114,7 +114,7 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
                 <label className={styles.label} htmlFor="signInEmail">Email</label>
                 <input
                   className={styles.input}
-                  name="signInEmail"
+                  name="email"
                   id="signInEmail"
                   type="email"
                   placeholder="Enter your email"
@@ -123,7 +123,8 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
                 <label className={styles.label} htmlFor="signInPassword">Password</label>
                 <PasswordInput
                   className={styles.input}
-                  name="signInPassword"
+                  name="password"
+                  id="signInPassword"
                   placeholder="Enter your password"
                   required
                 />
@@ -141,7 +142,7 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
                 <label className={styles.label} htmlFor="signUpName">Name</label>
                 <input
                   className={styles.input}
-                  name="signUpName"
+                  name="name"
                   id="signUpName"
                   type="name"
                   placeholder="Enter your name"
@@ -150,7 +151,7 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
                 <label className={styles.label} htmlFor="signUpEmail">Email</label>
                 <input
                   className={styles.input}
-                  name="signUpEmail"
+                  name="email"
                   id="signUpEmail"
                   type="email"
                   placeholder="Enter your email"
@@ -159,14 +160,16 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
                 <label className={styles.label} htmlFor="signUpPassword">Password</label>
                 <PasswordInput
                   className={styles.input}
-                  name="signUpPassword"
+                  name="password"
+                  id="signUpPassword"
                   placeholder="Enter your password"
                   required
                 />
                 <label className={styles.label} htmlFor="signUpConfirmPassword">Confirm password</label>
                 <PasswordInput
                   className={styles.input}
-                  name="signUpConfirmPassword"
+                  name="confirmPassword"
+                  id="signUpConfirmPassword"
                   placeholder="Confirm your password"
                   required
                 />

@@ -6,6 +6,7 @@ import styles from './PasswordInput.module.scss';
 type Props = {
   className: string,
   name: string,
+  id: string,
   required: boolean,
   placeholder: string,
 };
@@ -13,6 +14,7 @@ type Props = {
 const PasswordInput: FC<Props> = ({
   className,
   name,
+  id,
   required,
   placeholder,
 }) => {
@@ -23,7 +25,7 @@ const PasswordInput: FC<Props> = ({
       <input
         className={className}
         name={name}
-        id={name}
+        id={id}
         required={required}
         placeholder={placeholder}
         type={visible ? 'text' : 'password'}
