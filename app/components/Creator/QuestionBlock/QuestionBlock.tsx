@@ -2,16 +2,20 @@ import { ChangeEvent, FC, useContext } from 'react';
 import { EditorContext } from '../../../lib/contexts/EditorContext';
 import { QuizQuestion } from '../../../lib/types';
 import ResponseBlock from '../ResponseBlock/ResponseBlock';
+import AutoResizeInput from '../../Common/AutoResizeInput/AutoResizeInput';
+import TrashIcon from '../../../public/icons/iconComponents/TrashIcon';
+import PlusIcon from '../../../public/icons/iconComponents/PlusIcon';
+import styles from './QuestionBlock.module.scss';
 
 type Props = {
   question: QuizQuestion,
-  canBeDeleted: boolean
-}
+  canBeDeleted: boolean,
+};
 
 const QuestionBlock: FC<Props> = ({ question, canBeDeleted }) => {
   const { dispatchQuestions } = useContext(EditorContext);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     dispatchQuestions({
       type: 'modifyQuestion',
       id: question.id,
@@ -34,18 +38,20 @@ const QuestionBlock: FC<Props> = ({ question, canBeDeleted }) => {
   };
 
   return (
-    <div style={{ backgroundColor: '#EFEFEF' }}>
-      {canBeDeleted && (
-        <button type="button" onClick={handleDelete}>X</button>
-      )}
-      <p>{question.id}</p>
-      <input
-        type="text"
-        placeholder="Your question here"
-        value={question.question}
-        onChange={handleChange}
-      />
-      <ul>
+    <section className={styles.questionBlock}>
+      <div className={styles.questionContainer}>
+        <AutoResizeInput
+          placeholder="Your question here"
+          value={question.question}
+          onChange={handleChange}
+        />
+        {canBeDeleted && (
+          <button className={styles.delete} type="button" onClick={handleDelete}>
+            <TrashIcon />
+          </button>
+        )}
+      </div>
+      <ul className={styles.grid}>
         {question.responses.map((response, index) => (
           <li key={response.id}>
             <ResponseBlock
@@ -57,11 +63,15 @@ const QuestionBlock: FC<Props> = ({ question, canBeDeleted }) => {
             />
           </li>
         ))}
+        {question.responses.length < 4 && (
+          <li className={styles.addContainer}>
+            <button className={styles.add} type="button" onClick={handleAddResponse}>
+              <PlusIcon />
+            </button>
+          </li>
+        )}
       </ul>
-      {question.responses.length < 4 && (
-        <button type="button" onClick={handleAddResponse}>Add response</button>
-      )}
-    </div>
+    </section>
   );
 };
 

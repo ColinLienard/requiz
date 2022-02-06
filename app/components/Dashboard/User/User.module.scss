@@ -1,0 +1,23 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 6rem;
+
+  .profilePicture {
+    border-radius: 50%;
+  }
+
+  .noProfilePicture {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: variables.$orange;
+  }
+}

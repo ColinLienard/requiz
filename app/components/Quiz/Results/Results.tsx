@@ -13,9 +13,9 @@ const Results: FC = () => {
 
   useEffect(() => {
     socket.on('get-users', (users: User[]) => {
-      const newWinner = users.reduce((maybe, user) => {
-        return user.lives > maybe.lives ? user : maybe;
-      });
+      const newWinner = users.reduce((maybe, user) => (
+        user.lives > maybe.lives ? user : maybe
+      ));
       setWinner(newWinner.name);
     });
   }, []);

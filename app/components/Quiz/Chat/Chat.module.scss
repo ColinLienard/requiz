@@ -1,0 +1,78 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.chat {
+  background-color: variables.$darker;
+  border-radius: variables.$big-radius variables.$big-radius 0 0;
+  padding: 0.5rem 1.5rem 1.5rem;
+  position: fixed;
+  inset: auto 0 0 0;
+  display: flex;
+  flex-direction: column;
+
+  &.transition {
+    transition: top 0.2s ease-in-out;
+  }
+
+  @include screens.laptop {
+    position: relative;
+    padding: 3rem 2rem;
+    border-radius: 0;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: auto 0 100% 0;
+      height: 6rem;
+      background-color: inherit;
+    }
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    .dragger {
+      width: 5rem;
+      height: 0.25rem;
+      border-radius: 1rem;
+      background-color: rgba(white, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .title {
+      @include typography.heading2;
+    }
+
+    .option {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+
+      @include screens.laptop {
+        top: 0;
+      }
+    }
+  }
+
+  .messages {
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: 100%;
+    overflow-y: auto;
+
+    @include screens.laptop {
+      margin: 3rem 0;
+    }
+  }
+}
+
+.popup {
+  @include mixins.popup(0.5rem, right);
+}

@@ -24,10 +24,8 @@ const useTimer = (socket: Socket, timeType: 'secondes' | 'minutes-secondes') => 
     }
   });
 
-  useEffect(() => {
-    return () => {
-      socket.removeAllListeners('timer');
-    };
+  useEffect(() => () => {
+    socket.removeAllListeners('timer');
   }, []);
 
   return time;

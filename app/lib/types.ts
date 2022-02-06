@@ -1,36 +1,38 @@
 export type ChatMessageType = {
   author?: string,
-  content: string,
-  id: string
-}
+  content: string | [string, string],
+  id: number,
+};
 
 export type User = {
   name: string,
   id: string,
-  lives: number
-}
+  lives: number,
+};
 
 export type UserFromDB = {
   _id: string,
   name: string,
   email: string,
-  image?: string
-  password?: string
-}
+  image?: string,
+  password?: string,
+};
 
-export type GameState = 'waiting' | 'playing' | 'end'
+export type GameState = 'waiting' | 'playing' | 'end';
+
+export type QuizThemes = 'overallCulture' | 'videoGames' | 'moviesAndSeries' | 'books';
 
 export type QuizResponse = {
   id: number,
-  value: string
-}
+  value: string,
+};
 
 export type QuizQuestion = {
   id: number,
   question: string,
   responses: QuizResponse[],
-  correct: number
-}
+  correct: number,
+};
 
 export type QuizData = {
   _id?: string,
@@ -38,15 +40,15 @@ export type QuizData = {
   title?: string,
   description?: string,
   userId?: string,
-  theme?: string[],
+  theme?: QuizThemes,
   maxPlayers?: number,
   startDate?: string,
   questions?: QuizQuestion[],
   peopleIn?: number,
-}
+};
 
 export type PropsToGetDBData = {
   id: string,
   collection: 'accounts' | 'quizzes' | 'sessions' | 'users',
-  projection?: Record<string, number>
-}
+  projection?: Record<string, number>,
+};

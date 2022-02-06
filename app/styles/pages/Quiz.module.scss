@@ -1,17 +1,45 @@
-@use '../colors.scss';
+@use "../variables";
+@use "../mixins";
+@use "../typography";
+@use "../screens";
+
+.gradient {
+  @include mixins.gradient("center");
+
+  @include screens.laptop {
+    @include mixins.gradient("center");
+  }
+}
 
 .main {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 4rem);
+
+  @include screens.laptop {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    height: calc(100vh - 6rem);
+  }
+}
+
+.game {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding: 0 1.5rem 15.5rem;
+  position: relative;
 
-  section {
-    width: 100%;
-    padding: 4rem;
+  @include screens.laptop {
+    padding: 0 4rem 3rem;
+  }
 
-    &:nth-of-type(1), &:nth-of-type(3) {
-      max-width: 24rem;
-      background-color: colors.$grey;
+  .menu {
+    position: absolute;
+    inset: 0.5rem 1.5rem auto auto;
+
+    svg {
+      fill: white;
     }
   }
 }

@@ -1,28 +1,44 @@
 import { FC, useState } from 'react';
+import EyeIcon from '../../../public/icons/iconComponents/EyeIcon';
+import ClosedEyeIcon from '../../../public/icons/iconComponents/ClosedEyeIcon';
+import styles from './PasswordInput.module.scss';
 
 type Props = {
-  label: string,
-  name: string
-}
+  className: string,
+  name: string,
+  id: string,
+  required: boolean,
+  placeholder: string,
+};
 
-const PasswordInput: FC<Props> = ({ label, name }) => {
+const PasswordInput: FC<Props> = ({
+  className,
+  name,
+  id,
+  required,
+  placeholder,
+}) => {
   const [visible, setVisible] = useState(false);
 
   return (
-    <label htmlFor={name}>
-      {label}
+    <div className={styles.inputContainer}>
       <input
-        type={visible ? 'text' : 'password'}
+        className={className}
         name={name}
-        required
+        id={id}
+        required={required}
+        placeholder={placeholder}
+        type={visible ? 'text' : 'password'}
       />
-      <button type="button" onClick={() => setVisible((v) => !v)}>
-        {visible ? 'Hide password' : 'Show password'}
+      <button className={styles.toggler} type="button" onClick={() => setVisible((v) => !v)}>
+        {visible ? (
+          <ClosedEyeIcon />
+        ) : (
+          <EyeIcon />
+        )}
       </button>
-    </label>
+    </div>
   );
 };
-
-PasswordInput.displayName = 'PasswordInput';
 
 export default PasswordInput;

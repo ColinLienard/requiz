@@ -4,77 +4,106 @@ import {
   FC,
   SetStateAction,
 } from 'react';
-import { QuizData } from '../../../lib/types';
+import Link from 'next/link';
+import useMobile from '../../../lib/hooks/useMobile';
+import { QuizData, QuizThemes } from '../../../lib/types';
+import CrossIcon from '../../../public/icons/iconComponents/CrossIcon';
+import ThemeSelect from '../ThemeSelect/ThemeSelect';
+import styles from './SettingBar.module.scss';
 
 type Props = {
+  visible: boolean,
+  hide: () => void,
   setSettings: Dispatch<SetStateAction<QuizData | undefined>>,
-  defaultData?: QuizData
-}
+  defaultData?: QuizData,
+};
 
-const SettingBar: FC<Props> = ({ setSettings, defaultData }) => {
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setSettings((settings) => {
-      return {
-        ...settings,
-        [event.target.name]: event.target.value,
-      };
-    });
+const SettingBar: FC<Props> = ({
+  visible,
+  hide,
+  setSettings,
+  defaultData,
+}) => {
+  const isMobile = useMobile();
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSettings((settings) => ({
+      ...settings,
+      [event.target.name]: event.target.value,
+    }));
+  };
+
+  const handleThemeChange = (value: QuizThemes) => {
+    setSettings((settings) => ({
+      ...settings,
+      theme: value,
+    }));
   };
 
   return (
-    <section>
-      <h2>Settings</h2>
-      <label htmlFor="title">
-        Title
+    <aside className={`${styles.settingBar} ${visible && styles.visible}`}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>Settings</h2>
+        <Link href="/dashboard">
+          <a className={styles.link}>Back to the home page</a>
+        </Link>
+        {isMobile && (
+          <button className={styles.cross} onClick={hide} type="button">
+            <CrossIcon />
+          </button>
+        )}
+      </div>
+      <div className={styles.form}>
+        <label className={styles.label} htmlFor="title">Title of your quiz</label>
         <input
-          type="text"
+          className={styles.input}
           name="title"
+          id="title"
+          type="text"
           defaultValue={defaultData?.title}
           onChange={handleChange}
+          placeholder="Give your quiz a great name !"
         />
-      </label>
-      <label htmlFor="description">
-        Description
-        <input
-          type="text"
+        <label className={styles.label} htmlFor="description">Description</label>
+        <textarea
+          className={styles.textarea}
           name="description"
+          id="description"
+          rows={4}
           defaultValue={defaultData?.description}
           onChange={handleChange}
+          placeholder="Write a short description of your quiz topic."
         />
-      </label>
-      <label htmlFor="themes">
-        Theme
-        <select
-          name="theme"
+        <label className={styles.label} htmlFor="themes">Theme</label>
+        <ThemeSelect
           defaultValue={defaultData?.theme}
-          onChange={handleChange}
-        >
-          <option value="none">Choose a theme</option>
-          <option value="videoGames">Video games</option>
-          <option value="overallCulture">Overall culture</option>
-        </select>
-      </label>
-      <label htmlFor="maxPlayers">
-        Maximum number of players
+          onChange={handleThemeChange}
+        />
+        <label className={styles.label} htmlFor="maxPlayers">Maximum number of players</label>
         <input
-          type="number"
+          className={styles.input}
           name="maxPlayers"
+          id="maxPlayers"
+          type="number"
           defaultValue={defaultData?.maxPlayers}
           min={4}
           max={40}
           onChange={handleChange}
         />
-      </label>
-      <label htmlFor="startDate">
-        Start date
+        <label className={styles.label} htmlFor="startDate">Start date</label>
         <input
-          type="datetime-local"
+          className={styles.input}
           name="startDate"
+          id="startDate"
+          type="datetime-local"
           defaultValue={defaultData?.startDate}
           onChange={handleChange}
         />
-      </label>
-    </section>
+        {isMobile && (
+          <button className={styles.button} onClick={hide} type="button">OK</button>
+        )}
+      </div>
+    </aside>
   );
 };
 

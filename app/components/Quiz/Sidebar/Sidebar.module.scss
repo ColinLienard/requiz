@@ -1,0 +1,127 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 100%;
+  width: 100vw;
+  height: 100vh;
+  background-color: variables.$darker;
+  padding: 4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  transition: left 0.4s variables.$transition;
+
+  &.visible {
+    left: 0;
+  }
+
+  @include screens.laptop {
+    position: static;
+    width: auto;
+    height: auto;
+    background-color: rgba(white, 0.04);
+    border: variables.$border;
+    border-radius: variables.$radius;
+    margin: 0 0 3rem 2rem;
+    padding: 3rem 2rem;
+  }
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+
+    .cross {
+      margin: 0.5rem 0 0 auto;
+
+      svg {
+        fill: white;
+      }
+    }
+
+    .hero {
+      @include typography.heading2;
+
+      text-align: center;
+      margin-top: 1rem;
+
+      @include screens.laptop {
+        position: static;
+        margin-top: 0;
+      }
+    }
+  }
+
+  .theme {
+    padding: 0.8em 1em;
+    border-radius: variables.$radius;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    margin: 1.5rem auto 1rem;
+
+    .emoji {
+      font-size: 1.2em;
+    }
+  }
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    .description {
+      width: 100%;
+    }
+
+    .option {
+      flex: 1 0 auto;
+    }
+  }
+
+  .title {
+    @include typography.heading3;
+
+    margin: 3rem 0 1rem;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .user {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: variables.$light-blue;
+
+      .lives {
+        display: flex;
+        gap: 0.8rem;
+
+        .life {
+          width: 0.6rem;
+          height: 0.6rem;
+          border-radius: 50%;
+          background-color: variables.$orange;
+
+          &.hidden {
+            opacity: 0.25;
+          }
+        }
+      }
+    }
+  }
+}
+
+.popup {
+  @include mixins.popup(0.5rem, right);
+}

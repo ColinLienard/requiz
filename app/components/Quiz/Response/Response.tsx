@@ -1,37 +1,33 @@
 import { FC } from 'react';
+import styles from './Response.module.scss';
 
 type Props = {
   text: string,
   index: number,
   selected: number,
   select: (number: number) => void,
-  good?: boolean
-}
+  correct?: boolean,
+};
 
 const Response: FC<Props> = ({
   text,
   index,
   selected,
   select,
-  good,
-}) => {
-  return (
-    <button
-      type="button"
-      onClick={() => select(index)}
-      style={{
-        backgroundColor: selected === index ? 'royalblue' : 'transparent',
-        border: good ? '3px solid green' : 'none',
-      }}
-    >
-      <h4>{index + 1}</h4>
-      <p>{text}</p>
-    </button>
-  );
-};
+  correct,
+}) => (
+  <button
+    className={`${styles.response} ${selected === index && styles.selected} ${correct && styles.correct}`}
+    type="button"
+    onClick={() => select(index)}
+  >
+    <span className={styles.number}>{index + 1}</span>
+    <p className={styles.text}>{text}</p>
+  </button>
+);
 
 Response.defaultProps = {
-  good: false,
+  correct: false,
 };
 
 export default Response;

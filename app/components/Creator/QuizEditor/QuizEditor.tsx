@@ -1,6 +1,8 @@
 import { FC, useContext } from 'react';
 import { EditorContext } from '../../../lib/contexts/EditorContext';
+import PlusIcon from '../../../public/icons/iconComponents/PlusIcon';
 import QuestionBlock from '../QuestionBlock/QuestionBlock';
+import styles from './QuizEditor.module.scss';
 
 const QuizEditor: FC = () => {
   const { questions, dispatchQuestions } = useContext(EditorContext);
@@ -10,9 +12,8 @@ const QuizEditor: FC = () => {
   };
 
   return (
-    <section>
-      <h2>Quiz</h2>
-      <ul>
+    <section className={styles.container}>
+      <ul className={styles.list}>
         {questions?.map((question) => (
           <li key={question.id}>
             <QuestionBlock
@@ -22,7 +23,10 @@ const QuizEditor: FC = () => {
           </li>
         ))}
       </ul>
-      <button type="button" onClick={addQuestion}>Add question</button>
+      <button className={styles.button} type="button" onClick={addQuestion}>
+        <PlusIcon />
+        Add question
+      </button>
     </section>
   );
 };

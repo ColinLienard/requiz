@@ -1,0 +1,67 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.response {
+  width: 100%;
+  padding: 1.25rem;
+  border: variables.$border;
+  border-radius: variables.$radius;
+  background-color: rgba(white, 0.04);
+  position: relative;
+  transition: background-color 0.2s ease-in-out, border 0.2s ease-in-out;
+
+  @include screens.laptop {
+    padding: 1.5rem;
+  }
+
+  &.selected {
+    background-color: rgba(white, 0.08);
+    border-color: variables.$blue;
+  }
+
+  .number {
+    @include typography.heading3;
+
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: variables.$blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -1rem;
+    left: calc(50% - 1rem);
+
+    @include screens.laptop {
+      width: 2.5rem;
+      height: 2.5rem;
+      top: -1.25rem;
+      left: calc(50% - 1.25rem);
+    }
+  }
+
+  .text {
+    text-align: left;
+    word-break: break-all;
+  }
+
+  &.correct {
+    border-color: variables.$green;
+
+    .number {
+      background-color: variables.$green;
+      color: variables.$dark;
+    }
+  }
+
+  &.false {
+    border-color: variables.$red;
+
+    .number {
+      background-color: variables.$red;
+    }
+  }
+}

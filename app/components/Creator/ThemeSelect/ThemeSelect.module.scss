@@ -1,0 +1,90 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+.themeSelect {
+  font-weight: bold;
+  border-radius: variables.$radius;
+  padding: 0.8em 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+
+  svg {
+    fill: white;
+    position: absolute;
+    left: 0.8em;
+  }
+
+  .emoji {
+    font-size: 1.2em;
+  }
+}
+
+.popup {
+  width: calc(100% - 3rem);
+  transform: translateY(calc(50% - 1.75rem));
+  clip-path: inset(0 0 calc(100% - 3.5rem) 0);
+  transition:
+    clip-path 0.4s variables.$transition,
+    transform 0.4s variables.$transition,
+    opacity 0.1s 0.3s;
+
+  &:global(.open) {
+    transform: none;
+    clip-path: inset(0 0 0 0);
+    transition:
+      clip-path 0.4s variables.$transition,
+      transform 0.4s variables.$transition,
+      opacity 0.1s ease-in-out;
+  }
+
+  @include screens.laptop {
+    padding: 0 4rem;
+    width: min(40%, 40rem);
+  }
+
+  .item {
+    overflow: hidden;
+
+    &:nth-of-type(1) {
+      border-radius: variables.$radius variables.$radius 0 0;
+    }
+
+    &:nth-last-of-type(1) {
+      border-radius: 0 0 variables.$radius variables.$radius;
+    }
+  }
+
+  .theme {
+    width: 100%;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    .emoji {
+      font-size: 1.2em;
+    }
+  }
+}
+
+.backdrop {
+  background-color: rgba(variables.$dark, 0.5);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+
+  &:global(.open) {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,90 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+@keyframes jump {
+  25% {
+    transform: translateY(-0.25rem);
+  }
+
+  50% {
+    transform: translateY(0);
+  }
+
+  75% {
+    transform: translateY(-0.25rem);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.game {
+  @include mixins.box;
+
+  display: block;
+  padding: 2rem 1.5rem 1rem;
+  text-align: start;
+  width: 16rem;
+  position: relative;
+
+  @include screens.laptop {
+    padding: 2.5rem 2rem 1rem;
+    width: 20rem;
+  }
+
+  &:hover {
+    .emoji {
+      animation: jump 0.5s ease-in;
+    }
+  }
+
+  .theme {
+    position: absolute;
+    bottom: calc(100% - 1.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: variables.$radius;
+    line-height: initial;
+
+    @include screens.laptop {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+  }
+
+  .title {
+    @include typography.heading3;
+  }
+
+  .userContainer,
+  .statusContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.5rem 0 1rem;
+
+    @include screens.laptop {
+      margin: 0.75rem 0 1.5rem;
+    }
+  }
+
+  .infos {
+    display: flex;
+
+    .peopleIn {
+      @include typography.small;
+    }
+
+    .date {
+      @include typography.small;
+
+      margin-left: auto;
+    }
+  }
+}

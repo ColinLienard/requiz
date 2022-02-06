@@ -1,63 +1,63 @@
 import { FC } from 'react';
-import Link from 'next/link';
 import UserItem from '../../Common/UserItem/UserItem';
 import useDate from '../../../lib/hooks/useDate';
+import useQuizTheme from '../../../lib/hooks/useQuizTheme';
+import { QuizData } from '../../../lib/types';
+import styles from './Game.module.scss';
+import QuizStatusIndicator from '../../Common/QuizStatusIndicator/QuizStatusIndicator';
 
 type Props = {
   fromUser?: boolean,
   onClick?: () => void,
-  id: string,
-  title: string,
-  userId?: string,
-  status?: string,
-  peopleIn?: number,
-  startsIn: string
-}
+  title: QuizData['title'],
+  theme: QuizData['theme'],
+  userId?: QuizData['userId'],
+  status?: QuizData['status'],
+  peopleIn?: QuizData['peopleIn'],
+  startsIn: string,
+};
 
 const Game: FC<Props> = ({
   fromUser,
   onClick,
-  id,
   title,
+  theme,
   userId,
   status,
   peopleIn,
   startsIn,
 }) => {
   const date = useDate(startsIn);
+  const quizTheme = useQuizTheme(theme);
 
-  if (fromUser) {
-    return (
-      <Link href={`/creator/${id}`}>
-        <a>
-          <h4>{title}</h4>
-          <p>{status}</p>
-          <p>
+  return (
+    <button className={styles.game} type="button" onClick={onClick}>
+      <div className={styles.theme} style={{ backgroundColor: quizTheme?.color }}>
+        <span className={styles.emoji}>{quizTheme?.emoji}</span>
+      </div>
+      <h4 className={styles.title}>{title}</h4>
+      {fromUser ? (
+        <div className={styles.statusContainer}>
+          <QuizStatusIndicator status={status} />
+        </div>
+      ) : (
+        <div className={styles.userContainer}>
+          <p>by</p>
+          <UserItem id={userId} small />
+        </div>
+      )}
+      <div className={styles.infos}>
+        {peopleIn && (
+          <p className={styles.peopleIn}>
             {peopleIn}
             are waiting
           </p>
-          <p>
-            Starts in
-            {date}
-          </p>
-        </a>
-      </Link>
-    );
-  }
-  return (
-    <button type="button" onClick={onClick}>
-      <h4>{title}</h4>
-      <UserItem id={userId as string} />
-      {peopleIn && (
-        <p>
-          {peopleIn}
-          are waiting
+        )}
+        <p className={styles.date}>
+          Starts in
+          {date}
         </p>
-      )}
-      <p>
-        Starts in
-        {date}
-      </p>
+      </div>
     </button>
   );
 };
@@ -66,7 +66,7 @@ Game.defaultProps = {
   fromUser: false,
   onClick: undefined,
   userId: '',
-  status: '',
+  status: undefined,
   peopleIn: undefined,
 };
 

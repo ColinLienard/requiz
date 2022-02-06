@@ -1,0 +1,246 @@
+@use "../variables";
+@use "../mixins";
+@use "../typography";
+@use "../screens";
+
+@keyframes float {
+  0% { transform: translateY(-0.5rem); }
+
+  50% { transform: translateY(0.5rem); }
+
+  100% { transform: translateY(-0.5rem); }
+}
+
+.main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 4rem;
+
+  @include screens.laptop {
+    flex-direction: row-reverse;
+    padding-top: 1rem;
+    padding-bottom: 8rem;
+  }
+
+  .mainSection {
+    width: 100%;
+
+    @include screens.laptop {
+      padding: 0 4rem;
+    }
+  }
+
+  .sideSection {
+    @include screens.laptop {
+      padding: 0 4rem;
+    }
+  }
+}
+
+.backgroundimage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(12rem - 1.25rem);
+  background: radial-gradient(ellipse 100% 50% at center bottom, #e683bb, variables.$blue);
+  z-index: -10;
+
+  @include screens.laptop {
+    height: calc(20rem - 1.25rem);
+  }
+
+  span {
+    width: 100% !important;
+    height: 100% !important;
+
+    img {
+      object-fit: cover;
+
+      @include screens.laptop {
+        object-fit: contain;
+      }
+    }
+  }
+
+  &::before {
+    @include mixins.noise;
+
+    content: "";
+    z-index: 1;
+  }
+}
+
+.header {
+  height: 8rem;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  @include screens.laptop {
+    height: 14rem;
+  }
+
+  .hero {
+    @include typography.heading1;
+
+    margin: auto 0 0.75rem;
+
+    @include screens.laptop {
+      margin-bottom: 1rem;
+    }
+  }
+
+  .searchInputContainer {
+    width: min(80%, 32rem);
+    position: relative;
+
+    .iconButton {
+      position: absolute;
+      inset: 0 auto 0 0;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        width: 1rem;
+        fill: rgba(white, 0.25);
+        transition: fill 0.2s ease-in-out;
+      }
+    }
+
+    .searchInput {
+      @include mixins.input;
+
+      width: 100%;
+      padding-left: 3rem;
+
+      &:focus ~ .iconButton svg {
+        fill: white;
+      }
+    }
+  }
+
+  // .planet1 {
+  //   position: absolute;
+  //   top: 10%;
+  //   left: 5%;
+  //   width: 4rem;
+  //   animation: float 10s ease-in-out infinite;
+
+  //   @include screens.laptop {
+  //     left: calc(50% - 28rem);
+  //     width: 6rem;
+  //   }
+  // }
+
+  // .planet2 {
+  //   position: absolute;
+  //   top: 0;
+  //   left: 50%;
+  //   width: 2rem;
+  //   animation: float 8s ease-in-out infinite;
+
+  //   @include screens.laptop {
+  //     left: calc(50% + 16rem);
+  //     width: 3rem;
+  //   }
+  // }
+
+  // .planet3 {
+  //   position: absolute;
+  //   top: 50%;
+  //   right: 5%;
+  //   width: 1.75rem;
+  //   animation: float 6s ease-in-out infinite;
+
+  //   @include screens.laptop {
+  //     left: calc(50% + 32rem);
+  //     width: 2.5rem;
+  //   }
+  // }
+}
+
+.gradient {
+  @include mixins.gradient;
+}
+
+.title {
+  @include typography.heading2;
+
+  margin: 3rem 0 1.5rem 3rem;
+
+  @include screens.laptop {
+    margin: 4rem 0 2rem 2rem;
+  }
+}
+
+.gameList,
+.userList {
+  display: flex;
+  gap: 1rem;
+  padding: 0 1.5rem;
+  width: 100%;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include screens.laptop {
+    padding: 0;
+    gap: 1.5rem;
+
+    &.vertical {
+      flex-direction: column;
+    }
+  }
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.gameList {
+  padding-top: 0.75rem;
+}
+
+.empty {
+  text-align: center;
+  width: 16rem;
+
+  @include screens.laptop {
+    width: 20rem;
+  }
+}
+
+.text {
+  padding-left: 3rem;
+
+  @include screens.laptop {
+    padding-left: 2rem;
+  }
+}
+
+.separator {
+  margin-top: 3rem;
+  border: none;
+  border-top: variables.$border;
+
+  @include screens.laptop {
+    border: none;
+    border-left: variables.$border;
+  }
+}
+
+.button {
+  @include mixins.button(variables.$blue);
+
+  font-weight: bold;
+  margin: 1.5rem auto 0;
+
+  @include screens.laptop {
+    margin-top: 2rem;
+  }
+}

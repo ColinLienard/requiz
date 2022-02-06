@@ -1,0 +1,149 @@
+@use "variables";
+@use "screens";
+@use "sass:color";
+
+@mixin input($color: variables.$darker) {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: $color;
+  border-radius: variables.$radius;
+  padding: 0.8em 1em;
+  outline: solid 2px transparent;
+  transition: outline 0.2s ease-in-out;
+
+  svg {
+    width: 1em;
+    fill: rgba(white, 0.3);
+  }
+
+  &::placeholder {
+    color: rgba(white, 0.25);
+  }
+
+  &:focus {
+    outline-color: variables.$light-blue;
+  }
+}
+
+@mixin box {
+  background-color: rgba(white, 0.04);
+  border: variables.$border;
+  border-radius: variables.$radius;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: rgba(white, 0.08);
+  }
+}
+
+@mixin button($color, $text-color: white) {
+  background-color: $color;
+  color: $text-color;
+  padding: 1em 1.5em;
+  border-radius: variables.$radius;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1;
+  font-weight: bold;
+  outline: solid 2px transparent;
+  transition: background-color 0.2s ease-in-out, outline 0.2s ease-in-out;
+
+  svg {
+    width: 1.25em;
+    height: 1.25em;
+    fill: white;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: color.adjust($color, $lightness: 4%);
+  }
+
+  &:focus {
+    outline-color: white;
+  }
+}
+
+@mixin noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("../public/images/noise.svg");
+  mix-blend-mode: soft-light;
+}
+
+@mixin gradient($position: "top") {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  background:
+    radial-gradient(
+      ellipse 120% 50%,
+      rgba(variables.$orange, 0.2),
+      rgba(variables.$blue, 0.05),
+      transparent
+    );
+  z-index: -1;
+
+  @if $position == "top" {
+    height: 32rem;
+    top: -6rem;
+  } @else if $position == "center" {
+    height: 32rem;
+    top: calc(50% - 20rem);
+  }
+
+  @include screens.laptop {
+    background:
+      radial-gradient(
+        ellipse 64rem 50%,
+        rgba(variables.$orange, 0.2),
+        rgba(variables.$blue, 0.05),
+        transparent
+      );
+
+    @if $position == "top" {
+      height: 48rem;
+      top: -8rem;
+    } @else if $position == "center" {
+      height: 100%;
+      top: 0;
+    }
+  }
+}
+
+@mixin popup($padding: 0.5rem, $translate-from: center) {
+  background-color: variables.$dark;
+  border: variables.$border;
+  border-radius: variables.$radius;
+  padding: $padding;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.1s ease-in, opacity 0.1s ease-in;
+
+  @if $translate-from == left {
+    transform: translate(-2.5%, -2.5%) scale(0.95);
+  } @else if $translate-from == center {
+    transform: translate(0, -2.5%) scale(0.95);
+  } @else if $translate-from == right {
+    transform: translate(2.5%, -2.5%) scale(0.95);
+  }
+
+  &:global(.open) {
+    transform: none;
+    transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+  }
+
+  .popupButton {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: variables.$radius;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: rgba(white, 0.1);
+    }
+  }
+}

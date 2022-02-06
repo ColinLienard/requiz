@@ -1,0 +1,170 @@
+@use "../../../styles/variables";
+@use "../../../styles/mixins";
+@use "../../../styles/typography";
+@use "../../../styles/screens";
+
+@keyframes tilt {
+  25% {
+    transform: rotate(-15deg);
+  }
+
+  75% {
+    transform: rotate(15deg);
+  }
+
+  100% {
+    transform: rotate(0);
+  }
+}
+
+.navbar {
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 99;
+
+  @include screens.laptop {
+    height: 6rem;
+    padding: 0 2rem;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(variables.$darker, 0.8), transparent);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  &.scrolled::before {
+    opacity: 1;
+  }
+
+  .logoContainer {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-right: auto;
+
+    &:hover {
+      .logo {
+        animation: tilt 1.5s cubic-bezier(0.75, 0, 0.25, 1);
+      }
+    }
+
+    .hero {
+      font-family: Inter, sans-serif;
+      font-weight: 600;
+      font-size: inherit;
+    }
+  }
+
+  .profilePictureButton {
+    font-size: 0;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow: 0 0.25rem 0.5rem rgba(variables.$darker, 0.25);
+      opacity: 0;
+      transition: 0.2s ease-in-out;
+    }
+
+    &:hover::before {
+      opacity: 1;
+    }
+
+    .profilePicture {
+      border-radius: 50%;
+    }
+  }
+}
+
+.popup {
+  @include mixins.popup(0, right);
+
+  width: min(100%, 24rem);
+
+  .close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    fill: white;
+    font-size: 0;
+  }
+
+  .section {
+    padding: 1.5rem;
+
+    @include screens.laptop {
+      padding: 2rem;
+    }
+
+    &.centered {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &:not(&:nth-of-type(1)) {
+      border-top: variables.$border;
+    }
+  }
+
+  .image {
+    border-radius: 50%;
+  }
+
+  .name {
+    @include typography.heading2;
+
+    margin: 0.75rem 0 0.25rem;
+
+    @include screens.laptop {
+      margin: 1rem 0 0.5rem;
+    }
+  }
+
+  .email {
+    opacity: 0.5;
+  }
+
+  .button {
+    @include mixins.button(variables.$blue);
+
+    text-align: center;
+    margin: 1.5rem 0;
+
+    @include screens.laptop {
+      margin: 2rem 0;
+    }
+  }
+
+  .link {
+    color: variables.$red;
+    font-weight: bold;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .title {
+    @include typography.heading3;
+  }
+}

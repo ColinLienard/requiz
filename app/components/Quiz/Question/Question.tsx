@@ -5,10 +5,14 @@ import {
   useRef,
   useState,
 } from 'react';
+import Image from 'next/image';
 import SocketContext from '../../../lib/contexts/SocketContext';
 import useTimer from '../../../lib/hooks/useTimer';
 import { QuizQuestion } from '../../../lib/types';
 import Response from '../Response/Response';
+import useMobile from '../../../lib/hooks/useMobile';
+import starIcon from '../../../public/icons/star.svg';
+import styles from './Question.module.scss';
 
 const Question: FC = () => {
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion>();
@@ -18,6 +22,7 @@ const Question: FC = () => {
   const socket = useContext(SocketContext);
   const timer = useTimer(socket, 'secondes');
   const isCorrect = useRef(false);
+  const isMobile = useMobile();
 
   useEffect(() => {
     socket.on('question', (newQuizQuestion: QuizQuestion) => {
@@ -55,28 +60,48 @@ const Question: FC = () => {
     }
   };
 
-  const renderLives = () => {
-    let hearts = '';
-    for (let i = 0; i < lives; i += 1) {
-      hearts += '💖';
-    }
-    return hearts;
-  };
-
   return (
-    <section>
-      <p>
-        {lives > 0
-          ? renderLives()
-          : 'Eliminé'}
-      </p>
-      <h2>
-        {reveal && lives > 0
-          ? `${isCorrect.current}`
-          : timer}
-      </h2>
-      <h3>{quizQuestion?.question}</h3>
-      <ul>
+    <>
+      <div className={styles.topbar}>
+        <ul className={styles.lives}>
+          <li className={`${styles.star} ${lives === 0 && styles.hidden}`}>
+            <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
+          </li>
+          <li className={`${styles.star} ${lives <= 1 && styles.hidden}`}>
+            <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
+          </li>
+          <li className={`${styles.star} ${lives <= 2 && styles.hidden}`}>
+            <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
+          </li>
+          {lives <= 0 && (
+            <li className={styles.over}>Eliminated</li>
+          )}
+        </ul>
+        <div className={styles.progressbar}>1 / 10</div>
+      </div>
+      <div className={styles.timer}>
+        {reveal && lives > 0 ? (
+          <h3 className={styles.text}>
+            {isCorrect.current ? '👍' : '👎'}
+          </h3>
+        ) : (
+          <h3 className={styles.text}>
+            {timer}
+          </h3>
+        )}
+        <svg className={styles.circles} width="200" height="200" viewBox="0 0 200 200">
+          {reveal && lives > 0 ? (
+            <circle className={isCorrect.current ? styles.correct : styles.false} cx="100" cy="100" r="90" />
+          ) : (
+            <>
+              <circle cx="100" cy="100" r="90" />
+              <circle className={styles.animate} cx="100" cy="100" r="90" />
+            </>
+          )}
+        </svg>
+      </div>
+      <h4 className={styles.question}>{quizQuestion?.question}</h4>
+      <ul className={styles.responses}>
         {quizQuestion?.responses.map((response, index) => (
           <li key={response.id}>
             <Response
@@ -84,12 +109,12 @@ const Question: FC = () => {
               index={index}
               selected={selected}
               select={handleSelect}
-              good={reveal ? quizQuestion.correct === index : undefined}
+              correct={reveal ? quizQuestion.correct === index : undefined}
             />
           </li>
         ))}
       </ul>
-    </section>
+    </>
   );
 };
 
