@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 const CrossIcon: FC = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -13,4 +13,4 @@ const CrossIcon: FC = () => (
   </svg>
 );
 
-export default CrossIcon;
+export default memo(CrossIcon);

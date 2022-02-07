@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 const SmallArrowIcon: FC = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -7,4 +7,4 @@ const SmallArrowIcon: FC = () => (
   </svg>
 );
 
-export default SmallArrowIcon;
+export default memo(SmallArrowIcon);

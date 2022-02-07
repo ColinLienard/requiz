@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 const TrashIcon: FC = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -7,4 +7,4 @@ const TrashIcon: FC = () => (
   </svg>
 );
 
-export default TrashIcon;
+export default memo(TrashIcon);
