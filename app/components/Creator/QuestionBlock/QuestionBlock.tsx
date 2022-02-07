@@ -1,5 +1,10 @@
-import { ChangeEvent, FC, useContext } from 'react';
-import { EditorContext } from '../../../lib/contexts/EditorContext';
+import {
+  ChangeEvent,
+  FC,
+  useCallback,
+  useContext,
+} from 'react';
+import { DispatchQuestionsContext } from '../../../lib/contexts/EditorContext';
 import { QuizQuestion } from '../../../lib/types';
 import ResponseBlock from '../ResponseBlock/ResponseBlock';
 import AutoResizeInput from '../../Common/AutoResizeInput/AutoResizeInput';
@@ -13,29 +18,29 @@ type Props = {
 };
 
 const QuestionBlock: FC<Props> = ({ question, canBeDeleted }) => {
-  const { dispatchQuestions } = useContext(EditorContext);
+  const dispatchQuestions = useContext(DispatchQuestionsContext);
 
-  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = useCallback((event: ChangeEvent<HTMLTextAreaElement>) => {
     dispatchQuestions({
       type: 'modifyQuestion',
       id: question.id,
       value: event.target?.value,
     });
-  };
+  }, []);
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     dispatchQuestions({
       type: 'delete',
       id: question.id,
     });
-  };
+  }, []);
 
-  const handleAddResponse = () => {
+  const handleAddResponse = useCallback(() => {
     dispatchQuestions({
       type: 'addResponse',
       id: question.id,
     });
-  };
+  }, []);
 
   return (
     <section className={styles.questionBlock}>

@@ -1,4 +1,8 @@
-import { useReducer, useState, useMemo } from 'react';
+import {
+  useReducer,
+  useState,
+  useCallback,
+} from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
@@ -7,7 +11,7 @@ import { ObjectId } from 'mongodb';
 import SettingBar from '../../components/Creator/SettingBar/SettingBar';
 import Particules from '../../components/Common/Particules/Particules';
 import QuizEditor from '../../components/Creator/QuizEditor/QuizEditor';
-import { EditorContext, questionsReducer } from '../../lib/contexts/EditorContext';
+import { GetQuestionsContext, DispatchQuestionsContext, questionsReducer } from '../../lib/contexts/EditorContext';
 import QuizStatusIndicator from '../../components/Common/QuizStatusIndicator/QuizStatusIndicator';
 import useMobile from '../../lib/hooks/useMobile';
 import useIntersection from '../../lib/hooks/useIntersection';
@@ -31,13 +35,11 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
   const isMobile = useMobile();
   const intersection = useIntersection(
     isMobile ? 96 : 128,
-    () => setScrolled(true),
-    () => setScrolled(false),
+    useCallback(() => setScrolled(true), []),
+    useCallback(() => setScrolled(false), []),
   );
 
-  const editorContextValue = useMemo(() => ({ questions, dispatchQuestions }), []);
-
-  const saveQuiz = async (publish: boolean) => {
+  const saveQuiz = useCallback(async (publish: boolean) => {
     const response = await fetch('/api/save-quiz', {
       method: 'POST',
       body: JSON.stringify({
@@ -52,25 +54,25 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     } else {
       /* TODO: handle quiz cannot be saved */
     }
-  };
+  }, [settings, questions]);
 
-  const handleSaveQuiz = () => {
+  const handleSaveQuiz = useCallback(() => {
     if (settings?.title !== '') {
       saveQuiz(false);
     } else {
       /* TODO: handle title required */
     }
-  };
+  }, [settings]);
 
-  const publishQuiz = () => {
+  const publishQuiz = useCallback(() => {
     if (settings && questions && questions.length > 3 && isNotEmpty({ ...settings, questions })) {
       saveQuiz(true);
     } else {
       /* TODO: handle quiz cannot be published */
     }
-  };
+  }, [settings, questions]);
 
-  const deleteQuiz = async () => {
+  const deleteQuiz = useCallback(async () => {
     const response = await fetch('/api/delete-quiz', {
       method: 'POST',
       body: quizId,
@@ -80,7 +82,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     } else {
       /* TODO: handle quiz cannot be deleted */
     }
-  };
+  }, []);
 
   return (
     <>
@@ -99,7 +101,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
               <QuizStatusIndicator status={settings?.status} />
             </div>
             {isMobile && (
-              <button className={styles.menu} onClick={() => setSettingBarVisible(true)} type="button">
+              <button className={styles.menu} onClick={useCallback(() => setSettingBarVisible(true), [])} type="button">
                 <MenuIcon />
               </button>
             )}
@@ -110,14 +112,16 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
             </div>
           </header>
           <div className={styles.gradient} />
-          <EditorContext.Provider value={editorContextValue}>
-            <QuizEditor />
-          </EditorContext.Provider>
+          <GetQuestionsContext.Provider value={questions}>
+            <DispatchQuestionsContext.Provider value={dispatchQuestions}>
+              <QuizEditor />
+            </DispatchQuestionsContext.Provider>
+          </GetQuestionsContext.Provider>
         </main>
         <SettingBar
           visible={settingBarVisible}
-          hide={() => setSettingBarVisible(false)}
-          setSettings={setSettings}
+          hide={useCallback(() => setSettingBarVisible(false), [])}
+          setSettings={useCallback(setSettings, [])}
           defaultData={quizData}
         />
       </div>

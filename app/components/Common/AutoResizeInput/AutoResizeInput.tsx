@@ -1,6 +1,7 @@
 import {
   ChangeEvent,
   FC,
+  memo,
   useEffect,
   useRef,
   useState,
@@ -38,4 +39,4 @@ const AutoResizeInput: FC<Props> = ({ value, onChange, placeholder }) => {
   );
 };
 
-export default AutoResizeInput;
+export default memo(AutoResizeInput);
