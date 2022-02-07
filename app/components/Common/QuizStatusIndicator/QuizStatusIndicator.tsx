@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import useQuizStatus from '../../../lib/hooks/useQuizStatus';
 import styles from './QuizStatusIndicator.module.scss';
 
@@ -21,4 +21,4 @@ QuizStatusIndicator.defaultProps = {
   status: undefined,
 };
 
-export default QuizStatusIndicator;
+export default memo(QuizStatusIndicator);

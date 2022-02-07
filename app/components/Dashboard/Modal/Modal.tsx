@@ -76,17 +76,6 @@ const Modal: FC<Props> = ({ quiz, fromUser, onClose }) => {
           </div>
           <p className={styles.description}>{quiz?.description}</p>
           <p className={styles.date}>Starts in <b>{date}</b></p>
-          {/* {data?.status === 'waiting' && (
-            <>
-              <Link href={`/quiz/${id}`}>
-                <a className={styles.button}>Join</a>
-              </Link>
-              <h4 className={styles.title}>Waiting</h4>
-            </>
-          )}
-          {data?.status === 'published' && (
-            <button className={styles.button} type="button">Notify me</button>
-          )} */}
           {fromUser ? (
             <Link href={`/creator/${quiz?._id}`}>
               <a className={styles.button}>Continue</a>
