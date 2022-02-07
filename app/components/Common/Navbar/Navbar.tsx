@@ -71,14 +71,12 @@ const Navbar: FC = () => {
             </Popup>
           </>
         ) : (
-          <>
-            <Link href="/">
-              <a className={styles.logoContainer}>
-                <Image className={styles.logo} src="/icons/logo.svg" width={24} height={24} />
-                <h1 className={styles.hero}>Requiz</h1>
-              </a>
-            </Link>
-          </>
+          <Link href="/">
+            <a className={styles.logoContainer}>
+              <Image className={styles.logo} src="/icons/logo.svg" width={24} height={24} />
+              <h1 className={styles.hero}>Requiz</h1>
+            </a>
+          </Link>
         )}
       </nav>
       {intersection}

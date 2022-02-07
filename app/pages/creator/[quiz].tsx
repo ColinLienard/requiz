@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useReducer, useState, useMemo } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import Head from 'next/head';
@@ -34,6 +34,8 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     () => setScrolled(true),
     () => setScrolled(false),
   );
+
+  const editorContextValue = useMemo(() => ({ questions, dispatchQuestions }), []);
 
   const saveQuiz = async (publish: boolean) => {
     const response = await fetch('/api/save-quiz', {
@@ -108,7 +110,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
             </div>
           </header>
           <div className={styles.gradient} />
-          <EditorContext.Provider value={{ questions, dispatchQuestions }}>
+          <EditorContext.Provider value={editorContextValue}>
             <QuizEditor />
           </EditorContext.Provider>
         </main>
