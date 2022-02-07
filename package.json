@@ -1,13 +1,6 @@
 {
   "name": "requiz",
-  "description": "Online platform where you can compete in live quizzes created by the community.",
-  "version": "1.0.0",
   "private": true,
-  "author": {
-    "name": "Colin Lienard",
-    "email": "colin.lienard87@orange.fr",
-    "url": "https://colin-lienard.fr/"
-  },
   "scripts": {
     "dev:app": "yarn --cwd app dev",
     "dev:server": "yarn --cwd server dev",

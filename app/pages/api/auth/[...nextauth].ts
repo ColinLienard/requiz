@@ -101,11 +101,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => NextAuth(req
       return newSession;
     },
   },
-  adapter: MongoDBAdapter({
-    db: (await clientPromise).db('requiz'),
-  }),
+  adapter: MongoDBAdapter(clientPromise),
   session: {
-    jwt: true,
+    strategy: 'jwt',
   },
   pages: {
     signIn: '/auth/signin',
