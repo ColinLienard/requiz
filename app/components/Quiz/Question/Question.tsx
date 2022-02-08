@@ -1,5 +1,6 @@
 import {
   FC,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -7,12 +8,12 @@ import {
 } from 'react';
 import Image from 'next/image';
 import SocketContext from '../../../lib/contexts/SocketContext';
-import useTimer from '../../../lib/hooks/useTimer';
 import { QuizQuestion } from '../../../lib/types';
 import Response from '../Response/Response';
 import useMobile from '../../../lib/hooks/useMobile';
 import starIcon from '../../../public/icons/star.svg';
 import styles from './Question.module.scss';
+import Timer from '../Timer/Timer';
 
 const Question: FC = () => {
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion>();
@@ -20,7 +21,6 @@ const Question: FC = () => {
   const [reveal, setReveal] = useState(false);
   const [lives, setLives] = useState(3);
   const socket = useContext(SocketContext);
-  const timer = useTimer(socket, 'secondes');
   const isCorrect = useRef(false);
   const isMobile = useMobile();
 
@@ -54,11 +54,11 @@ const Question: FC = () => {
     isCorrect.current = selected === quizQuestion?.correct;
   }, [selected, quizQuestion]);
 
-  const handleSelect = (toSelect: number) => {
+  const handleSelect = useCallback((toSelect: number) => {
     if (!reveal && lives > 0) {
       setSelected(toSelect);
     }
-  };
+  }, [reveal, lives]);
 
   return (
     <>
@@ -79,27 +79,10 @@ const Question: FC = () => {
         </ul>
         <div className={styles.progressbar}>1 / 10</div>
       </div>
-      <div className={styles.timer}>
-        {reveal && lives > 0 ? (
-          <h3 className={styles.text}>
-            {isCorrect.current ? '👍' : '👎'}
-          </h3>
-        ) : (
-          <h3 className={styles.text}>
-            {timer}
-          </h3>
-        )}
-        <svg className={styles.circles} width="200" height="200" viewBox="0 0 200 200">
-          {reveal && lives > 0 ? (
-            <circle className={isCorrect.current ? styles.correct : styles.false} cx="100" cy="100" r="90" />
-          ) : (
-            <>
-              <circle cx="100" cy="100" r="90" />
-              <circle className={styles.animate} cx="100" cy="100" r="90" />
-            </>
-          )}
-        </svg>
-      </div>
+      <Timer
+        showResult={reveal && lives > 0}
+        isCorrect={isCorrect.current}
+      />
       <h4 className={styles.question}>{quizQuestion?.question}</h4>
       <ul className={styles.responses}>
         {quizQuestion?.responses.map((response, index) => (

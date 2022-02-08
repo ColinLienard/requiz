@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -61,7 +61,7 @@ const Quiz: NextPage = () => {
     });
   }, [socket]);
 
-  const renderGameState = () => {
+  const renderGameState = useCallback(() => {
     switch (gameState) {
       case 'waiting':
         return (
@@ -80,7 +80,7 @@ const Quiz: NextPage = () => {
       default:
         return null;
     }
-  };
+  }, [gameState]);
 
   return (
     <>
@@ -104,7 +104,11 @@ const Quiz: NextPage = () => {
             <section className={styles.game}>
               <ActionLines visible={actionLinesVisible} />
               {isMobile && (
-                <button className={styles.menu} type="button" onClick={() => setSidebarVisible((state) => !state)}>
+                <button
+                  className={styles.menu}
+                  type="button"
+                  onClick={() => setSidebarVisible((state) => !state)}
+                >
                   <MenuIcon />
                 </button>
               )}

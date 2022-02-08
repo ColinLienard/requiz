@@ -2,6 +2,7 @@ import {
   useReducer,
   useState,
   useCallback,
+  useMemo,
 } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
@@ -101,7 +102,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
               <QuizStatusIndicator status={settings?.status} />
             </div>
             {isMobile && (
-              <button className={styles.menu} onClick={useCallback(() => setSettingBarVisible(true), [])} type="button">
+              <button className={styles.menu} onClick={() => setSettingBarVisible(true)} type="button">
                 <MenuIcon />
               </button>
             )}
@@ -113,15 +114,15 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
           </header>
           <div className={styles.gradient} />
           <GetQuestionsContext.Provider value={questions}>
-            <DispatchQuestionsContext.Provider value={dispatchQuestions}>
+            <DispatchQuestionsContext.Provider value={useMemo(() => dispatchQuestions, [])}>
               <QuizEditor />
             </DispatchQuestionsContext.Provider>
           </GetQuestionsContext.Provider>
         </main>
         <SettingBar
           visible={settingBarVisible}
-          hide={useCallback(() => setSettingBarVisible(false), [])}
-          setSettings={useCallback(setSettings, [])}
+          hide={() => setSettingBarVisible(false)}
+          setSettings={setSettings}
           defaultData={quizData}
         />
       </div>

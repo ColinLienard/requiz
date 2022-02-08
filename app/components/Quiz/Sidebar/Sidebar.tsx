@@ -1,6 +1,7 @@
 import {
   Dispatch,
   FC,
+  memo,
   SetStateAction,
   useContext,
   useEffect,
@@ -98,7 +99,11 @@ const Sidebar: FC<Props> = ({
     <section className={`${styles.sidebar} ${visible && styles.visible}`}>
       <header className={styles.header}>
         {isMobile && (
-          <button className={styles.cross} type="button" onClick={() => setVisible(false)}>
+          <button
+            className={styles.cross}
+            type="button"
+            onClick={() => setVisible(false)}
+          >
             <CrossIcon />
           </button>
         )}
@@ -148,4 +153,4 @@ const Sidebar: FC<Props> = ({
   );
 };
 
-export default Sidebar;
+export default memo(Sidebar);
