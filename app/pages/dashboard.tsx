@@ -27,8 +27,8 @@ const Dashboard: NextPage<Props> = ({
   user,
   liveQuizzes,
   publishedQuizzes,
-  creators,
   userQuizzes,
+  creators,
 }: Props) => {
   const [modalQuiz, setModalQuiz] = useState<QuizData>();
 
@@ -141,90 +141,102 @@ const Dashboard: NextPage<Props> = ({
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const session = await getSession({ req });
-  if (session) {
-    const client = await clientPromise;
-
-    const liveQuizzes = await client
-      .db()
-      .collection('quizzes')
-      .find(
-        {
-          status: 'waiting',
-        },
-        {
-          projection: {
-            userId: 1,
-            title: 1,
-            theme: 1,
-            description: 1,
-            startDate: 1,
-            peopleIn: 1,
-          },
-        },
-      )
-      .limit(10)
-      .toArray();
-
-    const publishedQuizzes = await client
-      .db()
-      .collection('quizzes')
-      .find(
-        {
-          status: 'published',
-        },
-        {
-          projection: {
-            userId: 1,
-            title: 1,
-            theme: 1,
-            description: 1,
-            startDate: 1,
-          },
-        },
-      )
-      .limit(10)
-      .toArray();
-
-    const creators = await client
-      .db()
-      .collection('users')
-      .find()
-      .limit(10)
-      .toArray();
-
-    const userQuizzes = await client
-      .db()
-      .collection('quizzes')
-      .find(
-        {
-          userId: (session.user as UserFromDB)._id,
-        },
-        {
-          projection: {
-            title: 1,
-            theme: 1,
-            status: 1,
-            startDate: 1,
-          },
-        },
-      )
-      .toArray();
-
+  if (!session) {
     return {
-      props: {
-        user: session.user,
-        liveQuizzes: objectIdToJson(liveQuizzes),
-        publishedQuizzes: objectIdToJson(publishedQuizzes),
-        creators: objectIdToJson(creators),
-        userQuizzes: objectIdToJson(userQuizzes),
+      redirect: {
+        destination: '/',
+        permanent: false,
       },
     };
   }
 
+  const client = await clientPromise;
+
+  const liveQuizzesPromise = client
+    .db()
+    .collection('quizzes')
+    .find(
+      {
+        status: 'waiting',
+      },
+      {
+        projection: {
+          userId: 1,
+          title: 1,
+          theme: 1,
+          description: 1,
+          startDate: 1,
+          peopleIn: 1,
+        },
+      },
+    )
+    .limit(10)
+    .toArray();
+
+  const publishedQuizzesPromise = client
+    .db()
+    .collection('quizzes')
+    .find(
+      {
+        status: 'published',
+      },
+      {
+        projection: {
+          userId: 1,
+          title: 1,
+          theme: 1,
+          description: 1,
+          startDate: 1,
+        },
+      },
+    )
+    .limit(10)
+    .toArray();
+
+  const userQuizzesPromise = client
+    .db()
+    .collection('quizzes')
+    .find(
+      {
+        userId: (session.user as UserFromDB)._id,
+      },
+      {
+        projection: {
+          title: 1,
+          theme: 1,
+          status: 1,
+          startDate: 1,
+        },
+      },
+    )
+    .toArray();
+
+  const creatorsPromise = client
+    .db()
+    .collection('users')
+    .find()
+    .limit(10)
+    .toArray();
+
+  const [
+    liveQuizzes,
+    publishedQuizzes,
+    userQuizzes,
+    creators,
+  ] = await Promise.all([
+    liveQuizzesPromise,
+    publishedQuizzesPromise,
+    userQuizzesPromise,
+    creatorsPromise,
+  ]);
+
   return {
-    redirect: {
-      destination: '/',
-      permanent: false,
+    props: {
+      user: session.user,
+      liveQuizzes: objectIdToJson(liveQuizzes),
+      publishedQuizzes: objectIdToJson(publishedQuizzes),
+      userQuizzes: objectIdToJson(userQuizzes),
+      creators: objectIdToJson(creators),
     },
   };
 };

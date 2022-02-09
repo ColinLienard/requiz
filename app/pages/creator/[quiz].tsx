@@ -169,9 +169,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props: {},
     };
   }
+  const client = await clientPromise;
   if (quiz === 'new') {
     const { _id: userId } = session.user as UserFromDB;
-    const client = await clientPromise;
     const response = await client.db().collection('quizzes').insertOne({ userId });
     const quizId = response.insertedId.toHexString();
     client.close();
@@ -182,7 +182,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  const client = await clientPromise;
   const response: { _id: ObjectId | string } | null = await client
     .db()
     .collection('quizzes')

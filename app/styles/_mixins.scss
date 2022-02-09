@@ -2,7 +2,7 @@
 @use "screens";
 @use "sass:color";
 
-@mixin input($color: variables.$darker) {
+@mixin input($color: rgba(white, 0.04)) {
   display: flex;
   align-items: center;
   gap: 0.5rem;

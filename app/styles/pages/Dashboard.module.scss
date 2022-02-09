@@ -114,7 +114,7 @@
     }
 
     .searchInput {
-      @include mixins.input;
+      @include mixins.input(variables.$dark);
 
       width: 100%;
       padding-left: 3rem;
@@ -124,45 +124,6 @@
       }
     }
   }
-
-  // .planet1 {
-  //   position: absolute;
-  //   top: 10%;
-  //   left: 5%;
-  //   width: 4rem;
-  //   animation: float 10s ease-in-out infinite;
-
-  //   @include screens.laptop {
-  //     left: calc(50% - 28rem);
-  //     width: 6rem;
-  //   }
-  // }
-
-  // .planet2 {
-  //   position: absolute;
-  //   top: 0;
-  //   left: 50%;
-  //   width: 2rem;
-  //   animation: float 8s ease-in-out infinite;
-
-  //   @include screens.laptop {
-  //     left: calc(50% + 16rem);
-  //     width: 3rem;
-  //   }
-  // }
-
-  // .planet3 {
-  //   position: absolute;
-  //   top: 50%;
-  //   right: 5%;
-  //   width: 1.75rem;
-  //   animation: float 6s ease-in-out infinite;
-
-  //   @include screens.laptop {
-  //     left: calc(50% + 32rem);
-  //     width: 2.5rem;
-  //   }
-  // }
 }
 
 .gradient {
