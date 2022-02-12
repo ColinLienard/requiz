@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 const PlusIcon: FC = () => (
   <svg width="25" height="24" viewBox="0 0 25 24" xmlns="http://www.w3.org/2000/svg">
@@ -6,4 +6,4 @@ const PlusIcon: FC = () => (
   </svg>
 );
 
-export default PlusIcon;
+export default memo(PlusIcon);

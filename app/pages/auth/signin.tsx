@@ -1,8 +1,7 @@
-import { FormEvent, useState, useEffect } from 'react';
+import { FormEvent, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { getSession, signIn, getCsrfToken } from 'next-auth/react';
 import authErrorIndex from '../../lib/utils/authErrorIndex';
 import PasswordInput from '../../components/Common/PasswordInput/PasswordInput';
@@ -11,6 +10,7 @@ import styles from '../../styles/pages/Signin.module.scss';
 
 type Props = {
   csrfToken: string,
+  host: string,
 };
 
 type Value = {
@@ -29,14 +29,9 @@ interface SignUpFormData extends EventTarget {
   confirmPassword: Value,
 }
 
-const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
+const SignIn: NextPage<Props> = ({ csrfToken, host }: Props) => {
   const [sign, setSign] = useState<'in' | 'up'>('in');
   const [error, setError] = useState('');
-  const router = useRouter();
-
-  useEffect(() => {
-    router.prefetch('/dashboard');
-  }, []);
 
   const handleSignInSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -45,12 +40,10 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
       csrfToken,
       email: email.value,
       password: password.value,
-      redirect: false,
+      callbackUrl: `${host}/dashboard`,
     }).then((response: { error: string } | undefined) => {
       if (response?.error) {
         setError(response?.error);
-      } else {
-        router.push('/dashboard');
       }
     });
   };
@@ -73,12 +66,10 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
         name: name.value,
         email: email.value,
         password: password.value,
-        redirect: false,
+        callbackUrl: `${host}/dashboard`,
       }).then((response: { error: string } | undefined) => {
         if (response?.error) {
           setError(response?.error);
-        } else {
-          router.push('/dashboard');
         }
       });
     }
@@ -129,7 +120,6 @@ const SignIn: NextPage<Props> = ({ csrfToken }: Props) => {
                   required
                 />
                 <input className={styles.button} type="submit" value="Sign in" />
-                {/* <button className={styles.button} type="submit">Sign in</button> */}
                 <p className={styles.subtext}>Don&apos;t have an account ?</p>
                 <button className={styles.link} onClick={() => setSign('up')} type="button">Sign up.</button>
               </form>
@@ -191,7 +181,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       redirect: {
         permanent: false,
-        destination: '/',
+        destination: '/dashboard',
       },
       props: {},
     };
@@ -200,6 +190,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       csrfToken: await getCsrfToken(context),
+      host: context.req.headers.host,
     },
   };
 };

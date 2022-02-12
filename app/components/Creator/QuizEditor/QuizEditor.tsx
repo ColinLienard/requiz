@@ -1,15 +1,21 @@
-import { FC, useContext } from 'react';
-import { EditorContext } from '../../../lib/contexts/EditorContext';
+import {
+  FC,
+  memo,
+  useCallback,
+  useContext,
+} from 'react';
+import { GetQuestionsContext, DispatchQuestionsContext } from '../../../lib/contexts/EditorContext';
 import PlusIcon from '../../../public/icons/iconComponents/PlusIcon';
 import QuestionBlock from '../QuestionBlock/QuestionBlock';
 import styles from './QuizEditor.module.scss';
 
 const QuizEditor: FC = () => {
-  const { questions, dispatchQuestions } = useContext(EditorContext);
+  const questions = useContext(GetQuestionsContext);
+  const dispatchQuestions = useContext(DispatchQuestionsContext);
 
-  const addQuestion = () => {
+  const addQuestion = useCallback(() => {
     dispatchQuestions({ type: 'add' });
-  };
+  }, []);
 
   return (
     <section className={styles.container}>
@@ -35,4 +41,4 @@ QuizEditor.defaultProps = {
   defaultData: [],
 };
 
-export default QuizEditor;
+export default memo(QuizEditor);

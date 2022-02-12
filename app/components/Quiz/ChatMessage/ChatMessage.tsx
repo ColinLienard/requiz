@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import styles from './ChatMessage.module.scss';
 
 type Props = {
@@ -27,4 +27,4 @@ ChatMessage.defaultProps = {
   author: '',
 };
 
-export default ChatMessage;
+export default memo(ChatMessage);

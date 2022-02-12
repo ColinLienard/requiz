@@ -3,6 +3,7 @@ import {
   FC,
   FocusEvent,
   KeyboardEvent,
+  memo,
   useEffect,
   useRef,
   useState,
@@ -55,4 +56,4 @@ const ChatInput: FC<Props> = ({
   );
 };
 
-export default ChatInput;
+export default memo(ChatInput);

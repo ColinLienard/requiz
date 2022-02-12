@@ -68,7 +68,7 @@
 
     .input,
     .textarea {
-      @include mixins.input(rgba(white, 0.04));
+      @include mixins.input;
 
       width: 100%;
     }

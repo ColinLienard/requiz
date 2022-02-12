@@ -1,4 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC,
+  memo,
+  useEffect,
+  useState,
+} from 'react';
 import Image from 'next/image';
 import { PropsToGetDBData, UserFromDB } from '../../../lib/types';
 import styles from './UserItem.module.scss';
@@ -61,4 +66,4 @@ UserItem.defaultProps = {
   small: false,
 };
 
-export default UserItem;
+export default memo(UserItem);

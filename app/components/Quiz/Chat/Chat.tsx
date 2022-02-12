@@ -7,6 +7,8 @@ import {
   useContext,
   useRef,
   TouchEvent,
+  memo,
+  useCallback,
 } from 'react';
 import Popup from 'react-customizable-popup';
 import ChatMessage from '../ChatMessage/ChatMessage';
@@ -46,10 +48,10 @@ const Chat: FC<Props> = ({
   const messageIndex = useRef(1);
   const chat = useRef<HTMLUListElement>(null);
 
-  const getMessageId = (): number => {
+  const getMessageId = useCallback((): number => {
     messageIndex.current += 1;
     return messageIndex.current;
-  };
+  }, [messageIndex]);
 
   const scrollToBottom = () => chat.current?.scrollTo(0, chat.current.scrollHeight);
 
@@ -87,11 +89,11 @@ const Chat: FC<Props> = ({
     setTimeout(() => scrollToBottom(), 210);
   }, [chatTop]);
 
-  const handleMessageChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleMessageChange = useCallback((event: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value);
-  };
+  }, []);
 
-  const sendMessage = (event: FormEvent<HTMLFormElement> | undefined) => {
+  const sendMessage = useCallback((event: FormEvent<HTMLFormElement> | undefined) => {
     if (event) {
       event.preventDefault();
     }
@@ -104,7 +106,7 @@ const Chat: FC<Props> = ({
       }]);
       setMessage('');
     }
-  };
+  }, [message]);
 
   const handleDrag = (event: TouchEvent<HTMLElement>) => {
     switch (event.type) {
@@ -178,7 +180,7 @@ const Chat: FC<Props> = ({
         <ChatInput
           message={message}
           onChange={handleMessageChange}
-          onFocus={() => (isMobile ? setChatTop(minChatTop) : null)}
+          onFocus={useCallback(() => (isMobile ? setChatTop(minChatTop) : null), [])}
           onSubmit={sendMessage}
         />
       </form>
@@ -186,4 +188,4 @@ const Chat: FC<Props> = ({
   );
 };
 
-export default Chat;
+export default memo(Chat);

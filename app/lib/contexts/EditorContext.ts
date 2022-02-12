@@ -114,10 +114,6 @@ export const questionsReducer = (state: QuizQuestion[] | undefined, action: Ques
   }
 };
 
-export const EditorContext = createContext<{
-  questions: QuizQuestion[] | undefined,
-  dispatchQuestions: Dispatch<QuestionsAction>
-}>({
-  questions: undefined,
-  dispatchQuestions: () => null,
-});
+export const GetQuestionsContext = createContext<QuizQuestion[] | undefined>(undefined);
+
+export const DispatchQuestionsContext = createContext<Dispatch<QuestionsAction>>(() => null);

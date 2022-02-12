@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
@@ -17,8 +17,8 @@ const Navbar: FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const intersection = useIntersection(
     isMobile ? 128 : 192,
-    () => setScrolled(true),
-    () => setScrolled(false),
+    useCallback(() => setScrolled(true), []),
+    useCallback(() => setScrolled(false), []),
   );
 
   return (

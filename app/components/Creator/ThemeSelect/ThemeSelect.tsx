@@ -1,4 +1,9 @@
-import { FC, useRef, useState } from 'react';
+import {
+  FC,
+  memo,
+  useRef,
+  useState,
+} from 'react';
 import Popup, { PopupHandle } from 'react-customizable-popup';
 import useQuizTheme, { themes } from '../../../lib/hooks/useQuizTheme';
 import { QuizThemes } from '../../../lib/types';
@@ -76,4 +81,4 @@ ThemeSelect.defaultProps = {
   defaultValue: undefined,
 };
 
-export default ThemeSelect;
+export default memo(ThemeSelect);

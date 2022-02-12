@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 const MenuIcon: FC = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -9,4 +9,4 @@ const MenuIcon: FC = () => (
   </svg>
 );
 
-export default MenuIcon;
+export default memo(MenuIcon);

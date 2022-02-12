@@ -2,7 +2,9 @@ import {
   ChangeEvent,
   Dispatch,
   FC,
+  memo,
   SetStateAction,
+  useCallback,
 } from 'react';
 import Link from 'next/link';
 import useMobile from '../../../lib/hooks/useMobile';
@@ -33,12 +35,12 @@ const SettingBar: FC<Props> = ({
     }));
   };
 
-  const handleThemeChange = (value: QuizThemes) => {
+  const handleThemeChange = useCallback((value: QuizThemes) => {
     setSettings((settings) => ({
       ...settings,
       theme: value,
     }));
-  };
+  }, []);
 
   return (
     <aside className={`${styles.settingBar} ${visible && styles.visible}`}>
@@ -111,4 +113,4 @@ SettingBar.defaultProps = {
   defaultData: {},
 };
 
-export default SettingBar;
+export default memo(SettingBar);

@@ -13,16 +13,6 @@
   }
 }
 
-@keyframes rotate {
-  0% {
-    stroke-dashoffset: calc((100 * 6) - ((100 * 6) * 0) / 100);
-  }
-
-  100% {
-    stroke-dashoffset: calc((100 * 6) - ((100 * 6) * 100) / 100);
-  }
-}
-
 .topbar {
   display: flex;
   align-items: center;
@@ -104,59 +94,6 @@
       border-radius: variables.$radius;
       clip-path: inset(0 80% 0 0);
       z-index: -1;
-    }
-  }
-}
-
-.timer {
-  @include typography.heading2;
-
-  width: 3.5rem;
-  height: 3.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-
-  @include screens.laptop {
-    width: 4rem;
-    height: 4rem;
-    margin-top: 3rem;
-  }
-
-  .text {
-    @include typography.heading2;
-  }
-
-  .circles {
-    position: absolute;
-    transform: rotate(-90deg);
-
-    circle {
-      stroke-width: 10px;
-      fill: none;
-
-      &:nth-of-type(1) {
-        stroke: rgba(variables.$orange, 0.5);
-      }
-
-      &:nth-of-type(2) {
-        stroke: variables.$orange;
-        z-index: 1;
-        stroke-dasharray: calc(100 * 6);
-      }
-
-      &.correct {
-        stroke: variables.$green;
-      }
-
-      &.false {
-        stroke: variables.$red;
-      }
-
-      &.animate {
-        animation: rotate 6s linear;
-      }
     }
   }
 }

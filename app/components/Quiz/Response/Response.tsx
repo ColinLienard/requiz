@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import styles from './Response.module.scss';
 
 type Props = {
@@ -30,4 +30,4 @@ Response.defaultProps = {
   correct: false,
 };
 
-export default Response;
+export default memo(Response);
