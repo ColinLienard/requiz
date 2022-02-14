@@ -7,7 +7,9 @@ import {
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { signIn, getCsrfToken } from 'next-auth/react';
+import Alert, { AlertHandle } from '../../components/Common/Alert/Alert';
 import authErrorIndex from '../../lib/utils/authErrorIndex';
 import PasswordInput from '../../components/Common/PasswordInput/PasswordInput';
 import Particules from '../../components/Common/Particules/Particules';
@@ -32,6 +34,8 @@ interface SignUpFormData extends EventTarget {
 const SignIn: NextPage = () => {
   const [sign, setSign] = useState<'in' | 'up'>('in');
   const [error, setError] = useState('');
+  const alert = useRef<AlertHandle>(null);
+  const router = useRouter();
   const csrfToken = useRef('');
   const callbackUrl = useRef('');
 
@@ -42,8 +46,16 @@ const SignIn: NextPage = () => {
         csrfToken.current = token;
       }
     })();
+
     callbackUrl.current = `${window.location.origin}/dashboard`;
   }, []);
+
+  useEffect(() => {
+    if (router.query.error) {
+      setError(router.query.error as string);
+      alert.current?.show();
+    }
+  }, [router.query]);
 
   const handleSignInSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -53,10 +65,6 @@ const SignIn: NextPage = () => {
       email: email.value,
       password: password.value,
       callbackUrl: callbackUrl.current,
-    }).then((response: { error: string } | undefined) => {
-      if (response?.error) {
-        setError(response?.error);
-      }
     });
   };
 
@@ -70,8 +78,10 @@ const SignIn: NextPage = () => {
     } = event.target as SignUpFormData;
     if (password.value.length && password.value.length < 8) {
       setError('password-not-long-enough');
+      alert.current?.show();
     } else if (password.value !== confirmPassword.value) {
       setError('passwords-do-not-match');
+      alert.current?.show();
     } else {
       signIn('signup', {
         csrfToken,
@@ -79,10 +89,6 @@ const SignIn: NextPage = () => {
         email: email.value,
         password: password.value,
         callbackUrl: callbackUrl.current,
-      }).then((response: { error: string } | undefined) => {
-        if (response?.error) {
-          setError(response?.error);
-        }
       });
     }
   };
@@ -95,8 +101,12 @@ const SignIn: NextPage = () => {
       </Head>
 
       <Particules />
-      <strong style={{ color: 'red' }}>{authErrorIndex[error]}</strong>
       <main className={styles.main}>
+        <Alert
+          type="error"
+          text={authErrorIndex[error]}
+          ref={alert}
+        />
         <div className={styles.wrapper}>
           <div className={styles.gradient} />
           <h2 className={styles.hero}>{sign === 'in' ? 'Sign in' : 'Sign up'}</h2>
