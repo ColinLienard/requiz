@@ -33,7 +33,6 @@ interface SignUpFormData extends EventTarget {
 
 const SignIn: NextPage = () => {
   const [sign, setSign] = useState<'in' | 'up'>('in');
-  const [error, setError] = useState('');
   const alert = useRef<AlertHandle>(null);
   const router = useRouter();
   const csrfToken = useRef('');
@@ -52,8 +51,7 @@ const SignIn: NextPage = () => {
 
   useEffect(() => {
     if (router.query.error) {
-      setError(router.query.error as string);
-      alert.current?.show();
+      alert.current?.setContent(authErrorIndex[router.query.error as string]);
     }
   }, [router.query]);
 
@@ -77,11 +75,9 @@ const SignIn: NextPage = () => {
       confirmPassword,
     } = event.target as SignUpFormData;
     if (password.value.length && password.value.length < 8) {
-      setError('password-not-long-enough');
-      alert.current?.show();
+      alert.current?.setContent(authErrorIndex['password-not-long-enough']);
     } else if (password.value !== confirmPassword.value) {
-      setError('passwords-do-not-match');
-      alert.current?.show();
+      alert.current?.setContent(authErrorIndex['passwords-do-not-match']);
     } else {
       signIn('signup', {
         csrfToken,
@@ -102,11 +98,7 @@ const SignIn: NextPage = () => {
 
       <Particules />
       <main className={styles.main}>
-        <Alert
-          type="error"
-          text={authErrorIndex[error]}
-          ref={alert}
-        />
+        <Alert ref={alert} />
         <div className={styles.wrapper}>
           <div className={styles.gradient} />
           <h2 className={styles.hero}>{sign === 'in' ? 'Sign in' : 'Sign up'}</h2>

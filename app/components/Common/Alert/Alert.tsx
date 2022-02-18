@@ -1,24 +1,28 @@
 import {
+  Dispatch,
   forwardRef,
+  memo,
+  SetStateAction,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
 } from 'react';
+import CheckIcon from '../../../public/icons/iconComponents/CheckIcon';
 import WarningIcon from '../../../public/icons/iconComponents/WarningIcon';
 import styles from './Alert.module.scss';
-
-type Props = {
-  type: 'error' | 'success',
-  text: string,
-};
 
 export type AlertHandle = {
   show: () => void,
   hide: () => void,
+  setContent: Dispatch<SetStateAction<string>>,
+  setType: Dispatch<SetStateAction<'error' | 'success'>>,
 };
 
-const Alert = forwardRef<AlertHandle, Props>(({ type, text }: Props, forwardedRef) => {
+const Alert = forwardRef<AlertHandle>((props, forwardedRef) => {
   const [visible, setVisible] = useState(false);
+  const [content, setContent] = useState('');
+  const [type, setType] = useState<'error' | 'success'>('error');
   const interval = useRef<NodeJS.Timer | null>(null);
 
   const show = () => {
@@ -38,7 +42,15 @@ const Alert = forwardRef<AlertHandle, Props>(({ type, text }: Props, forwardedRe
   useImperativeHandle(forwardedRef, () => ({
     show,
     hide,
+    setContent,
+    setType,
   }));
+
+  useEffect(() => {
+    if (content) {
+      show();
+    }
+  }, [content]);
 
   return (
     <div
@@ -47,13 +59,17 @@ const Alert = forwardRef<AlertHandle, Props>(({ type, text }: Props, forwardedRe
       role="button"
       aria-hidden="true"
     >
-      <WarningIcon />
+      {type === 'error' ? (
+        <WarningIcon />
+      ) : (
+        <CheckIcon />
+      )}
       <div className={styles.textContainer}>
         <p className={styles.title}>{type === 'error' ? 'Error' : 'Success'}</p>
-        <p className={styles.text}>{text}</p>
+        <p className={styles.text}>{content}</p>
       </div>
     </div>
   );
 });
 
-export default Alert;
+export default memo(Alert);
