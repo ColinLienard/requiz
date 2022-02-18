@@ -3,6 +3,7 @@ import {
   useState,
   useCallback,
   useMemo,
+  useRef,
 } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
@@ -12,6 +13,7 @@ import { ObjectId } from 'mongodb';
 import SettingBar from '../../components/Creator/SettingBar/SettingBar';
 import Particules from '../../components/Common/Particules/Particules';
 import QuizEditor from '../../components/Creator/QuizEditor/QuizEditor';
+import Alert, { AlertHandle } from '../../components/Common/Alert/Alert';
 import { GetQuestionsContext, DispatchQuestionsContext, questionsReducer } from '../../lib/contexts/EditorContext';
 import QuizStatusIndicator from '../../components/Common/QuizStatusIndicator/QuizStatusIndicator';
 import useMobile from '../../lib/hooks/useMobile';
@@ -32,6 +34,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
   const [questions, dispatchQuestions] = useReducer(questionsReducer, quizData?.questions);
   const [settingBarVisible, setSettingBarVisible] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const alert = useRef<AlertHandle>(null);
   const router = useRouter();
   const isMobile = useMobile();
   const intersection = useIntersection(
@@ -51,9 +54,11 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
       }),
     });
     if (response.ok) {
-      /* TODO: handle quiz is saved */
+      alert.current?.setType('success');
+      alert.current?.setContent(`Your quiz has been ${publish ? 'published' : 'saved'} !`);
     } else {
-      /* TODO: handle quiz cannot be saved */
+      alert.current?.setType('error');
+      alert.current?.setContent('Your quiz cannot be saved for an unknown reason...');
     }
   }, [settings, questions]);
 
@@ -61,7 +66,8 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     if (settings?.title !== '') {
       saveQuiz(false);
     } else {
-      /* TODO: handle title required */
+      alert.current?.setType('error');
+      alert.current?.setContent('You must a least provide a title for your quiz to be saved.');
     }
   }, [settings]);
 
@@ -69,7 +75,8 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     if (settings && questions && questions.length > 3 && isNotEmpty({ ...settings, questions })) {
       saveQuiz(true);
     } else {
-      /* TODO: handle quiz cannot be published */
+      alert.current?.setType('error');
+      alert.current?.setContent('Your quiz cannot be published. Make sure that all fields are completed and that you have created at list 3 questions.');
     }
   }, [settings, questions]);
 
@@ -81,7 +88,8 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     if (response.ok) {
       router.push('/?alert=quiz-succesfully-deleted', '/');
     } else {
-      /* TODO: handle quiz cannot be deleted */
+      alert.current?.setType('error');
+      alert.current?.setContent('Your quiz cannot be deleted for an unknown reason...');
     }
   }, []);
 
@@ -96,6 +104,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
       <div className={styles.wrapper}>
         <main className={styles.main}>
           {intersection}
+          <Alert ref={alert} />
           <header className={`${styles.header} ${scrolled && styles.background}`}>
             <div className={styles.heroContainer}>
               <h1 className={styles.hero}>{settings?.title || 'Your new quiz'}</h1>

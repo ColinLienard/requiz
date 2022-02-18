@@ -30,7 +30,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         peopleIn: 0,
       },
     });
-  if (response.modifiedCount) {
+  if (response.acknowledged) {
     res.status(200).end();
   } else {
     res.status(400).end();
