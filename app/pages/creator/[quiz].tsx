@@ -63,7 +63,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
   }, [settings, questions]);
 
   const handleSaveQuiz = useCallback(() => {
-    if (settings?.title !== '') {
+    if (settings?.title && settings?.title !== '') {
       saveQuiz(false);
     } else {
       alert.current?.setType('error');
@@ -86,7 +86,7 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
       body: quizId,
     });
     if (response.ok) {
-      router.push('/?alert=quiz-succesfully-deleted', '/');
+      router.push('/dashboard?alert=quiz-succesfully-deleted', '/dashboard');
     } else {
       alert.current?.setType('error');
       alert.current?.setContent('Your quiz cannot be deleted for an unknown reason...');

@@ -40,6 +40,9 @@ const Dashboard: NextPage<Props> = ({
   useEffect(() => {
     if (router.query.error) {
       alert.current?.setContent(quizErrorIndex[router.query.error as string]);
+    } else if (router.query.alert) {
+      alert.current?.setType('success');
+      alert.current?.setContent('Your quiz has been successfully deleted.');
     }
   }, [router.query]);
 
