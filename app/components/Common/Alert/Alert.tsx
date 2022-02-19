@@ -3,7 +3,6 @@ import {
   forwardRef,
   memo,
   SetStateAction,
-  useEffect,
   useImperativeHandle,
   useRef,
   useState,
@@ -15,7 +14,7 @@ import styles from './Alert.module.scss';
 export type AlertHandle = {
   show: () => void,
   hide: () => void,
-  setContent: Dispatch<SetStateAction<string>>,
+  setContent: (state: string) => void,
   setType: Dispatch<SetStateAction<'error' | 'success'>>,
 };
 
@@ -42,15 +41,12 @@ const Alert = forwardRef<AlertHandle>((props, forwardedRef) => {
   useImperativeHandle(forwardedRef, () => ({
     show,
     hide,
-    setContent,
+    setContent: (state: string) => {
+      setContent(state);
+      show();
+    },
     setType,
   }));
-
-  useEffect(() => {
-    if (content) {
-      show();
-    }
-  }, [content]);
 
   return (
     <div

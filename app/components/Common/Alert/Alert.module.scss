@@ -32,17 +32,23 @@
 .alert {
   position: fixed;
   top: -6rem;
+  left: 50%;
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 1rem;
   border-radius: variables.$radius;
   width: min(calc(100% - 3rem), 32rem);
+  transform: translateX(-50%);
   z-index: 999;
   transition: top 0.3s cubic-bezier(0.5, 0, 1, 0.5);
 
   &.visible {
     top: 1.5rem;
+  }
+
+  svg {
+    fill: currentcolor;
   }
 
   &.error {
@@ -53,19 +59,11 @@
       transition: top 0.3s cubic-bezier(0, 0.5, 0.5, 1);
       animation: shake 0.6s linear;
     }
-
-    svg {
-      fill: white;
-    }
   }
 
   &.success {
     background-color: variables.$green;
     color: variables.$dark;
-
-    svg {
-      fill: variables.$dark;
-    }
   }
 
   .title {
