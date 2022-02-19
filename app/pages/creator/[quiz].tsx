@@ -54,11 +54,15 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
       }),
     });
     if (response.ok) {
-      alert.current?.setType('success');
-      alert.current?.setContent(`Your quiz has been ${publish ? 'published' : 'saved'} !`);
+      alert.current?.alert(
+        `Your quiz has been ${publish ? 'published' : 'saved'} !`,
+        'success',
+      );
     } else {
-      alert.current?.setType('error');
-      alert.current?.setContent('Your quiz cannot be saved for an unknown reason...');
+      alert.current?.alert(
+        'Your quiz cannot be saved for an unknown reason...',
+        'error',
+      );
     }
   }, [settings, questions]);
 
@@ -66,8 +70,10 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     if (settings?.title && settings?.title !== '') {
       saveQuiz(false);
     } else {
-      alert.current?.setType('error');
-      alert.current?.setContent('You must a least provide a title for your quiz to be saved.');
+      alert.current?.alert(
+        'You must a least provide a title for your quiz to be saved.',
+        'error',
+      );
     }
   }, [settings]);
 
@@ -75,8 +81,10 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     if (settings && questions && questions.length > 3 && isNotEmpty({ ...settings, questions })) {
       saveQuiz(true);
     } else {
-      alert.current?.setType('error');
-      alert.current?.setContent('Your quiz cannot be published. Make sure that all fields are completed and that you have created at list 3 questions.');
+      alert.current?.alert(
+        'Your quiz cannot be published. Make sure that all fields are completed and that you have created at list 3 questions.',
+        'error',
+      );
     }
   }, [settings, questions]);
 
@@ -88,8 +96,12 @@ const Creator: NextPage<Props> = ({ quizId, quizData }: Props) => {
     if (response.ok) {
       router.push('/dashboard?alert=quiz-succesfully-deleted', '/dashboard');
     } else {
-      alert.current?.setType('error');
-      alert.current?.setContent('Your quiz cannot be deleted for an unknown reason...');
+      // alert.current?.setType('error');
+      // alert.current?.setContent('Your quiz cannot be deleted for an unknown reason...');
+      alert.current?.alert(
+        'Your quiz cannot be deleted for an unknown reason...',
+        'error',
+      );
     }
   }, []);
 

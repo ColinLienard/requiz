@@ -51,7 +51,10 @@ const SignIn: NextPage = () => {
 
   useEffect(() => {
     if (router.query.error) {
-      alert.current?.setContent(authErrorIndex[router.query.error as string]);
+      alert.current?.alert(
+        authErrorIndex[router.query.error as string],
+        'error',
+      );
     }
   }, [router.query]);
 
@@ -75,9 +78,15 @@ const SignIn: NextPage = () => {
       confirmPassword,
     } = event.target as SignUpFormData;
     if (password.value.length && password.value.length < 8) {
-      alert.current?.setContent(authErrorIndex['password-not-long-enough']);
+      alert.current?.alert(
+        authErrorIndex['password-not-long-enough'],
+        'error',
+      );
     } else if (password.value !== confirmPassword.value) {
-      alert.current?.setContent(authErrorIndex['passwords-do-not-match']);
+      alert.current?.alert(
+        authErrorIndex['passwords-do-not-match'],
+        'error',
+      );
     } else {
       signIn('signup', {
         csrfToken,

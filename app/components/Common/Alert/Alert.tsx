@@ -1,8 +1,6 @@
 import {
-  Dispatch,
   forwardRef,
   memo,
-  SetStateAction,
   useImperativeHandle,
   useRef,
   useState,
@@ -12,10 +10,7 @@ import WarningIcon from '../../../public/icons/iconComponents/WarningIcon';
 import styles from './Alert.module.scss';
 
 export type AlertHandle = {
-  show: () => void,
-  hide: () => void,
-  setContent: (state: string) => void,
-  setType: Dispatch<SetStateAction<'error' | 'success'>>,
+  alert: (newContent: string, newType: 'error' | 'success') => void,
 };
 
 const Alert = forwardRef<AlertHandle>((props, forwardedRef) => {
@@ -39,13 +34,11 @@ const Alert = forwardRef<AlertHandle>((props, forwardedRef) => {
   };
 
   useImperativeHandle(forwardedRef, () => ({
-    show,
-    hide,
-    setContent: (state: string) => {
-      setContent(state);
+    alert: (newContent: string, newType: 'error' | 'success') => {
+      setType(newType);
+      setContent(newContent);
       show();
     },
-    setType,
   }));
 
   return (
