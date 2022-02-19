@@ -107,5 +107,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => NextAuth(req
   },
   pages: {
     signIn: '/auth/signin',
+    error: '/auth/signin',
   },
 });

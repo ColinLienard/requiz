@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Popup from 'react-customizable-popup';
 import UserItem from '../../Common/UserItem/UserItem';
 import CrossIcon from '../../../public/icons/iconComponents/CrossIcon';
@@ -41,6 +42,7 @@ const Sidebar: FC<Props> = ({
   const socket = useContext(SocketContext);
   const [data, setData] = useState<QuizData>({});
   const quizTheme = useQuizTheme(data.theme);
+  const router = useRouter();
   const isMobile = useMobile();
 
   useEffect(() => {
@@ -62,6 +64,8 @@ const Sidebar: FC<Props> = ({
       if (response.ok) {
         const newData: QuizData = await response.json();
         setData(newData);
+      } else {
+        router.push('/dashboard?error=game-does-not-exist', '/dashboard');
       }
     })();
 

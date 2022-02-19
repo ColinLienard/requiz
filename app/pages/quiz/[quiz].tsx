@@ -47,12 +47,8 @@ const Quiz: NextPage = () => {
     socket?.on('connect', () => {
       setConnected(true);
 
-      socket?.on('game-started', () => {
-        // router.push('/?error=game-started', '/');
-      });
-
-      socket?.on('game-full', () => {
-        // router.push('/?error=game-full', '/');
+      socket?.on('error', (error: string) => {
+        router.push(`/dashboard?error=${error}`, '/dashboard');
       });
 
       socket?.on('game-state', (newGameState: GameState) => {

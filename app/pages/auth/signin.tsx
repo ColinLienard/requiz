@@ -1,17 +1,19 @@
-import { FormEvent, useState } from 'react';
-import { GetServerSideProps, NextPage } from 'next';
+import {
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { getSession, signIn, getCsrfToken } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { signIn, getCsrfToken } from 'next-auth/react';
+import Alert, { AlertHandle } from '../../components/Common/Alert/Alert';
 import authErrorIndex from '../../lib/utils/authErrorIndex';
 import PasswordInput from '../../components/Common/PasswordInput/PasswordInput';
 import Particules from '../../components/Common/Particules/Particules';
 import styles from '../../styles/pages/Signin.module.scss';
-
-type Props = {
-  csrfToken: string,
-  host: string,
-};
 
 type Value = {
   value: string,
@@ -29,9 +31,32 @@ interface SignUpFormData extends EventTarget {
   confirmPassword: Value,
 }
 
-const SignIn: NextPage<Props> = ({ csrfToken, host }: Props) => {
+const SignIn: NextPage = () => {
   const [sign, setSign] = useState<'in' | 'up'>('in');
-  const [error, setError] = useState('');
+  const alert = useRef<AlertHandle>(null);
+  const router = useRouter();
+  const csrfToken = useRef('');
+  const callbackUrl = useRef('');
+
+  useEffect(() => {
+    (async () => {
+      const token = await getCsrfToken();
+      if (token) {
+        csrfToken.current = token;
+      }
+    })();
+
+    callbackUrl.current = `${window.location.origin}/dashboard`;
+  }, []);
+
+  useEffect(() => {
+    if (router.query.error) {
+      alert.current?.alert(
+        authErrorIndex[router.query.error as string],
+        'error',
+      );
+    }
+  }, [router.query]);
 
   const handleSignInSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -40,11 +65,7 @@ const SignIn: NextPage<Props> = ({ csrfToken, host }: Props) => {
       csrfToken,
       email: email.value,
       password: password.value,
-      callbackUrl: `${host}/dashboard`,
-    }).then((response: { error: string } | undefined) => {
-      if (response?.error) {
-        setError(response?.error);
-      }
+      callbackUrl: callbackUrl.current,
     });
   };
 
@@ -57,20 +78,22 @@ const SignIn: NextPage<Props> = ({ csrfToken, host }: Props) => {
       confirmPassword,
     } = event.target as SignUpFormData;
     if (password.value.length && password.value.length < 8) {
-      setError('password-not-long-enough');
+      alert.current?.alert(
+        authErrorIndex['password-not-long-enough'],
+        'error',
+      );
     } else if (password.value !== confirmPassword.value) {
-      setError('passwords-do-not-match');
+      alert.current?.alert(
+        authErrorIndex['passwords-do-not-match'],
+        'error',
+      );
     } else {
       signIn('signup', {
         csrfToken,
         name: name.value,
         email: email.value,
         password: password.value,
-        callbackUrl: `${host}/dashboard`,
-      }).then((response: { error: string } | undefined) => {
-        if (response?.error) {
-          setError(response?.error);
-        }
+        callbackUrl: callbackUrl.current,
       });
     }
   };
@@ -83,17 +106,25 @@ const SignIn: NextPage<Props> = ({ csrfToken, host }: Props) => {
       </Head>
 
       <Particules />
-      <strong style={{ color: 'red' }}>{authErrorIndex[error]}</strong>
       <main className={styles.main}>
+        <Alert ref={alert} />
         <div className={styles.wrapper}>
           <div className={styles.gradient} />
           <h2 className={styles.hero}>{sign === 'in' ? 'Sign in' : 'Sign up'}</h2>
           <aside className={styles.buttonContainer}>
-            <button className={`${styles.iconButton} ${styles.discord}`} type="button" onClick={() => signIn('discord')}>
+            <button
+              className={`${styles.iconButton} ${styles.discord}`}
+              type="button"
+              onClick={() => signIn('discord', { callbackUrl: callbackUrl.current })}
+            >
               Continue with
               <Image src="/icons/discord.svg" width={24} height={18} />
             </button>
-            <button className={`${styles.iconButton} ${styles.google}`} type="button" onClick={() => signIn('google')}>
+            <button
+              className={`${styles.iconButton} ${styles.google}`}
+              type="button"
+              onClick={() => signIn('google', { callbackUrl: callbackUrl.current })}
+            >
               Continue with
               <Image src="/icons/google.svg" width={18} height={18} />
             </button>
@@ -101,7 +132,6 @@ const SignIn: NextPage<Props> = ({ csrfToken, host }: Props) => {
           {sign === 'in' && (
             <section>
               <form className={styles.form} method="post" action="/api/auth/callback/signin" onSubmit={handleSignInSubmit}>
-                <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
                 <label className={styles.label} htmlFor="signInEmail">Email</label>
                 <input
                   className={styles.input}
@@ -128,7 +158,6 @@ const SignIn: NextPage<Props> = ({ csrfToken, host }: Props) => {
           {sign === 'up' && (
             <section>
               <form className={styles.form} method="post" action="/api/auth/callback/signup" onSubmit={handleSignUpSubmit}>
-                <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
                 <label className={styles.label} htmlFor="signUpName">Name</label>
                 <input
                   className={styles.input}
@@ -173,26 +202,6 @@ const SignIn: NextPage<Props> = ({ csrfToken, host }: Props) => {
       </main>
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (session) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/dashboard',
-      },
-      props: {},
-    };
-  }
-
-  return {
-    props: {
-      csrfToken: await getCsrfToken(context),
-      host: context.req.headers.host,
-    },
-  };
 };
 
 export default SignIn;

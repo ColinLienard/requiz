@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/react';
 import clientPromise from '../lib/utils/mongodb';
 import Game from '../components/Dashboard/Game/Game';
@@ -11,9 +12,11 @@ import Modal from '../components/Dashboard/Modal/Modal';
 import Particules from '../components/Common/Particules/Particules';
 import SearchIcon from '../public/icons/iconComponents/SearchIcon';
 import objectIdToJson from '../lib/utils/objectIdToJson';
+import quizErrorIndex from '../lib/utils/quizErrorIndex';
 import { QuizData, UserFromDB } from '../lib/types';
 import PlusIcon from '../public/icons/iconComponents/PlusIcon';
 import styles from '../styles/pages/Dashboard.module.scss';
+import Alert, { AlertHandle } from '../components/Common/Alert/Alert';
 
 type Props = {
   user: UserFromDB,
@@ -31,6 +34,22 @@ const Dashboard: NextPage<Props> = ({
   creators,
 }: Props) => {
   const [modalQuiz, setModalQuiz] = useState<QuizData>();
+  const alert = useRef<AlertHandle>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.error) {
+      alert.current?.alert(
+        quizErrorIndex[router.query.error as string],
+        'error',
+      );
+    } else if (router.query.alert) {
+      alert.current?.alert(
+        'Your quiz has been successfully deleted.',
+        'success',
+      );
+    }
+  }, [router.query]);
 
   return (
     <>
@@ -40,6 +59,7 @@ const Dashboard: NextPage<Props> = ({
       </Head>
 
       <Particules />
+      <Alert ref={alert} />
       <div className={styles.backgroundimage}>
         <Image src="/images/landscape.svg" width={1057} height={333} priority />
       </div>

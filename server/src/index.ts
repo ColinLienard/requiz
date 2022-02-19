@@ -33,8 +33,7 @@ io.on('connection', (socket: Socket) => {
     if (!getRoom(roomId)) {
       const roomData = await createRoom(roomId);
       if (!roomData) {
-        io.to(socket.id).emit('game-full');
-        /* TODO: handle error */
+        io.to(socket.id).emit('error', 'game-does-not-exist');
       }
 
       socket.join(roomId);
@@ -49,10 +48,10 @@ io.on('connection', (socket: Socket) => {
       });
     } else if (getRoom(roomId).state !== 'waiting') {
       // If the game is started, redirect user to home
-      io.to(socket.id).emit('game-started');
+      io.to(socket.id).emit('error', 'game-started');
     } else if (getUsers(roomId).length === maxUsers) {
       // If the game is full, redirect user to home
-      io.to(socket.id).emit('game-full');
+      io.to(socket.id).emit('error', 'game-full');
     } else {
       socket.join(roomId);
       addUser(userName, userId, socket.id, roomId);
