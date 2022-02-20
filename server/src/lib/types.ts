@@ -3,7 +3,8 @@ export type User = {
   id: string,
   socketId: string,
   roomId: string,
-  lives: number
+  lives: number,
+  master?: boolean,
 }
 
 export type RoomState = 'published' | 'waiting' | 'playing'
@@ -22,6 +23,7 @@ export type QuizQuestion = {
 
 export type Room = {
   id: string,
+  userId: string,
   state: RoomState,
   timer: NodeJS.Timer | null,
   title: string,
@@ -30,5 +32,5 @@ export type Room = {
   maxPlayers: number,
   startDate: number,
   questions: QuizQuestion[],
-  peopleIn: number
+  peopleIn?: number
 }

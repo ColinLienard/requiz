@@ -8,6 +8,7 @@ export type User = {
   name: string,
   id: string,
   lives: number,
+  master?: boolean,
 };
 
 export type UserFromDB = {

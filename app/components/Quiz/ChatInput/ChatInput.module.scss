@@ -4,7 +4,7 @@
 @use "../../../styles/screens";
 
 .input {
-  @include mixins.input;
+  @include mixins.input(transparent);
 
   width: 100%;
   border: 1px solid rgba(white, 0.2);

@@ -30,23 +30,32 @@ io.on('connection', (socket: Socket) => {
     { userName, userId, roomId }:
     { userName: string, userId: string, roomId: string },
   ) => {
-    if (!getRoom(roomId)) {
+    const room = getRoom(roomId);
+    if (!room) {
       const roomData = await createRoom(roomId);
       if (!roomData) {
         io.to(socket.id).emit('error', 'game-does-not-exist');
       }
 
       socket.join(roomId);
-      addUser(userName, userId, socket.id, roomId);
+      addUser(userName, userId, socket.id, roomId, roomData?.userId === userId);
       listenToResponses(io, socket);
 
-      startTimer(io, roomId, 5, () => {
+      startTimer(io, roomId, 600, () => {
         // After the waiting room
         updateRoomState(roomId, 'playing');
         io.to(roomId).emit('game-state', 'playing');
         startQuiz(io, socket, roomId);
       });
-    } else if (getRoom(roomId).state !== 'waiting') {
+    } else if (room.userId === userId) {
+      // If the user is the creator, make him join as the master
+      socket.join(roomId);
+      addUser(userName, userId, socket.id, roomId, true);
+      listenToResponses(io, socket);
+
+      socket.to(roomId).emit('user-joined', userName, userId, true);
+      io.to(socket.id).emit('get-users', getUsers(roomId));
+    } else if (room.state !== 'waiting') {
       // If the game is started, redirect user to home
       io.to(socket.id).emit('error', 'game-started');
     } else if (getUsers(roomId).length === maxUsers) {

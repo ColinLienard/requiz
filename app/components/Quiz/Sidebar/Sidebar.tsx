@@ -73,8 +73,13 @@ const Sidebar: FC<Props> = ({
       setUserList(users);
     });
 
-    socket.on('user-joined', (anUserName: string, anUserId: string) => {
-      setUserList((state) => [{ name: anUserName, id: anUserId, lives: 3 }, ...state]);
+    socket.on('user-joined', (anUserName: string, anUserId: string, master?: boolean) => {
+      setUserList((state) => [{
+        name: anUserName,
+        id: anUserId,
+        lives: 3,
+        master,
+      }, ...state]);
     });
 
     socket.on('update-user', (userToUpdate: User) => {
@@ -140,18 +145,36 @@ const Sidebar: FC<Props> = ({
           </Link>
         </Popup>
       </div>
+      {userList.map((user) => {
+        if (user.master) {
+          return (
+            <>
+              <h3 className={styles.title}>Quiz master</h3>
+              <div className={styles.userMaster}>
+                <UserItem id={user.id} />
+              </div>
+            </>
+          );
+        }
+        return null;
+      })}
       <h3 className={styles.title}>Players in competition</h3>
       <ul className={styles.list}>
-        {userList.map((user) => (
-          <li className={styles.user} key={user.id}>
-            <UserItem id={user.id} />
-            <div className={styles.lives}>
-              <span className={styles.life} />
-              <span className={`${styles.life} ${user.lives <= 1 && styles.hidden}`} />
-              <span className={`${styles.life} ${user.lives <= 2 && styles.hidden}`} />
-            </div>
-          </li>
-        ))}
+        {userList.map((user) => {
+          if (!user.master) {
+            return (
+              <li className={`${styles.user} ${user.master && styles.master}`} key={user.id}>
+                <UserItem id={user.id} />
+                <div className={styles.lives}>
+                  <span className={styles.life} />
+                  <span className={`${styles.life} ${user.lives <= 1 && styles.hidden}`} />
+                  <span className={`${styles.life} ${user.lives <= 2 && styles.hidden}`} />
+                </div>
+              </li>
+            );
+          }
+          return null;
+        })}
       </ul>
     </section>
   );

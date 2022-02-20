@@ -1,7 +1,7 @@
 import { MongoClient, ObjectId } from 'mongodb';
 import { RoomState, Room } from './types';
 
-const rooms: (Room | { id: string })[] = [];
+const rooms: (Room)[] = [];
 
 export const getRoom = (id: string): Room => rooms.filter((room) => room.id === id)[0] as Room;
 
@@ -34,7 +34,7 @@ export const deleteRoom = (id: string) => {
 };
 
 export const createRoom = async (id: string) => {
-  rooms.push({ id });
+  // rooms.push({ id });
   const client = await new MongoClient(process.env.MONGODB_URI as string).connect();
   const response = await client
     .db()
@@ -43,6 +43,7 @@ export const createRoom = async (id: string) => {
   if (response) {
     updateRoomState(id, 'waiting');
     const {
+      userId,
       title,
       description,
       theme,
@@ -53,6 +54,7 @@ export const createRoom = async (id: string) => {
     deleteRoom(id);
     rooms.push({
       id,
+      userId,
       state: 'waiting',
       timer: null,
       title,
@@ -65,6 +67,6 @@ export const createRoom = async (id: string) => {
     return rooms[rooms.length - 1];
   }
   updateRoomState(id, 'published');
-  deleteRoom(id);
+  // deleteRoom(id);
   return null;
 };

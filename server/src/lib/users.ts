@@ -25,6 +25,7 @@ export const addUser = (
   userId: string,
   socketId: string,
   roomId: string,
+  master?: boolean,
 ) => {
   const user = {
     name: userName,
@@ -32,9 +33,12 @@ export const addUser = (
     socketId,
     roomId,
     lives: 3,
+    master,
   };
   users.push(user);
-  updateUserNumber(user.roomId);
+  if (!master) {
+    updateUserNumber(user.roomId);
+  }
 };
 
 export const removeUser = (id: string): User | null => {
