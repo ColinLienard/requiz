@@ -4,7 +4,7 @@ import { User } from './types';
 const users: User[] = [];
 
 export const updateUserNumber = async (roomId: string) => {
-  const peopleIn = users.filter((user) => user.roomId === roomId).length;
+  const peopleIn = users.filter((user) => user.roomId === roomId).map((user) => user.id);
   const client = await new MongoClient(process.env.MONGODB_URI as string).connect();
   await client
     .db()

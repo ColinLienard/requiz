@@ -70,7 +70,7 @@ const Modal: FC<Props> = ({ quiz, onClose }) => {
             <span className={styles.emoji}>{theme?.emoji}</span>
             {theme?.name}
           </span>
-          <h3 className={styles.title}>{quiz?.title}</h3>
+          <h3 className={styles.hero}>{quiz?.title}</h3>
         </div>
         <div className={styles.main}>
           <div className={styles.userContainer}>
@@ -93,7 +93,20 @@ const Modal: FC<Props> = ({ quiz, onClose }) => {
               <a className={styles.button}>Join {quiz?.status && 'as the master'}</a>
             </Link>
           )}
-          <h4 className={styles.title}>Waiting</h4>
+          {quiz?.peopleIn?.length && quiz?.peopleIn?.length > 0 ? (
+            <>
+              <h4 className={styles.title}>
+                Waiting <span className={styles.transparent}>({quiz.peopleIn.length})</span>
+              </h4>
+              <ul>
+                {quiz?.peopleIn?.map((userId) => (
+                  <li key={userId}>
+                    <UserItem id={userId} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
         </div>
       </aside>
     </>

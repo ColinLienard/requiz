@@ -5,21 +5,21 @@ export type User = {
   roomId: string,
   lives: number,
   master?: boolean,
-}
+};
 
-export type RoomState = 'published' | 'waiting' | 'playing'
+export type RoomState = 'published' | 'waiting' | 'playing';
 
 export type QuizResponse = {
   id: number,
-  value: string
-}
+  value: string,
+};
 
 export type QuizQuestion = {
   id: number,
   question: string,
   responses: QuizResponse[],
-  correct: number
-}
+  correct: number,
+};
 
 export type Room = {
   id: string,
@@ -32,5 +32,5 @@ export type Room = {
   maxPlayers: number,
   startDate: number,
   questions: QuizQuestion[],
-  peopleIn?: number
-}
+  peopleIn?: string[],
+};

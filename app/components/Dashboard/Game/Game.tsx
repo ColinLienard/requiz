@@ -47,9 +47,9 @@ const Game: FC<Props> = ({
         </div>
       )}
       <div className={styles.infos}>
-        {peopleIn && peopleIn > 0 ? (
+        {peopleIn && peopleIn.length > 0 ? (
           <p className={styles.peopleIn}>
-            {peopleIn} {peopleIn === 1 ? 'is' : 'are'} waiting
+            {peopleIn.length} {peopleIn.length === 1 ? 'is' : 'are'} waiting
           </p>
         ) : null}
         <p className={styles.date}>

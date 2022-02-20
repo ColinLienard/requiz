@@ -45,7 +45,7 @@ export type QuizData = {
   maxPlayers?: number,
   startDate?: string,
   questions?: QuizQuestion[],
-  peopleIn?: number,
+  peopleIn?: string[],
 };
 
 export type PropsToGetDBData = {
