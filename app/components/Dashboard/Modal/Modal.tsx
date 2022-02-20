@@ -1,4 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import Link from 'next/link';
 import { QuizData } from '../../../lib/types';
 import UserItem from '../../Common/UserItem/UserItem';
@@ -9,14 +14,14 @@ import useQuizTheme from '../../../lib/hooks/useQuizTheme';
 
 type Props = {
   quiz?: QuizData,
-  fromUser: boolean,
   onClose: () => void,
 };
 
-const Modal: FC<Props> = ({ quiz, fromUser, onClose }) => {
+const Modal: FC<Props> = ({ quiz, onClose }) => {
   const [visible, setVisible] = useState(false);
   const date = useDate(quiz?.startDate as string);
   const theme = useQuizTheme(quiz?.theme);
+  const quizUrl = useRef('');
 
   const handleClose = () => {
     setVisible(false);
@@ -39,6 +44,8 @@ const Modal: FC<Props> = ({ quiz, fromUser, onClose }) => {
 
   useEffect(() => {
     if (quiz) {
+      quizUrl.current = `${window.location.origin}/quiz/${quiz._id}`;
+      console.log(quizUrl);
       setVisible(true);
     } else {
       handleClose();
@@ -68,7 +75,7 @@ const Modal: FC<Props> = ({ quiz, fromUser, onClose }) => {
         <div className={styles.main}>
           <div className={styles.userContainer}>
             <p>by</p>
-            {fromUser ? (
+            {quiz?.status ? (
               <p>you</p>
             ) : (
               <UserItem id={quiz?.userId} small />
@@ -76,13 +83,14 @@ const Modal: FC<Props> = ({ quiz, fromUser, onClose }) => {
           </div>
           <p className={styles.description}>{quiz?.description}</p>
           <p className={styles.date}>Starts in <b>{date}</b></p>
-          {fromUser ? (
+          {quiz?.status && (
             <Link href={`/creator/${quiz?._id}`}>
-              <a className={styles.button}>Continue</a>
+              <a className={styles.button}>Edit</a>
             </Link>
-          ) : (
+          )}
+          {(!quiz?.status || quiz?.status === 'waiting' || quiz?.status === 'playing') && (
             <Link href={`/quiz/${quiz?._id}`}>
-              <a className={styles.button}>Join</a>
+              <a className={styles.button}>Join {quiz?.status && 'as the master'}</a>
             </Link>
           )}
           <h4 className={styles.title}>Waiting</h4>

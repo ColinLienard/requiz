@@ -9,6 +9,16 @@ const status = [
   {
     id: 'published',
     name: 'Published',
+    color: '#3c38f0',
+  },
+  {
+    id: 'waiting',
+    name: 'Waiting room',
+    color: '#8599ff',
+  },
+  {
+    id: 'playing',
+    name: 'Playing !',
     color: '#16e28c',
   },
 ];

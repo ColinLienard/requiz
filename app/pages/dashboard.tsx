@@ -76,7 +76,6 @@ const Dashboard: NextPage<Props> = ({
       <main className={styles.main}>
         <Modal
           quiz={modalQuiz}
-          fromUser={modalQuiz?.status !== undefined}
           onClose={() => setModalQuiz(undefined)}
         />
         <section className={styles.mainSection}>
@@ -225,7 +224,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
           title: 1,
           theme: 1,
           status: 1,
+          description: 1,
           startDate: 1,
+          peopleIn: 1,
         },
       },
     )

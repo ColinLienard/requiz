@@ -47,15 +47,13 @@ const Game: FC<Props> = ({
         </div>
       )}
       <div className={styles.infos}>
-        {peopleIn && (
+        {peopleIn && peopleIn > 0 ? (
           <p className={styles.peopleIn}>
-            {peopleIn}
-            are waiting
+            {peopleIn} {peopleIn === 1 ? 'is' : 'are'} waiting
           </p>
-        )}
+        ) : null}
         <p className={styles.date}>
-          Starts in
-          {date}
+          Starts in {date}
         </p>
       </div>
     </button>

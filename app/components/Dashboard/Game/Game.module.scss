@@ -76,6 +76,7 @@
 
   .infos {
     display: flex;
+    align-items: flex-end;
 
     .peopleIn {
       @include typography.small;
