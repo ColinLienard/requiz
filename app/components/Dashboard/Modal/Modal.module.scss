@@ -98,9 +98,15 @@
       z-index: -1;
     }
 
-    .cross {
-      width: fit-content;
-      fill: white;
+    .icons {
+      display: flex;
+      justify-content: space-between;
+
+      .cross,
+      .share {
+        width: fit-content;
+        fill: white;
+      }
     }
 
     .theme {
@@ -167,4 +173,8 @@
       }
     }
   }
+}
+
+.popup {
+  @include mixins.popup;
 }
