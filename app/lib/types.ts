@@ -1,5 +1,6 @@
 export type ChatMessageType = {
   author?: string,
+  isMaster?: boolean,
   content: string | [string, string],
   id: number,
 };

@@ -122,6 +122,7 @@ const Quiz: NextPage = () => {
             <Chat
               userName={userName}
               userId={userId}
+              isMaster={isMaster}
               roomId={quiz as string}
             />
           </SocketContext.Provider>

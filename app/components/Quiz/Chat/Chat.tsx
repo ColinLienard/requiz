@@ -22,12 +22,14 @@ import ChatInput from '../ChatInput/ChatInput';
 type Props = {
   userName: string,
   userId: string,
+  isMaster: boolean,
   roomId: string,
 };
 
 const Chat: FC<Props> = ({
   userName,
   userId,
+  isMaster,
   roomId,
 }) => {
   const minChatTop = 100;
@@ -58,20 +60,21 @@ const Chat: FC<Props> = ({
   useEffect(() => {
     socket.emit('join', { userName, userId, roomId });
 
-    socket.on('message', (author: string, content: string) => {
+    socket.on('message', (author: string, master: boolean, content: string) => {
       setChatMessages((state) => [...state, {
         author,
+        isMaster: master,
         content,
         id: getMessageId(),
       }]);
     });
 
-    socket.on('user-joined', (anUserName: string) => {
-      setChatMessages((state) => [...state, { content: [anUserName, 'joined !'], id: getMessageId() }]);
+    socket.on('user-joined', (anUserName: string, anUserId: string, master: boolean) => {
+      setChatMessages((state) => [...state, { isMaster: master, content: [anUserName, 'joined !'], id: getMessageId() }]);
     });
 
-    socket.on('user-left', (anUserName) => {
-      setChatMessages((state) => [...state, { content: [anUserName, 'left !'], id: getMessageId() }]);
+    socket.on('user-left', (anUserName, master: boolean) => {
+      setChatMessages((state) => [...state, { isMaster: master, content: [anUserName, 'left !'], id: getMessageId() }]);
     });
 
     return () => {
@@ -98,9 +101,15 @@ const Chat: FC<Props> = ({
       event.preventDefault();
     }
     if (message.length > 0) {
-      socket.emit('message', { roomId, author: userName, content: message });
+      socket.emit('message', {
+        roomId,
+        author: userName,
+        isMaster,
+        content: message,
+      });
       setChatMessages((state) => [...state, {
         author: 'You',
+        isMaster,
         content: message,
         id: getMessageId(),
       }]);
@@ -172,7 +181,11 @@ const Chat: FC<Props> = ({
       <ul className={styles.messages} ref={chat}>
         {chatMessages.map((chatMessage) => (
           <li key={chatMessage.id}>
-            <ChatMessage author={chatMessage.author} content={chatMessage.content} />
+            <ChatMessage
+              author={chatMessage.author}
+              isMaster={chatMessage.isMaster || false}
+              content={chatMessage.content}
+            />
           </li>
         ))}
       </ul>

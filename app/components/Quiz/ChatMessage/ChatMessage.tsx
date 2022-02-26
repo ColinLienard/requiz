@@ -3,11 +3,12 @@ import styles from './ChatMessage.module.scss';
 
 type Props = {
   author?: string,
+  isMaster: boolean,
   content: string | [string, string],
 };
 
-const ChatMessage: FC<Props> = ({ author, content }) => (
-  <div className={styles.message}>
+const ChatMessage: FC<Props> = ({ author, isMaster, content }) => (
+  <div className={`${styles.message} ${isMaster && styles.master}`}>
     {author ? (
       <>
         <span className={styles.author}>

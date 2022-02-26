@@ -32,12 +32,12 @@ io.on('connection', (socket: Socket) => {
   ) => {
     const joinUser = (first: boolean, isMaster: boolean) => {
       socket.join(roomId);
-      addUser(userName, userId, socket.id, roomId, true);
+      addUser(userName, userId, socket.id, roomId, isMaster);
       listenToResponses(io, socket);
       io.to(socket.id).emit('get-users', getUsers(roomId));
 
       if (!first) {
-        socket.to(roomId).emit('user-joined', userName, userId, true);
+        socket.to(roomId).emit('user-joined', userName, userId, isMaster);
       }
 
       if (isMaster) {
@@ -74,17 +74,24 @@ io.on('connection', (socket: Socket) => {
     }
   });
 
-  socket.on('message', (
-    { roomId, author, content }:
-    { roomId: string, author: string, content: string },
-  ) => {
-    socket.to(roomId).emit('message', author, content);
+  socket.on('message', ({
+    roomId,
+    author,
+    isMaster,
+    content,
+  }:{
+    roomId: string,
+    author: string,
+    isMaster: boolean,
+    content: string,
+  }) => {
+    socket.to(roomId).emit('message', author, isMaster, content);
   });
 
   socket.on('disconnect', () => {
     const user: User | null = removeUser(socket.id);
     if (user) {
-      io.to(user.roomId).emit('user-left', user.name);
+      io.to(user.roomId).emit('user-left', user.name, user.master);
       io.to(user.roomId).emit('get-users', getUsers(user.roomId));
       updateUserNumber(user.roomId);
 

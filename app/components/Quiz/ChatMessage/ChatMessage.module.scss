@@ -27,4 +27,9 @@
       color: variables.$light-blue;
     }
   }
+
+  &.master .author,
+  &.master .info .username {
+    color: variables.$orange;
+  }
 }
