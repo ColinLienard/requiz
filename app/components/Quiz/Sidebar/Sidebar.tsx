@@ -148,12 +148,12 @@ const Sidebar: FC<Props> = ({
       {userList.map((user) => {
         if (user.master) {
           return (
-            <>
+            <div key="master">
               <h3 className={styles.title}>Quiz master</h3>
               <div className={styles.userMaster}>
                 <UserItem id={user.id} />
               </div>
-            </>
+            </div>
           );
         }
         return null;

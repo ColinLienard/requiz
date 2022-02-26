@@ -1,4 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -27,6 +31,7 @@ const Quiz: NextPage = () => {
   const [connected, setConnected] = useState(false);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [actionLinesVisible, setActionLinesVisible] = useState(false);
+  const [isMaster, setIsMaster] = useState(false);
   const isMobile = useMobile();
 
   useEffect(() => {
@@ -54,6 +59,10 @@ const Quiz: NextPage = () => {
       socket?.on('game-state', (newGameState: GameState) => {
         setGameState(newGameState);
       });
+
+      socket?.on('is-master', () => {
+        setIsMaster(true);
+      });
     });
   }, [socket]);
 
@@ -66,7 +75,7 @@ const Quiz: NextPage = () => {
       case 'playing':
         setTimeout(() => setActionLinesVisible(true), 1000);
         return (
-          <Question />
+          <Question isMaster={isMaster} />
         );
       case 'end':
         setTimeout(() => setActionLinesVisible(false), 1000);

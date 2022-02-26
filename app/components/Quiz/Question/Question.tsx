@@ -15,7 +15,11 @@ import starIcon from '../../../public/icons/star.svg';
 import styles from './Question.module.scss';
 import Timer from '../Timer/Timer';
 
-const Question: FC = () => {
+type Props = {
+  isMaster: boolean,
+};
+
+const Question: FC<Props> = ({ isMaster }) => {
   const [quizQuestion, setQuizQuestion] = useState<QuizQuestion>();
   const [selected, setSelected] = useState<number>(-1);
   const [reveal, setReveal] = useState(false);
@@ -33,7 +37,7 @@ const Question: FC = () => {
 
     socket.on('request-response', () => {
       setReveal(true);
-      if (!isCorrect.current && lives > 0) {
+      if (!isCorrect.current && lives > 0 && !isMaster) {
         setLives((newLives) => {
           if (newLives > 0) {
             socket.emit('response', false);
@@ -55,7 +59,7 @@ const Question: FC = () => {
   }, [selected, quizQuestion]);
 
   const handleSelect = useCallback((toSelect: number) => {
-    if (!reveal && lives > 0) {
+    if (!isMaster && !reveal && lives > 0) {
       setSelected(toSelect);
     }
   }, [reveal, lives]);
@@ -63,25 +67,28 @@ const Question: FC = () => {
   return (
     <>
       <div className={styles.topbar}>
-        <ul className={styles.lives}>
-          <li className={`${styles.star} ${lives === 0 && styles.hidden}`}>
-            <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
-          </li>
-          <li className={`${styles.star} ${lives <= 1 && styles.hidden}`}>
-            <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
-          </li>
-          <li className={`${styles.star} ${lives <= 2 && styles.hidden}`}>
-            <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
-          </li>
-          {lives <= 0 && (
-            <li className={styles.over}>Eliminated</li>
-          )}
-        </ul>
+        {!isMaster && (
+          <ul className={styles.lives}>
+            <li className={`${styles.star} ${lives === 0 && styles.hidden}`}>
+              <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
+            </li>
+            <li className={`${styles.star} ${lives <= 1 && styles.hidden}`}>
+              <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
+            </li>
+            <li className={`${styles.star} ${lives <= 2 && styles.hidden}`}>
+              <Image src={starIcon} width={isMobile ? 24 : 32} height={isMobile ? 24 : 32} />
+            </li>
+            {lives <= 0 && (
+              <li className={styles.over}>Eliminated</li>
+            )}
+          </ul>
+        )}
         <div className={styles.progressbar}>1 / 10</div>
       </div>
       <Timer
         showResult={reveal && lives > 0}
         isCorrect={isCorrect.current}
+        isMaster={isMaster}
       />
       <h4 className={styles.question}>{quizQuestion?.question}</h4>
       <ul className={styles.responses}>

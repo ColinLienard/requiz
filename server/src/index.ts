@@ -30,6 +30,21 @@ io.on('connection', (socket: Socket) => {
     { userName, userId, roomId }:
     { userName: string, userId: string, roomId: string },
   ) => {
+    const joinUser = (first: boolean, isMaster: boolean) => {
+      socket.join(roomId);
+      addUser(userName, userId, socket.id, roomId, true);
+      listenToResponses(io, socket);
+      io.to(socket.id).emit('get-users', getUsers(roomId));
+
+      if (!first) {
+        socket.to(roomId).emit('user-joined', userName, userId, true);
+      }
+
+      if (isMaster) {
+        io.to(socket.id).emit('is-master', true);
+      }
+    };
+
     const room = getRoom(roomId);
     if (!room) {
       const roomData = await createRoom(roomId);
@@ -37,9 +52,7 @@ io.on('connection', (socket: Socket) => {
         io.to(socket.id).emit('error', 'game-does-not-exist');
       }
 
-      socket.join(roomId);
-      addUser(userName, userId, socket.id, roomId, roomData?.userId === userId);
-      listenToResponses(io, socket);
+      joinUser(true, roomData?.userId === userId);
 
       startTimer(io, roomId, 600, () => {
         // After the waiting room
@@ -49,12 +62,7 @@ io.on('connection', (socket: Socket) => {
       });
     } else if (room.userId === userId) {
       // If the user is the creator, make him join as the master
-      socket.join(roomId);
-      addUser(userName, userId, socket.id, roomId, true);
-      listenToResponses(io, socket);
-
-      socket.to(roomId).emit('user-joined', userName, userId, true);
-      io.to(socket.id).emit('get-users', getUsers(roomId));
+      joinUser(false, true);
     } else if (room.state !== 'waiting') {
       // If the game is started, redirect user to home
       io.to(socket.id).emit('error', 'game-started');
@@ -62,12 +70,7 @@ io.on('connection', (socket: Socket) => {
       // If the game is full, redirect user to home
       io.to(socket.id).emit('error', 'game-full');
     } else {
-      socket.join(roomId);
-      addUser(userName, userId, socket.id, roomId);
-      listenToResponses(io, socket);
-
-      socket.to(roomId).emit('user-joined', userName, userId);
-      io.to(socket.id).emit('get-users', getUsers(roomId));
+      joinUser(false, false);
     }
   });
 

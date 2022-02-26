@@ -12,7 +12,7 @@ export const startQuiz = async (io: Server, socket: Socket, roomId: string, inde
     const { questions } = room;
     if (index < questions.length) {
       io.to(roomId).emit('question', questions[index]);
-      startTimer(io, roomId, 5, () => {
+      startTimer(io, roomId, 10, () => {
         // At the end of the timer
         io.to(roomId).emit('request-response');
         setTimeout(() => {
